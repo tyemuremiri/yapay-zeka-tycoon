@@ -1,0 +1,17 @@
+{
+  "name": "Yapay Zekâ Tycoon",
+  "short_name": "YZ Tycoon",
+  "description": "Tek bir nörondan yapay zekâ beyni kurduğun çizgi film tarzı tıklama oyunu.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#D3EFE6",
+  "theme_color": "#8A5CF6",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
