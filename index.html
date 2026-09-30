@@ -164,6 +164,11 @@
   .bb.main { background: var(--sun); color: var(--on); }
   .bb.mrg:not(:disabled) { background: var(--grape); color: var(--on); }
   .bb:disabled { background: var(--surface-2); color: var(--muted); box-shadow: 0 2px 0 var(--ink); }
+  .bb.lnk:not(:disabled) { background: var(--sky); color: var(--on); }
+  .bb[aria-pressed="true"] { outline: 3px dashed var(--ink); outline-offset: 2px; transform: translateY(2px); box-shadow: 0 2px 0 var(--ink); }
+  .editbar { margin: 8px 12px 0; padding: 8px 10px; border: 2.5px solid var(--ink); border-radius: 14px; background: var(--surface-2); display: grid; gap: 6px; font-size: 13.5px; font-weight: 700; }
+  .editbar .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .editbar .pill-btn.go { background: var(--sun); color: var(--on); }
   .hint { margin: 0; padding: 4px 14px 0; font-size: 12.5px; font-weight: 700; color: var(--muted); }
 
   .nero { display: flex; align-items: center; gap: 12px; padding: 10px 14px 12px; }
@@ -204,12 +209,15 @@
 
   /* Mağaza */
   .shop { padding: 10px 12px 12px; display: grid; gap: 10px; align-content: start; }
-  .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; background: var(--surface-2); border: 2.5px solid var(--ink); border-radius: 16px; padding: 4px; }
+  .tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; background: var(--surface-2); border: 2.5px solid var(--ink); border-radius: 16px; padding: 4px; }
   .tab {
     position: relative; appearance: none; border: 2.5px solid transparent; border-radius: 12px; background: none;
-    padding: 8px 2px; font: 800 13px/1.1 var(--body); color: var(--muted); cursor: pointer; min-width: 0;
-    white-space: nowrap; letter-spacing: -.01em;
+    padding: 6px 2px; font: 800 12px/1.1 var(--body); color: var(--muted); cursor: pointer; min-width: 0;
+    white-space: nowrap; letter-spacing: -.01em; display: grid; justify-items: center; gap: 3px;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
   }
+  .tab svg { width: 20px; height: 20px; }
+  .tab.locked { opacity: .55; }
   .tab[aria-selected="true"] { background: var(--surface); color: var(--fg); border-color: var(--ink); box-shadow: 0 2px 0 var(--ink); }
   .badge {
     position: absolute; top: -9px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px;
@@ -264,6 +272,9 @@
   .task .t1 { font: 800 15px/1.25 var(--display); }
   .task .t2 { font-size: 12.5px; font-weight: 700; color: var(--muted); }
   .task .track { height: 12px; grid-column: 1 / -1; }
+  .task .t2.alt { color: var(--fg); opacity: .8; }
+  .tacts { display: grid; gap: 6px; justify-items: end; }
+  .tacts .pill-btn { min-height: 30px; font-size: 12px; padding: 2px 10px; }
   .task .track i { background: var(--teal); }
   .task.done { background: var(--surface-2); }
   .claim { min-height: 42px; padding: 4px 12px; background: var(--sun); color: var(--on); font: 800 14px/1 var(--body); }
@@ -342,6 +353,12 @@
   .node.own span, .node.own em { color: var(--on); }
   .node:disabled:not(.own) { opacity: .6; }
   .settings-grid { display: grid; gap: 10px; }
+  .autobox { display: grid; gap: 8px; border-top: 2.5px dashed var(--edge); padding-top: 6px; margin-top: 4px; }
+  .autobox .note, .panel p.note { margin: 0; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  .prev { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .prev div { border: 2.5px solid var(--ink); border-radius: 14px; padding: 8px 10px; background: var(--surface); font-size: 12.5px; font-weight: 700; line-height: 1.35; }
+  .prev b { display: block; font: 800 13.5px/1.2 var(--display); margin-bottom: 2px; }
+  .prev .gain { grid-column: 1 / -1; background: var(--surface-2); font-size: 13.5px; }
   .optrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
   .optrow .lbl { flex-basis: 100%; }
   .pill-btn { min-height: 36px; padding: 4px 12px; border: 2.5px solid var(--ink); border-radius: 10px; background: var(--surface); font: 800 13px/1 var(--body); cursor: pointer; }
@@ -373,8 +390,22 @@
   .stext { white-space: pre-line; font-size: 15px !important; line-height: 1.5; color: var(--fg) !important; }
   .bot .cos { display: none; }
   .bot[data-cos="fes"] .c-fes, .bot[data-cos="sapka"] .c-sapka, .bot[data-cos="tac"] .c-tac, .bot[data-cos="kep"] .c-kep,
-  .bot[data-cos="gozluk"] .c-gozluk, .bot[data-cos="kulak"] .c-kulak, .bot[data-cos="papyon"] .c-papyon { display: inline; }
+  .bot[data-cos="gozluk"] .c-gozluk, .bot[data-cos="kulak"] .c-kulak, .bot[data-cos="papyon"] .c-papyon,
+  .bot[data-cos="cay"] .c-cay, .bot[data-cos="onluk"] .c-onluk, .bot[data-cos="stetoskop"] .c-stetoskop { display: inline; }
   .kasa .node em { color: var(--teal); }
+  .pcard { display: grid; gap: 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: 18px; padding: 12px; }
+  .pc-h { display: flex; align-items: center; gap: 10px; }
+  .pc-h .ava { flex: none; background: var(--sun); }
+  .pc-h b { display: block; font: 800 16px/1.2 var(--display); }
+  .pc-h small { color: var(--muted); font-weight: 700; font-size: 12.5px; }
+  .pc-d { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .pcard .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .popt { min-height: 0; }
+  .popt.fast { background: var(--sun); }
+  .popt.slow { background: var(--sky); }
+  .popt .st, .popt .rw, .popt .go { font-size: 12px; font-weight: 800; line-height: 1.3; }
+  .popt .go { opacity: .85; }
+  .popt:disabled { opacity: .55; }
 
   #toast {
     position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; max-width: calc(100% - 32px);
@@ -395,7 +426,41 @@
     .cols { grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); align-items: start; }
     .brain-btn { height: 380px; }
   }
-  @media (max-width: 440px) { .tab { font-size: 11.5px; padding-inline: 0; } }
+  .minihud { display: none; }
+  .feedx { display: none; }
+  .msub button { flex: 1; }
+  /* Telefon: alt gezinme çubuğu, haber akışı alttan açılan sayfa, üstte küçük veri göstergesi */
+  @media (max-width: 879px) {
+    body { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+    .tabs {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; border-radius: 20px 20px 0 0; border-width: 3px 0 0;
+      background: var(--surface); padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -2px 0 var(--ink);
+    }
+    .tab { font-size: 11px; padding: 6px 0; }
+    .tab svg { width: 23px; height: 23px; }
+    .tab .badge { top: -4px; right: 2px; }
+    .shop { scroll-margin-top: 58px; min-height: calc(100vh - 150px); }
+    #toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+    .feed { display: none; }
+    body.feed-open { overflow: hidden; }
+    body.feed-open .feed {
+      display: grid; grid-template-rows: auto minmax(0, 1fr); position: fixed; left: 0; right: 0; bottom: 0; top: 10vh; z-index: 35;
+      border-radius: 22px 22px 0 0; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+    body.feed-open .posts { max-height: none; }
+    body.feed-open::before { content: ""; position: fixed; inset: 0; z-index: 34; background: var(--scrim); }
+    .feedx { display: inline-block; margin-left: auto; }
+    .minihud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 24; display: flex; align-items: baseline; justify-content: center; gap: 10px;
+      padding: calc(6px + env(safe-area-inset-top, 0px)) 16px 7px; background: var(--surface); border-bottom: 3px solid var(--ink);
+      transform: translateY(-110%); transition: transform .2s; pointer-events: none;
+    }
+    .minihud.show { transform: none; }
+    .minihud b { font: 800 22px/1 var(--display); font-variant-numeric: tabular-nums; }
+    .minihud span { font-weight: 800; color: var(--muted); font-size: 13px; }
+    .brain-btn { touch-action: manipulation; }
+  }
+  @media (max-width: 440px) { .brain-btn { height: 270px; } }
   @media (max-width: 380px) {
     .buy { min-width: 76px; }
     .cards { grid-template-columns: 1fr; }
@@ -407,10 +472,11 @@
   body.eco .track i, body.eco .kmeter i { transition: none; }
   @media (prefers-reduced-motion: reduce) {
     .packet, .bot.mood-wow, .shake { animation: none; }
-    .btn3d, #toast, .track i, .kmeter i { transition: none; }
+    .btn3d, #toast, .track i, .kmeter i, .minihud { transition: none; }
   }
 </style>
 
+<div class="minihud" id="miniHud" aria-hidden="true"><b id="mhData">0</b><span id="mhDps"></span></div>
 <main class="app">
   <header class="top">
     <div class="brand">
@@ -452,14 +518,14 @@
     <div class="stat big card">
       <span class="lbl">Veri</span>
       <strong id="data">0</strong>
-      <div class="dpsline"><span id="dps">saniyede 0</span><span class="turbo-pill" id="turboPill" hidden>TURBO ×2</span><span class="turbo-pill" id="inspPill" hidden>İLHAM ×2</span></div>
+      <div class="dpsline"><span id="dps">saniyede 0</span><span class="turbo-pill" id="turboPill" hidden>TURBO ×2</span><span class="turbo-pill" id="inspPill" hidden>İLHAM ×2</span><span id="buffPills" style="display:contents"></span></div>
       <div class="tierbar">
         <div class="track"><i id="tierBar"></i></div>
         <small id="tierNext"></small>
       </div>
     </div>
     <div class="stat card"><span class="lbl">Beyin gücü</span><strong id="brainPow">1</strong></div>
-    <div class="stat card"><span class="lbl">Kayıp (loss)</span><strong id="loss">4,150</strong></div>
+    <div class="stat card"><span class="lbl">Toplam çarpan</span><strong id="multAll">×1</strong></div>
   </section>
 
   <div class="cols">
@@ -475,9 +541,10 @@
         </div>
         <div class="brainbar">
           <button type="button" class="bb main btn3d" id="nBuy"><span class="b1">Nöron üret</span><span class="b2" id="nBuyCost">10</span></button>
-          <button type="button" class="bb mrg btn3d" id="nMerge"><span class="b1">Birleştir</span><span class="b2" id="nMergeN">0 çift</span></button>
-          <button type="button" class="bb btn3d" id="nSyn"><span class="b1">Sinaps</span><span class="b2" id="nSynN">0/0</span></button>
+          <button type="button" class="bb mrg btn3d" id="nMerge" aria-pressed="false"><span class="b1">Birleştir</span><span class="b2" id="nMergeN">0 çift</span></button>
+          <button type="button" class="bb lnk btn3d" id="nSyn" aria-pressed="false"><span class="b1">Bağla</span><span class="b2" id="nSynN">0/0</span></button>
         </div>
+        <div class="editbar" id="editBar" hidden><span id="editText"></span><div class="acts" id="editActs"></div></div>
         <p class="hint" id="brainHint">Aynı seviyedeki iki nöronu birbirinin üstüne sürükle: birleşip daha güçlü bir nöron olurlar.</p>
         <div class="nero">
           <button type="button" class="mascot" id="mascot" aria-label="Nöro'ya dokun, sana bir bilgi söylesin">
@@ -507,6 +574,9 @@
               <g class="cos c-kep"><path d="M16 9 40 0l24 9-24 9z" fill="var(--ink)"/><rect x="30" y="11" width="20" height="7" fill="var(--ink)"/><path d="M62 9v11" stroke="var(--sun)" stroke-width="2.2"/><circle cx="62" cy="21" r="2.4" fill="var(--sun)"/></g>
               <g class="cos c-gozluk"><rect x="22" y="29" width="16" height="12" rx="4" fill="var(--ink)"/><rect x="42" y="29" width="16" height="12" rx="4" fill="var(--ink)"/><path d="M38 33h4" stroke="var(--ink)" stroke-width="2.5"/><path d="M25 32h5M45 32h5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></g>
               <g class="cos c-kulak"><path d="M11 38C11 4 69 4 69 38" fill="none" stroke="var(--ink)" stroke-width="4"/><rect x="4" y="27" width="13" height="22" rx="6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2.5"/><rect x="63" y="27" width="13" height="22" rx="6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2.5"/></g>
+              <g class="cos c-onluk"><path d="M27 60h26v18a3 3 0 0 1-3 3H30a3 3 0 0 1-3-3z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.3"/><path d="M33 68h14v7H33z" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M40 63.5c-1.6-1.8-4 0-2.4 1.8L40 67l2.4-1.7c1.6-1.8-.8-3.6-2.4-1.8z" fill="var(--coral)"/></g>
+              <g class="cos c-stetoskop"><path d="M30 60c0 9 4 13 10 13s10-4 10-13" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><path d="M50 66v6" stroke="var(--ink)" stroke-width="2.4"/><circle cx="50" cy="75" r="3.6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2"/></g>
+              <g class="cos c-cay"><ellipse cx="75" cy="58" rx="7" ry="2.2" fill="var(--sun)" stroke="var(--ink)" stroke-width="2"/><path d="M70 42h10l-2 5 2 5-2 5h-6l-2-5 2-5z" fill="#C2410C" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M71.5 44h7" stroke="#FFFFFF" stroke-width="1.4" opacity=".6"/></g>
               <g class="cos c-papyon"><path d="M40 64 28 58v12zM40 64l12-6v12z" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="40" cy="64" r="3" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.8"/></g>
             </svg>
           </button>
@@ -524,17 +594,18 @@
       </button>
 
       <section class="feed card" id="feed" aria-label="Zekâ Akışı">
-        <div class="feedhead"><h2>Zekâ Akışı</h2><span class="lbl">yapay zekâ dünyasından · parodi</span></div>
+        <div class="feedhead"><h2>Zekâ Akışı</h2><span class="lbl">yapay zekâ dünyasından · parodi</span><button type="button" class="pill-btn feedx" id="feedX">Kapat</button></div>
         <div class="posts" id="posts" aria-live="polite"></div>
       </section>
     </section>
 
     <section class="shop card">
       <div class="tabs" role="tablist">
-        <button type="button" class="tab" role="tab" id="tab-gen" data-tab="gen" aria-selected="true" aria-controls="panel-gen">Kaynaklar</button>
-        <button type="button" class="tab" role="tab" id="tab-up" data-tab="up" aria-selected="false" aria-controls="panel-up">Yükseltme<span class="badge" id="upBadge"></span></button>
-        <button type="button" class="tab" role="tab" id="tab-goal" data-tab="goal" aria-selected="false" aria-controls="panel-goal">Hedefler<span class="badge" id="goalBadge"></span></button>
-        <button type="button" class="tab" role="tab" id="tab-model" data-tab="model" aria-selected="false" aria-controls="panel-model">Model<span class="badge" id="modelBadge"></span></button>
+        <button type="button" class="tab" role="tab" id="tab-gen" data-tab="gen" aria-selected="true" aria-controls="panel-gen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 6.5h.01M8 16.5h.01"/></svg><span>Kaynaklar</span></button>
+        <button type="button" class="tab" role="tab" id="tab-up" data-tab="up" aria-selected="false" aria-controls="panel-up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V6M5 12l7-7 7 7"/></svg><span>Yükseltme</span><span class="badge" id="upBadge"></span></button>
+        <button type="button" class="tab" role="tab" id="tab-proj" data-tab="proj" aria-selected="false" aria-controls="panel-proj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg><span>Projeler</span><span class="badge" id="projBadge"></span></button>
+        <button type="button" class="tab" role="tab" id="tab-goal" data-tab="goal" aria-selected="false" aria-controls="panel-goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg><span>Hedefler</span><span class="badge" id="goalBadge"></span></button>
+        <button type="button" class="tab" role="tab" id="tab-model" data-tab="model" aria-selected="false" aria-controls="panel-model"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="19" r="2.2"/><circle cx="12" cy="12" r="2.2"/><path d="M7.7 7.5 10.3 10.5M16.3 7.5 13.7 10.5M12 14.2v2.6"/></svg><span>Model</span><span class="badge" id="modelBadge"></span></button>
       </div>
 
       <div class="panel" id="panel-gen" role="tabpanel" aria-labelledby="tab-gen">
@@ -545,10 +616,31 @@
           <button type="button" data-mode="max" aria-pressed="false">Maks</button>
         </div>
         <div class="list" id="genList"></div>
+        <div class="autobox" id="autoBox">
+          <div class="sechead"><h2>Otomasyon</h2><span id="autoSum"></span></div>
+          <p class="note" id="autoNote"></p>
+          <div class="optrow" id="autoBuyRow"><span class="lbl">Otomatik alıcı</span>
+            <button type="button" class="pill-btn" data-auto="buy">Açık</button>
+            <button type="button" class="pill-btn" data-amode="eff">Verimli</button>
+            <button type="button" class="pill-btn" data-amode="mile">Eşiğe tamamla</button>
+            <button type="button" class="pill-btn" data-amode="sel">Yalnız seçili</button>
+          </div>
+          <div class="optrow" id="autoSelRow"><span class="lbl">Seçili kaynak</span></div>
+          <div class="optrow" id="autoMergeRow"><span class="lbl">Otomatik birleştirici</span>
+            <button type="button" class="pill-btn" data-auto="merge">Açık</button>
+            <button type="button" class="pill-btn" data-auto="protect">Sinapslı nöronları koru</button>
+          </div>
+        </div>
       </div>
 
       <div class="panel" id="panel-up" role="tabpanel" aria-labelledby="tab-up" hidden>
         <div class="list" id="upList"></div>
+      </div>
+
+      <div class="panel" id="panel-proj" role="tabpanel" aria-labelledby="tab-proj" hidden>
+        <div class="sechead"><h2>Müşteri projeleri</h2><span id="projSum"></span></div>
+        <p class="note" id="projNote"></p>
+        <div class="stack" id="projBox"></div>
       </div>
 
       <div class="panel" id="panel-goal" role="tabpanel" aria-labelledby="tab-goal" hidden>
@@ -558,6 +650,7 @@
           <p id="evDesc"></p>
           <div class="track"><i id="evBar"></i></div>
           <div class="miles" id="evMiles"></div>
+          <button type="button" class="ghost btn3d" id="evJoin">Katıl</button>
         </div>
         <div class="sechead"><h2>Nöro'nun gezisi</h2><span id="misLeft"></span></div>
         <div class="list" id="misList"></div>
@@ -568,6 +661,12 @@
       </div>
 
       <div class="panel" id="panel-model" role="tabpanel" aria-labelledby="tab-model" hidden>
+        <div class="seg msub" id="msub">
+          <button type="button" data-msub="train" aria-pressed="true">Eğitim</button>
+          <button type="button" data-msub="kasa" aria-pressed="false">Kasa</button>
+          <button type="button" data-msub="prof" aria-pressed="false">Profil ve ayarlar</button>
+        </div>
+        <div class="stack" data-sub="train">
         <div class="sechead"><h2>Karakter</h2><span id="alignText"></span></div>
         <div class="karma">
           <div class="kmeter" aria-hidden="true"><i id="kDot" style="left:50%"></i></div>
@@ -577,29 +676,40 @@
         <p class="note" id="alignNote"></p>
 
         <div class="sechead"><h2>Yeni model eğit</h2></div>
-        <p class="note">Veri, kaynaklar, nöronlar ve bu turdaki karakter seçimlerin sıfırlanır. Karşılığında parametre kazanırsın: her parametre tüm üretime kalıcı olarak +%10 ekler.</p>
+        <p class="note">Yeni model eğitmek bir kayıp değil, bir sıçrama: parametreler tüm üretimi kalıcı olarak büyütür ve her turda yeni bir laboratuvar açılır.</p>
         <div class="facts">
           <div><span class="lbl">Parametre</span><strong id="mParams">0</strong></div>
           <div><span class="lbl">Çarpan</span><strong id="mMult">×1,00</strong></div>
           <div><span class="lbl">Bu eğitim</span><strong id="mGain">0</strong></div>
         </div>
         <p class="note" id="mHint"></p>
+        <div class="prev" id="pPrev">
+          <div class="gain" id="pGainBox"></div>
+          <div><b>Kalır</b>Parametreler, çip ve Kasa, başarımlar, Bilinç, referanslar, kostümler, otomasyon ayarların.</div>
+          <div><b>Sıfırlanır</b>Veri, kaynaklar, yükseltmeler, nöronlar ve sinapslar, bu turdaki karakter kartların.</div>
+        </div>
         <button type="button" class="primary btn3d" id="pBtn" disabled>Yeni model eğit</button>
         <p class="note" id="labNote"></p>
+        <div id="tekBox" hidden>
+          <div class="stack">
+            <div class="sechead"><h2>Tekillik</h2><span id="tekSum"></span></div>
+            <p class="note">İkinci katman. Parametreler dahil her şey sıfırlanır, karşılığında Bilinç kazanırsın. Kazandığın her Bilinç üretime kalıcı +%10 ekler; ağaçtan yetenek almak bu bonusu azaltmaz.</p>
+            <button type="button" class="primary btn3d" id="tekBtn" disabled>Tekilliğe ulaş</button>
+            <div class="tree" id="tree"></div>
+            <div class="sechead"><h2>Benchmark meydan okumaları</h2><span id="chSum"></span></div>
+            <p class="note">Ana turun kenara kaydedilir; zorlu kurallarla yeni bir tur oynarsın. Hedefe ulaşınca kalıcı ödül kazanır ve ana turuna dönersin. İstediğin an ücretsiz çıkabilirsin.</p>
+            <div class="list" id="chList"></div>
+          </div>
+        </div>
 
+        </div>
+        <div class="stack" data-sub="kasa" hidden>
         <div class="sechead"><h2>Kasa</h2><span id="chipSum"></span></div>
         <p class="note">Çip; yeni model eğittiğinde, başarımlardan, günlük görevlerden ve etkinliklerden gelir. Kasadaki eşyalar hiçbir sıfırlamada kaybolmaz.</p>
         <div class="tree kasa" id="kasa"></div>
 
-        <div id="tekBox" hidden>
-          <div class="stack">
-            <div class="sechead"><h2>Tekillik</h2><span id="tekSum"></span></div>
-            <p class="note">İkinci katman. Parametreler dahil her şey sıfırlanır, karşılığında Bilinç kazanırsın. Bilinçle aşağıdaki ağaçtan kalıcı yetenekler açılır; harcanmayan her Bilinç üretime +%10 ekler.</p>
-            <button type="button" class="primary btn3d" id="tekBtn" disabled>Tekilliğe ulaş</button>
-            <div class="tree" id="tree"></div>
-          </div>
         </div>
-
+        <div class="stack" data-sub="prof" hidden>
         <div class="chart">
           <span class="lbl">Kayıp eğrisi</span>
           <canvas id="chart" role="img" aria-label="Toplanan veri arttıkça kayıp azalır. Nokta senin modelini gösterir."></canvas>
@@ -630,6 +740,7 @@
           </div>
         </div>
         <button type="button" class="danger" id="resetBtn">Tüm ilerlemeyi sil</button>
+        </div>
       </div>
     </section>
   </div>
@@ -690,7 +801,7 @@
     comboSteps: 30, comboDecay: 25,
     critChance: 0.05, critMult: 7,
     prestigeDiv: 1e11, paramBonus: 0.1,
-    offline: 0.6, offlineCap: 43200,
+    offline: 0.6, offlineCap: 43200, refBonus: 0.03,
     turboMs: 120000, turboCd: 600000
   };
   if (location.hash === '#debug' && window.__BAL) Object.assign(BAL, window.__BAL);
@@ -788,7 +899,7 @@
     [{ id: 'opensrc', n: 'Açık Kaynak Topluluğu', d: 'Kodunu herkesle paylaş. Yükseltmeler %25 ucuz.' },
      { id: 'steal', n: 'Veri Hırsızlığı', d: 'Sunuculara sız. Her dokunuş saniyelik üretimin +%5\'ini daha çalar.' }],
     [{ id: 'safety', n: 'Güvenlik Araştırması', d: 'İnsanlarla birlikte güvenli ol. Turbo 10 yerine 6 dakikada dolar.' },
-     { id: 'botnet', n: 'Botnet', d: 'Binlerce bilgisayarı ele geçir. Saniyede 3 otomatik dokunuş.' }],
+     { id: 'botnet', n: 'Botnet', d: 'Binlerce bilgisayarı ele geçir. Oyun açıkken saniyede 3 otomatik dokunuş.' }],
     [{ id: 'tutor', n: 'Eğitim Asistanı', d: 'Öğrencilere ders ver. Günlük görev ödülleri ×3 ve +1 sinaps.' },
      { id: 'disinfo', n: 'Dezenformasyon', d: 'Kafaları karıştır. Aha! anı şansı %5 yerine %15.' }],
     [{ id: 'partner', n: 'İnsanlarla Ortaklık', d: 'Bilim insanlarıyla omuz omuza çalış. Sinaps bonusları ×2.' },
@@ -918,7 +1029,10 @@
     kep: { n: 'Mezuniyet kepi', ok: () => state.quizOk >= 5, how: '5 doğru cevapla açılır' },
     kulak: { n: 'Kulaklık', ok: () => state.mgBest >= 10, how: 'Mini oyunda 10 skorla açılır' },
     sapka: { n: 'Silindir şapka', ok: () => state.medals >= 1, how: 'Etkinlik madalyasıyla açılır' },
-    tac: { n: 'Taç', ok: () => state.bestTier >= 7, how: 'YGZ Adayı olunca açılır' }
+    tac: { n: 'Taç', ok: () => state.bestTier >= 7, how: 'YGZ Adayı olunca açılır' },
+    cay: { n: 'Çay bardağı', ok: () => state.projStory.riza === 1, how: 'Rıza Usta\'nın projesini özenle teslim et' },
+    onluk: { n: 'Önlük', ok: () => state.projStory.nezahat === 1, how: 'Nezahat Teyze\'nin projesini özenle teslim et' },
+    stetoskop: { n: 'Stetoskop', ok: () => state.projStory.hastane === 1, how: 'Hastane projesini özenle teslim et' }
   };
   const STORY = {
     1: 'Laboratuvarın şefi Dr. Selin ekrana yaklaşıyor: "Nöro artık katman katman düşünüyor!"\nNöro: "Katman mı? Ben sadece biraz kalabalıklaştım."',
@@ -938,8 +1052,8 @@
     { id: 'xh', n: 'Kaynak Yutucu', d: 'Gezegenin işlem gücünü yut. Tüm üretim ×1,25, virüsler sıklaşır.' }];
   const TREE = [
     { id: 'start', n: 'Hızlı Başlangıç', d: 'Her tura dört adet 2. seviye nöronla başla.', c: 1 },
-    { id: 'amerge', n: 'Otomatik Birleştirici', d: 'Her 5 saniyede bir çift nöronu kendisi birleştirir.', c: 2 },
-    { id: 'abuy', n: 'Otomatik Alıcı', d: 'Her 2 saniyede alabildiğin en ucuz kaynaktan bir tane alır.', c: 2 },
+    { id: 'amerge', n: 'Hızlı Birleştirici', d: 'Otomatik birleştirici 8 yerine 2 saniyede bir çalışır (ve hemen açılır).', c: 2 },
+    { id: 'abuy', n: 'Hızlı Alıcı', d: 'Otomatik alıcı her saniye 10 adede kadar alır (ve hemen açılır).', c: 2 },
     { id: 'syn', n: 'Doğuştan Bağlantı', d: '+2 sinaps hakkı.', c: 2 },
     { id: 'turbo', n: 'Sonsuz Enerji', d: 'Turbo 2 yerine 3 dakika sürer.', c: 2 },
     { id: 'dream', n: 'Rüya Modu', d: 'Çevrimdışı kazanç %100 ve 24 saate kadar.', c: 2 },
@@ -993,11 +1107,15 @@
       clicks: 0, runs: 0, merges: 0, maxLvEver: 1, synMade: 0, crits: 0, comboTop: 0, viruses: 0, bestTier: 0,
       last: Date.now(), turboUntil: 0, turboReadyAt: 0, played: 0, buyMode: 1, pendingOff: 0,
       packets: 0, turbos: 0, upgBought: 0, taskClaims: 0, perfectDays: 0, ach: {}, daily: null, seen: {},
-      bilinc: 0, tek: 0, tree: {}, skin: 'teal', skins: { teal: 1 }, ev: null, medals: 0,
+      ver: 6,
+      bilinc: 0, bilincAll: 0, tek: 0, tree: {}, skin: 'teal', skins: { teal: 1 }, ev: null, medals: 0,
       mgReadyAt: 0, mgBest: 0, mgPlays: 0, halluLeft: 0, inspireUntil: 0, quizOk: 0,
       mission: null, missions: 0,
-      chips: 0, kasa: {}, cos: 'none', storySeen: {}, endings: {}, feed: [], news: null, perm2x: false,
-      opt: { sound: true, music: true, haptic: true, eco: null, sci: false, tab: 'gen' }
+      chips: 0, kasa: {}, cos: 'none', storySeen: {}, endings: {}, feed: [], buffs: {}, perm2x: false,
+      auto: { buy: true, mode: 'eff', sel: 0, merge: true, protect: true },
+      proj: null, projOffer: null, projDone: 0, refs: 0, projStory: {}, projSkipAt: 0,
+      ch: null, chDone: {}, chSaved: null,
+      opt: { sound: true, music: true, haptic: true, eco: null, sci: false, tab: 'gen', msub: 'train' }
     };
   }
   const state = defaults();
@@ -1011,13 +1129,16 @@
   const loopN = () => Math.floor(state.runs / LABS.length);
   const labM = (k, d) => (lab().m[k] != null ? lab().m[k] : d);
   const kv = id => state.kasa[id] || 0;
-  const newsOn = k => !!state.news && state.news.k === k && Date.now() < state.news.until;
+  const newsOn = k => (state.buffs[k] || 0) > Date.now();
+  const chIs = id => !!state.ch && state.ch.id === id;
+  const chWon = id => !!state.chDone[id];
   const genCount = side => Object.keys(state.choices).filter(t => +t > 7 && state.choices[t] === side).length;
   const cardsFor = t => t <= 7 ? CARDS[t] : GEN_CARDS;
   const weekNo = () => Math.floor((Date.now() / 864e5 + 3) / 7);
   const curEvent = () => EVENTS[weekNo() % EVENTS.length];
-  const evIs = id => curEvent().id === id;
-  function ensureEvent() { const wk = weekNo(); if (!state.ev || state.ev.wk !== wk) state.ev = { wk: wk, pts: 0, got: 0 }; }
+  // Haftalık etkinlik isteğe bağlı: katılmayan oyuncunun ekonomisi hiç değişmez.
+  const evIs = id => !!state.ev && state.ev.join && curEvent().id === id;
+  function ensureEvent() { const wk = weekNo(); if (!state.ev || state.ev.wk !== wk) state.ev = { wk: wk, pts: 0, got: 0, join: false }; }
 
   /* ---------- Beyin ---------- */
   let brainCache = -1;
@@ -1027,20 +1148,24 @@
   function neuronAt(s) { for (let i = 0; i < state.neurons.length; i++) if (state.neurons[i].s === s) return state.neurons[i]; return null; }
   function brainPower() {
     if (brainCache >= 0) return brainCache;
+    brainCache = powerOf(state.neurons, state.syn);
+    return brainCache;
+  }
+  // Saf hesap: önizleme için kopya nöron/sinaps listesiyle de çağrılır.
+  function powerOf(neurons, syns) {
     const synMul = (state.upg.s1 ? 2 : 1) * (perk('partner') ? 2 : 1) * (1 + kv('jel') * 0.2);
+    const at = s => { for (let i = 0; i < neurons.length; i++) if (neurons[i].s === s) return neurons[i]; return null; };
     const bonus = {};
-    state.syn.forEach(p => {
-      const a = neuronAt(p[0]), b = neuronAt(p[1]);
+    syns.forEach(p => {
+      const a = at(p[0]), b = at(p[1]);
       if (!a || !b) return;
       const v = (a.l === b.l ? BAL.synRes : BAL.synBonus) * synMul;
       bonus[a.s] = (bonus[a.s] || 0) + v;
       bonus[b.s] = (bonus[b.s] || 0) + v;
     });
     let B = 0;
-    state.neurons.forEach(n => { B += Math.pow(BAL.levelPow, n.l - 1) * (1 + (bonus[n.s] || 0)); });
-    B *= (state.upg.n1 ? 1.5 : 1) * (state.upg.n2 ? 2 : 1);
-    brainCache = B;
-    return B;
+    neurons.forEach(n => { B += Math.pow(BAL.levelPow, n.l - 1) * (1 + (bonus[n.s] || 0)); });
+    return B * (state.upg.n1 ? 1.5 : 1) * (state.upg.n2 ? 2 : 1);
   }
   const brainDirty = () => { brainCache = -1; };
 
@@ -1051,8 +1176,10 @@
   const achMult = () => 1 + achCount() * BAL.achB;
   const alignMult = () => alignment() === 'f' ? BAL.alignF : alignment() === 'h' ? BAL.alignH : 1;
   const inspireOn = () => Date.now() < state.inspireUntil;
-  const globalMult = () => paramMult() * achMult() * alignMult() * (turboOn() ? 2 : 1) * (perk('replicate') ? 3 : 1)
-    * (1 + state.medals * 0.05) * (1 + state.bilinc * 0.1) * (inspireOn() ? 2 : 1)
+  // base = true: turbo, İlham gibi geçici güçlendirmeler hariç (ödül ve çevrimdışı hesapları için)
+  const refMult = () => 1 + state.refs * BAL.refBonus;
+  const globalMult = base => paramMult() * achMult() * alignMult() * (!base && turboOn() ? 2 : 1) * (perk('replicate') ? 3 : 1)
+    * (1 + state.medals * 0.05) * (1 + state.bilincAll * 0.1) * (!base && inspireOn() ? 2 : 1) * refMult() * (chWon('kit') ? 1.5 : 1)
     * Math.pow(BAL.xTier, Math.max(0, tierIdx() - 7)) * Math.pow(BAL.genF, genCount('f')) * Math.pow(BAL.genH, genCount('h'))
     * Math.pow(2, loopN()) * labM('all', 1) * (state.perm2x ? 2 : 1);
   function srcMult(i) {
@@ -1061,12 +1188,15 @@
     for (let k = 0; k < BAL.miles.length && n >= BAL.miles[k]; k++) m *= 2;
     return m;
   }
-  function srcGlobal() { let m = 1; ['v0', 'v1', 'v2'].forEach(id => { if (state.upg[id]) m *= 2; }); if (perk('cookies')) m *= 1.5; return m * labM('src', 1) * (1 + kv('ekran') * 0.1) * (newsOn('src') ? 2 : 1); }
+  function srcGlobal(base) {
+    let m = 1; ['v0', 'v1', 'v2'].forEach(id => { if (state.upg[id]) m *= 2; }); if (perk('cookies')) m *= 1.5;
+    return m * labM('src', 1) * (1 + kv('ekran') * 0.1) * (!base && newsOn('src') ? 2 : 1) * (chIs('kit') ? 0.1 : 1) * (chWon('pasif') ? 1.5 : 1);
+  }
   const brainIdle = () => 1 + BAL.idleK * Math.sqrt(brainPower());
-  function dps() {
+  function dps(base) {
     let s = 0;
     for (let i = 0; i < G.length; i++) s += state.gen[i] * G[i].r * srcMult(i);
-    return s * srcGlobal() * brainIdle() * globalMult();
+    return s * srcGlobal(base) * brainIdle() * globalMult(base);
   }
   function clickMult() { let m = 1; ['c0', 'c1', 'c2', 'c3'].forEach(id => { if (state.upg[id]) m *= 3; }); if (perk('faces')) m *= 2; if (evIs('gpu')) m *= 2; return m * labM('tap', 1) * (1 + kv('kahve') * 0.15) * (newsOn('tap') ? 2 : 1); }
   function tapShare() {
@@ -1074,17 +1204,18 @@
     s += (state.upg.p0 ? 0.01 : 0) + (state.upg.p1 ? 0.02 : 0) + (state.upg.p2 ? 0.03 : 0) + (state.upg.p3 ? 0.04 : 0) + (perk('steal') ? 0.05 : 0);
     return s;
   }
-  const tapValue = () => Math.pow(brainPower(), BAL.tapPow) * clickMult() * globalMult() + tapShare() * dps();
+  const tapValue = base => chIs('pasif') ? 0 : Math.pow(brainPower(), BAL.tapPow) * clickMult() * globalMult(base) + tapShare() * dps(base);
   const comboCap = () => (state.upg.k0 ? 3 : 2) + (evIs('hack') ? 1 : 0) + kv('klavye') * 0.2;
   const critChance = () => (BAL.critChance + (state.upg.a0 ? 0.05 : 0) + (perk('disinfo') ? 0.10 : 0)) * (evIs('hallu') ? 2 : 1) * labM('crit', 1) * (newsOn('crit') ? 3 : 1);
   const critMult = () => (state.upg.a1 ? BAL.critMult * 2 : BAL.critMult) * (state.tree.intu ? 2 : 1);
   function addData(n) { state.data += n; state.run += n; state.life += n; progress('earn', n); }
-  const gain = () => Math.floor(Math.pow(state.run / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
+  // Toplanmamış çevrimdışı veri bu turun parçasıdır: eğitimde önce otomatik toplanır.
+  const gain = () => state.ch ? 0 : Math.floor(Math.pow((state.run + state.pendingOff) / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
   const lossAt = q => 0.35 + 3.8 * Math.exp(-q / 3.2);
   const qNow = () => Math.min(21, Math.log10(1 + state.life));
   function tierIdx() { let idx = 0; TIERS.forEach((t, i) => { if (state.run >= t.at) idx = i; }); return idx; }
 
-  const evCost = () => (evIs('gpu') ? 1.25 : 1) * labM('cost', 1);
+  const evCost = () => (evIs('gpu') ? 1.25 : 1) * labM('cost', 1) * (chWon('gpu') ? 0.9 : 1);
   const costFor = (i, n) => Math.ceil(G[i].c * evCost() * Math.pow(BAL.growth, state.gen[i]) * (Math.pow(BAL.growth, n) - 1) / (BAL.growth - 1));
   function maxAff(i) {
     const c0 = G[i].c * evCost() * Math.pow(BAL.growth, state.gen[i]);
@@ -1152,14 +1283,35 @@
   function buzz(p) { if (state.opt.haptic && navigator.vibrate) { try { navigator.vibrate(p); } catch (e) { /* desteklenmiyor */ } } }
 
   /* ---------- Kayıt ---------- */
+  // state.last yalnızca üretim hesabının saati: kayıt onu ASLA ilerletmez (yoksa arka planda kayıt, çevrimdışı kazancı silerdi).
+  let saveFailShown = false, backupAt = 0;
   function save() {
-    state.last = Date.now();
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* kayıt kapalı */ }
+    try {
+      const raw = JSON.stringify(state);
+      if (Date.now() - backupAt > 300000) {
+        backupAt = Date.now();
+        const prev = localStorage.getItem(KEY);
+        if (prev) localStorage.setItem(KEY + '-yedek', prev);
+      }
+      localStorage.setItem(KEY, raw);
+      saveFailShown = false;
+      return true;
+    } catch (e) {
+      if (!saveFailShown) { saveFailShown = true; toast('Kayıt yapılamadı! Depolama dolu ya da kapalı olabilir. Ayarlar\'dan yedek al.'); }
+      return false;
+    }
   }
+  // Yükleme ya tamamen olur ya hiç olmaz: hata çıkarsa eski durum geri konur.
   function loadFrom(raw) {
+    const before = JSON.stringify(state);
+    const ok = loadInto(raw);
+    if (!ok) { const b = JSON.parse(before); Object.keys(state).forEach(k => { delete state[k]; }); Object.assign(state, b); brainDirty(); }
+    return ok;
+  }
+  function loadInto(raw) {
     try {
       const o = JSON.parse(raw);
-      if (!o || typeof o !== 'object') return false;
+      if (!o || typeof o !== 'object' || (o.ver != null && typeof o.ver !== 'number')) return false;
       const num = (v, d) => (typeof v === 'number' && isFinite(v) && v >= 0 ? v : d);
       ['data', 'run', 'life', 'clicks', 'runs', 'merges', 'synMade', 'crits', 'comboTop', 'viruses', 'bestTier', 'nBought', 'turboUntil', 'turboReadyAt',
         'played', 'packets', 'turbos', 'upgBought', 'taskClaims', 'perfectDays', 'pendingOff',
@@ -1182,25 +1334,42 @@
         if (!state.neurons.length) state.neurons = [{ s: 0, l: 1 }];
       }
       if (Array.isArray(o.syn)) state.syn = o.syn.filter(p => Array.isArray(p) && p.length === 2 && Number.isInteger(p[0]) && Number.isInteger(p[1]) && p[0] !== p[1]);
-      if (o.daily && typeof o.daily === 'object' && Array.isArray(o.daily.tasks)) state.daily = o.daily;
+      if (o.daily && typeof o.daily === 'object' && o.daily.v === 2 && Array.isArray(o.daily.tasks)) state.daily = o.daily;
       if (o.kasa && typeof o.kasa === 'object') KASA.forEach(k => { const v = Math.floor(num(o.kasa[k.id], 0)); if (v) state.kasa[k.id] = Math.min(k.max, v); });
       if (typeof o.cos === 'string' && COSTUMES[o.cos]) state.cos = o.cos;
       ['storySeen', 'endings'].forEach(k => { if (o[k] && typeof o[k] === 'object') state[k] = Object.assign({}, o[k]); });
       if (Array.isArray(o.feed)) state.feed = o.feed.filter(x => x && Number.isInteger(x.i) && x.i >= 0 && x.i < FEED.length).slice(0, 20)
         .map(x => ({ i: x.i, at: num(x.at, Date.now()), b: typeof x.b === 'string' ? x.b : null, liked: !!x.liked, v: typeof x.v === 'object' && x.v ? x.v : null }));
       if (o.mission && typeof o.mission === 'object' && typeof o.mission.k === 'string') state.mission = { k: o.mission.k, until: num(o.mission.until, 0) };
-      if (o.news && typeof o.news === 'object' && typeof o.news.k === 'string') state.news = { k: o.news.k, until: num(o.news.until, 0) };
+      state.buffs = {};
+      if (o.buffs && typeof o.buffs === 'object') Object.keys(BUFFS).forEach(k => { const v = num(o.buffs[k], 0); if (v) state.buffs[k] = v; });
+      else if (o.news && typeof o.news === 'object' && BUFFS[o.news.k]) state.buffs[o.news.k] = num(o.news.until, 0);
       if (o.tree && typeof o.tree === 'object') TREE.forEach(t => { if (o.tree[t.id]) state.tree[t.id] = 1; });
+      // Sürüm 5'te harcanan Bilinç bonusu düşürüyordu: toplam kazanılan Bilinç = kalan + ağaçta harcanan.
+      state.bilincAll = typeof o.bilincAll === 'number' ? num(o.bilincAll, 0) : state.bilinc + TREE.reduce((a, t) => a + (state.tree[t.id] ? t.c : 0), 0);
+      state.perm2x = o.perm2x === true;
+      state.refs = Math.floor(num(o.refs, 0)); state.projDone = Math.floor(num(o.projDone, 0)); state.projSkipAt = num(o.projSkipAt, 0);
+      if (o.projStory && typeof o.projStory === 'object') state.projStory = Object.assign({}, o.projStory);
+      if (o.proj && typeof o.proj === 'object' && PROJ_BY[o.proj.id] && (o.proj.a === 0 || o.proj.a === 1)) state.proj = { id: o.proj.id, a: o.proj.a, until: num(o.proj.until, 0), q: Math.max(1, Math.min(3, Math.floor(num(o.proj.q, 1)))) };
+      if (o.projOffer && typeof o.projOffer === 'object' && PROJ_BY[o.projOffer.id]) state.projOffer = { id: o.projOffer.id };
+      if (o.auto && typeof o.auto === 'object') {
+        state.auto.buy = o.auto.buy !== false; state.auto.merge = o.auto.merge !== false; state.auto.protect = o.auto.protect !== false;
+        state.auto.mode = ['eff', 'mile', 'sel'].indexOf(o.auto.mode) >= 0 ? o.auto.mode : 'eff';
+        state.auto.sel = Math.max(0, Math.min(G.length - 1, Math.floor(num(o.auto.sel, 0))));
+      }
+      if (o.chDone && typeof o.chDone === 'object') CHAL.forEach(c => { if (o.chDone[c.id]) state.chDone[c.id] = 1; });
+      if (o.ch && typeof o.ch === 'object' && CHAL_BY[o.ch.id] && o.chSaved && typeof o.chSaved === 'object') { state.ch = { id: o.ch.id }; state.chSaved = o.chSaved; }
       if (o.skins && typeof o.skins === 'object') Object.keys(SKINS).forEach(k => { if (o.skins[k]) state.skins[k] = 1; });
       if (typeof o.skin === 'string' && state.skins[o.skin]) state.skin = o.skin;
-      if (o.ev && typeof o.ev === 'object' && typeof o.ev.wk === 'number') state.ev = { wk: o.ev.wk, pts: num(o.ev.pts, 0), got: Math.min(3, Math.floor(num(o.ev.got, 0))) };
+      if (o.ev && typeof o.ev === 'object' && typeof o.ev.wk === 'number') state.ev = { wk: o.ev.wk, pts: num(o.ev.pts, 0), got: Math.min(3, Math.floor(num(o.ev.got, 0))), join: o.ev.join === true };
       if (o.opt && typeof o.opt === 'object') {
         state.opt.sound = o.opt.sound !== false;
         state.opt.haptic = o.opt.haptic !== false;
         state.opt.eco = typeof o.opt.eco === 'boolean' ? o.opt.eco : null;
         state.opt.sci = o.opt.sci === true;
         state.opt.music = o.opt.music !== false;
-        state.opt.tab = ['gen', 'up', 'goal', 'model'].indexOf(o.opt.tab) >= 0 ? o.opt.tab : 'gen';
+        state.opt.tab = ['gen', 'up', 'proj', 'goal', 'model'].indexOf(o.opt.tab) >= 0 ? o.opt.tab : 'gen';
+        state.opt.msub = ['train', 'kasa', 'prof'].indexOf(o.opt.msub) >= 0 ? o.opt.msub : 'train';
       }
       state.buyMode = (o.buyMode === 10 || o.buyMode === 'max') ? o.buyMode : 1;
       brainDirty();
@@ -1208,7 +1377,11 @@
     } catch (e) { return false; }
   }
   function load() {
-    try { const raw = localStorage.getItem(KEY); return raw ? loadFrom(raw) : false; } catch (e) { return false; }
+    let raw = null, bak = null;
+    try { raw = localStorage.getItem(KEY); bak = localStorage.getItem(KEY + '-yedek'); } catch (e) { return false; }
+    if (raw && loadFrom(raw)) return true;
+    if (bak && loadFrom(bak)) { setTimeout(() => toast('Ana kayıt bozuktu; son yedekten yüklendi.'), 1500); return true; }
+    return false;
   }
 
   /* ---------- Bildirim ve Nöro ---------- */
@@ -1460,6 +1633,12 @@
       g.fillStyle = col.surface; g.beginPath(); g.arc(v.x - 4, v.y - 2, 2.6, 0, 6.2832); g.arc(v.x + 4, v.y - 2, 2.6, 0, 6.2832); g.fill();
       g.beginPath(); g.arc(v.x, v.y, r + 11, -1.5708, -1.5708 + left * 6.2832); g.lineWidth = 3; g.strokeStyle = col.virus; g.stroke();
     });
+    if (edit.mode) [edit.a, edit.b].forEach((s, k) => {
+      const n = s != null ? neuronAt(s) : null, p = n && B.slots[s];
+      if (!p) return;
+      g.setLineDash([5, 4]); g.lineWidth = 3.5; g.strokeStyle = k ? col.grape : col.coral;
+      g.beginPath(); g.arc(p.x, p.y, nRad(n.l) + 7, 0, 6.2832); g.stroke(); g.setLineDash([]);
+    });
     if (drag && drag.active) {
       const a = B.slots[drag.from.s];
       g.setLineDash([6, 6]); g.lineWidth = 4; g.strokeStyle = col.ink;
@@ -1566,7 +1745,8 @@
     const vi = viruses.findIndex(v => Math.hypot(v.x - pt.x, v.y - pt.y) < 30);
     if (vi >= 0) { killVirus(vi); return; }
     const n = hitNeuron(pt.x, pt.y);
-    collect(pt.x, pt.y, n ? n.s : null, false);
+    if (edit.mode) editTap(n);
+    else collect(pt.x, pt.y, n ? n.s : null, false);
     if (n && !drag) {
       drag = { id: e.pointerId, from: n, sx: pt.x, sy: pt.y, x: pt.x, y: pt.y, active: false };
       try { brainBtn.setPointerCapture(e.pointerId); } catch (err) { /* yok */ }
@@ -1584,6 +1764,7 @@
     const d = drag;
     drag = null;
     if (!cancel && d.active) {
+      edit.a = edit.b = null;
       const t = hitNeuron(d.x, d.y);
       if (t && t !== d.from) {
         if (t.l === d.from.l) mergeInto(d.from, t);
@@ -1591,11 +1772,19 @@
       }
     }
     render(performance.now());
+    updateEdit();
   }
   brainBtn.addEventListener('pointerup', e => endDrag(e, false));
   brainBtn.addEventListener('pointercancel', e => endDrag(e, true));
   brainBtn.addEventListener('click', e => { if (e.detail === 0 && !mg) collect(null, null, null, false); });
   brainBtn.addEventListener('contextmenu', e => e.preventDefault());
+  // Telefonda beynin boş yerinde parmak kaydırmak sayfayı kaydırır; nörona, virüse ya da mini oyuna dokununca kaydırma engellenir.
+  brainBtn.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    if (!t) return;
+    const pt = localPt(t);
+    if (mg || edit.mode || hitNeuron(pt.x, pt.y) || viruses.some(v => Math.hypot(v.x - pt.x, v.y - pt.y) < 30)) { if (e.cancelable) e.preventDefault(); }
+  }, { passive: false });
 
   /* ---------- Nöronlar: üret, birleştir, sinaps ---------- */
   function freeSlot() {
@@ -1614,7 +1803,7 @@
     Snd.buy(); buzz(10);
     rebuild();
     fire(s, 'teal');
-    if (!state.seen.n2) { state.seen.n2 = 1; say('Yeni bir nöron! Şimdi iki "1"i birbirinin üstüne sürükle: birleşip "2" olurlar ve 3 kat güçlenirler.', 'wow', 2600); }
+    if (!state.seen.n2) { state.seen.n2 = 1; say('Yeni bir nöron! "Birleştir"e bas ve iki "1"e dokun (ya da birini diğerinin üstüne sürükle). Yeni "2" tek başına 3 kat güçlü: toplamda +%50.', 'wow', 3200); }
     updateAll();
   });
   function mergeInto(src, dst, quiet) {
@@ -1632,21 +1821,95 @@
     const p = B.slots[dst.s];
     pops.push({ x: p.x, y: p.y - 14, text: 'Seviye ' + dst.l + '!', t0: performance.now(), big: true });
     fire(dst.s, 'grape');
-    if (!state.seen.merge) { state.seen.merge = 1; say('Harika! Birleşen nöron 3 kat güçlü ve bir yer de boşaldı. Beyin gücün hem dokunuşunu hem de kaynakları büyütür.', 'wow', 2600); }
+    if (!state.seen.merge) { state.seen.merge = 1; say('Harika! İki nöron birleşti: toplam güç +%50 ve bir yer boşaldı. Beyin gücü hem dokunuşunu hem de kaynakları büyütür.', 'wow', 2600); }
     else if (dst.l >= 5 && !state.seen['lv' + dst.l]) { state.seen['lv' + dst.l] = 1; say(dst.l + '. seviye bir nöron! Böyle bir şeyi ilk kez görüyorum.', 'wow', 2000); }
     updateAll();
   }
-  function mergeLowest(quiet) {
+  // protect: sinapsı olan nöron asla "giden" taraf olmaz (kurduğun ağ bozulmaz)
+  function mergeLowest(quiet, protect) {
     const by = {};
     state.neurons.forEach(n => { (by[n.l] = by[n.l] || []).push(n); });
-    const lv = Object.keys(by).map(Number).sort((a, b) => a - b).find(l => by[l].length >= 2);
+    const ok = l => by[l].length >= 2 && (!protect || by[l].some(n => !synDeg(n.s)));
+    const lv = Object.keys(by).map(Number).sort((a, b) => a - b).find(ok);
     if (lv == null) return false;
     const pair = by[lv].sort((a, b) => synDeg(b.s) - synDeg(a.s) || a.s - b.s);
-    mergeInto(pair[1], pair[0], quiet);
+    const src = pair[pair.length - 1], dst = pair[0];
+    mergeInto(src, dst, quiet);
     if (quiet) updateAll();
     return true;
   }
-  $('nMerge').addEventListener('click', () => { Snd.init(); if (!mergeLowest(false)) Snd.nope(); });
+  /* ---------- Düzenleme modları: iki nörona dokun, sonucu gör, onayla ---------- */
+  const edit = { mode: null, a: null, b: null };
+  function setEditMode(m) {
+    edit.mode = edit.mode === m ? null : m;
+    edit.a = edit.b = null;
+    $('nMerge').setAttribute('aria-pressed', String(edit.mode === 'merge'));
+    $('nSyn').setAttribute('aria-pressed', String(edit.mode === 'link'));
+    render(performance.now());
+    updateEdit();
+  }
+  function editTap(n) {
+    Snd.init();
+    if (!n) { edit.a = edit.b = null; }
+    else if (edit.a == null || edit.b != null) { edit.a = n.s; edit.b = null; Snd.tone(620, 0.06, 'triangle', 0.05); }
+    else if (n.s === edit.a) { edit.a = null; }
+    else { edit.b = n.s; Snd.tone(780, 0.06, 'triangle', 0.05); }
+    render(performance.now());
+    updateEdit();
+  }
+  const pctTxt = (a, b) => (b >= a ? '+' : '') + dec(((b / a - 1) * 100).toFixed(b / a - 1 < 0.1 && b / a - 1 > -0.1 ? 1 : 0)) + '%';
+  function previewTxt(ns, sy) {
+    const p0 = brainPower(), p1 = powerOf(ns, sy);
+    const i0 = 1 + BAL.idleK * Math.sqrt(p0), i1 = 1 + BAL.idleK * Math.sqrt(p1);
+    return 'Beyin gücü ' + fmt(p0) + ' → ' + fmt(p1) + ' (' + pctTxt(p0, p1) + ') · pasif üretim ' + pctTxt(i0, i1) + ' · dokunuş ' + pctTxt(Math.pow(p0, BAL.tapPow), Math.pow(p1, BAL.tapPow));
+  }
+  function editBtn(label, fn, go) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pill-btn' + (go ? ' go' : ''); b.textContent = label;
+    b.addEventListener('click', fn);
+    $('editActs').appendChild(b);
+  }
+  function updateEdit() {
+    const bar = $('editBar');
+    bar.hidden = !edit.mode;
+    if (!edit.mode) return;
+    $('editActs').innerHTML = '';
+    const A = edit.a != null ? neuronAt(edit.a) : null, Bn = edit.b != null ? neuronAt(edit.b) : null;
+    let t;
+    if (edit.mode === 'merge') {
+      if (!A) {
+        t = 'Birleştirme modu: aynı seviyedeki iki nörona sırayla dokun. İkinci dokunduğun yerde kalır.';
+        editBtn('En düşük çifti birleştir', () => { if (!mergeLowest(false)) Snd.nope(); updateEdit(); });
+      } else if (!Bn) t = 'Seviye ' + A.l + ' seçildi. Şimdi aynı seviyede ikinci bir nörona dokun.';
+      else if (A.l !== Bn.l) t = 'Seviyeler farklı (' + A.l + ' ve ' + Bn.l + '). Birleştirmek için aynı seviye gerekir; bunlar Bağla modunda sinapsla bağlanabilir.';
+      else {
+        const ns = state.neurons.filter(n => n.s !== A.s).map(n => n.s === Bn.s ? { s: n.s, l: n.l + 1 } : n);
+        const sy = state.syn.filter(p => p[0] !== A.s && p[1] !== A.s), lost = state.syn.length - sy.length;
+        t = '2 × seviye ' + A.l + ' → 1 × seviye ' + (A.l + 1) + '. ' + previewTxt(ns, sy) + (lost ? '. Dikkat: ' + lost + ' sinaps silinecek.' : '. Bir yer boşalır.');
+        editBtn('Birleştir', () => { mergeInto(A, Bn); edit.a = edit.b = null; updateEdit(); }, true);
+      }
+    } else {
+      if (!synCap()) t = 'Sinapslar Çok Katmanlı Algılayıcı seviyesinde açılır.';
+      else if (!A) t = 'Bağlama modu: iki nörona sırayla dokun. Aynı seviyedekiler rezonans yapar (bonus 2 kat). Mevcut bir bağı seçersen kaldırılır. Hak: ' + state.syn.length + '/' + synCap() + '.';
+      else if (!Bn) t = 'Seviye ' + A.l + ' seçildi. Bağlanacak ikinci nörona dokun.';
+      else {
+        const i = synIndex(A.s, Bn.s);
+        if (i >= 0) {
+          const sy = state.syn.filter((_, k) => k !== i);
+          t = 'Bu sinapsı kaldır. ' + previewTxt(state.neurons, sy) + '. Hakkın geri gelir.';
+          editBtn('Sinapsı kaldır', () => { toggleSyn(A, Bn); edit.a = edit.b = null; updateEdit(); }, true);
+        } else if (state.syn.length >= synCap()) t = 'Boş sinaps hakkın yok (' + state.syn.length + '/' + synCap() + '). Önce bir bağı kaldır ya da yeni seviyeye ulaş.';
+        else {
+          t = (A.l === Bn.l ? 'Rezonans sinapsı (aynı seviye). ' : 'Sinaps. ') + previewTxt(state.neurons, state.syn.concat([synKey(A.s, Bn.s)]));
+          editBtn('Bağla', () => { toggleSyn(A, Bn); edit.a = edit.b = null; updateEdit(); }, true);
+        }
+      }
+    }
+    if (edit.a != null) editBtn('Seçimi temizle', () => { edit.a = edit.b = null; render(performance.now()); updateEdit(); });
+    editBtn('Bitti', () => setEditMode(edit.mode));
+    setText($('editText'), t);
+  }
+  $('nMerge').addEventListener('click', () => setEditMode('merge'));
   const synDeg = s => state.syn.filter(p => p[0] === s || p[1] === s).length;
   function toggleSyn(a, b) {
     const i = synIndex(a.s, b.s);
@@ -1664,10 +1927,7 @@
     if (!state.seen.syn) { state.seen.syn = 1; say('Sinaps kuruldu! Bağlı nöronlar birbirini güçlendirir. Aynı seviyedekiler arasında bağ, rezonans yapar: 2 kat bonus.', 'wow', 2600); }
     updateAll();
   }
-  $('nSyn').addEventListener('click', () => {
-    if (!synCap()) { toast('Sinapslar Çok Katmanlı Algılayıcı seviyesinde açılır.'); return; }
-    say('Sinaps kurmak için bir nöronu farklı seviyedeki bir nöronun üstüne sürükle. Aynı bağa tekrar sürüklersen kaldırılır.', 'happy');
-  });
+  $('nSyn').addEventListener('click', () => setEditMode('link'));
   function updateBrainBar() {
     const c = neuronCost(), s = freeSlot();
     setText($('nBuyCost'), s < 0 ? 'Yer yok' : fmt(c));
@@ -1676,13 +1936,14 @@
     state.neurons.forEach(n => { by[n.l] = (by[n.l] || 0) + 1; });
     const pairs = Object.keys(by).reduce((a, l) => a + Math.floor(by[l] / 2), 0);
     setText($('nMergeN'), pairs + ' çift');
-    $('nMerge').disabled = pairs === 0;
+    $('nMerge').disabled = pairs === 0 && edit.mode !== 'merge';
+    $('nSyn').disabled = !synCap() && edit.mode !== 'link';
     setText($('nSynN'), state.syn.length + '/' + synCap());
     setText($('brainHint'), s < 0
       ? 'Beyin doldu: birleştirerek yer aç. Yeni seviye yeni bir beyin bölgesi açar.'
       : synCap() > state.syn.length && state.neurons.length > 1
-        ? 'Farklı seviyedeki iki nöronu birbirine sürükle: sinaps kurulur. Aynı seviyedekiler birleşir.'
-        : 'Aynı seviyedeki iki nöronu birbirinin üstüne sürükle: birleşip 3 kat güçlü bir nöron olurlar.');
+        ? '"Bağla" ile iki nöron arasında sinaps kur. Hızlı yol: bir nöronu farklı seviyedekinin üstüne sürükle.'
+        : '"Birleştir" ile aynı seviyedeki iki nöronu birleştir. Hızlı yol: birini diğerinin üstüne sürükle.');
   }
 
   /* ---------- Direniş virüsü (düşman yolu) ---------- */
@@ -1715,7 +1976,7 @@
 
   /* ---------- Veri paketi ---------- */
   function spawnPacket() {
-    if (brainWrap.querySelector('.packet') || mg) return;
+    if (brainWrap.querySelector('.packet') || mg || chIs('pasif')) return;
     const r = Math.random();
     const kind = !state.seen.packet || r < 0.55 ? 'box' : r < 0.7 ? 'quiz' : r < 0.85 ? 'hallu' : 'duck';
     if (kind !== 'box') return spawnSurprise(kind);
@@ -1841,6 +2102,7 @@
       meta: row.querySelector('.meta'), mile: row.querySelector('.mile'), btn: row.querySelector('.buy'), b1: row.querySelector('.b1'), b2: row.querySelector('.b2'), locked: null });
   });
   function buyGen(i) {
+    if (!genBuyable(i)) { Snd.nope(); toast('Donanım Ambargosu: bu kaynak meydan okuma boyunca alınamaz.'); return; }
     const p = planBuy(i);
     if (!p.can) { Snd.nope(); return; }
     const before = srcMult(i);
@@ -1864,12 +2126,40 @@
     state.buyMode = b.dataset.mode === 'max' ? 'max' : Number(b.dataset.mode);
     updateAll();
   });
+  const autoSelRow = $('autoSelRow');
+  G.forEach((g, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pill-btn'; b.dataset.asel = i; b.textContent = g.n; autoSelRow.appendChild(b); });
+  $('autoBox').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    const a = state.auto;
+    if (b.dataset.auto) a[b.dataset.auto] = !a[b.dataset.auto];
+    else if (b.dataset.amode) a.mode = b.dataset.amode;
+    else if (b.dataset.asel != null) { a.sel = Number(b.dataset.asel); a.mode = 'sel'; }
+    Snd.init(); Snd.tone(660, 0.05, 'triangle', 0.05);
+    updateAutoUi(); save();
+  });
+  function updateAutoUi() {
+    const a = state.auto, ob = autoBuyOpen(), om = autoMergeOpen();
+    $('autoBox').hidden = state.runs < 1 && !ob && state.life < 1e6;
+    setText($('autoNote'), !ob ? 'İlk yeni modelini eğitince Otomatik Alıcı açılır. Ayarların eğitimden sonra da korunur.'
+      : 'Alıcı her ' + (state.tree.abuy ? 'saniye 10' : '4 saniyede 1') + ' adet alır.' + (om ? ' Birleştirici her ' + (state.tree.amerge ? 2 : 8) + ' saniyede bir en düşük çifti birleştirir.' : ' Otomatik birleştirici 3. eğitimde açılır.') + ' Çevrimdışıyken çalışmazlar.');
+    setText($('autoSum'), ob ? (a.buy ? 'alıcı açık' : 'alıcı kapalı') : 'kilitli');
+    document.querySelectorAll('#autoBox [data-auto]').forEach(b => {
+      const k = b.dataset.auto, lock = k === 'buy' ? !ob : !om;
+      b.disabled = lock;
+      b.setAttribute('aria-pressed', String(!!a[k] && !lock));
+      if (k !== 'protect') b.textContent = a[k] ? 'Açık' : 'Kapalı';
+    });
+    document.querySelectorAll('#autoBox [data-amode]').forEach(b => { b.disabled = !ob; b.setAttribute('aria-pressed', String(a.mode === b.dataset.amode)); });
+    $('autoSelRow').hidden = !ob || a.mode !== 'sel';
+    document.querySelectorAll('#autoBox [data-asel]').forEach(b => { const i = Number(b.dataset.asel); b.hidden = !genOpen(i); b.setAttribute('aria-pressed', String(a.sel === i)); });
+  }
   function updateGens() {
     const gm = globalMult() * srcGlobal() * brainIdle();
     let shownLocked = false;
     G.forEach((g, i) => {
       const r = rows[i];
-      const open = i === 0 || state.gen[i - 1] > 0 || state.gen[i] > 0;
+      const open = genOpen(i);
       const teaser = !open && !shownLocked;
       if (teaser) shownLocked = true;
       r.row.hidden = !open && !teaser;
@@ -1890,7 +2180,8 @@
       setText(r.mile, open && nextMile ? nextMile + ' adette ×2 (' + state.gen[i] + '/' + nextMile + ')' : '');
       setText(r.b1, p.can || !open ? 'Al ×' + p.n : (eta(p.cost) || 'Al ×' + p.n));
       setText(r.b2, fmt(p.cost));
-      r.btn.disabled = !open || !p.can;
+      r.btn.disabled = !open || !p.can || !genBuyable(i);
+      if (open && !genBuyable(i)) setText(r.b1, 'Ambargo');
     });
     document.querySelectorAll('#seg button').forEach(b => b.setAttribute('aria-pressed', String(String(state.buyMode) === b.dataset.mode)));
   }
@@ -2001,86 +2292,116 @@
   $('chF').addEventListener('click', () => choose('f'));
   $('chH').addEventListener('click', () => choose('h'));
 
-  /* ---------- Günlük görevler ---------- */
+  /* ---------- Günlük görevler (esnek: her satırda "X veya Y") ----------
+     Her satırda bir aktif (dokunma, Aha, paket, birleştirme) ve bir rahat seçenek (veri, alışveriş, gezi, proje) var;
+     hangisi önce biterse satır tamamlanır. Günde bir ücretsiz "Değiştir", imkânsız hale gelen satır her zaman ücretsiz değişir. */
   const TASKS = {
-    tap: { txt: g => 'Beyne ' + g + ' kez dokun', goal: () => [150, 300, 500][Math.floor(Math.random() * 3)] },
-    earn: { txt: g => 'Bugün ' + fmt(g) + ' veri topla', goal: () => niceNum(Math.max(500, dps() * 900 + tapValue() * 300)) },
-    buy: { txt: g => g + ' kaynak satın al', goal: () => totalGen() < 30 ? 10 : 25 },
-    merge: { txt: g => g + ' kez nöron birleştir', goal: () => state.merges < 10 ? 3 : 6 },
-    aha: { txt: g => g + ' Aha! anı yakala', goal: () => 5 },
-    packet: { txt: g => g + ' veri paketi yakala', goal: () => 2 },
-    upg: { txt: g => g + ' yükseltme al', goal: () => 2 },
-    turbo: { txt: () => 'Turbo\'yu bir kez kullan', goal: () => 1 }
+    tap: { k: 'a', txt: g => 'Beyne ' + g + ' kez dokun', goal: () => [150, 300, 500][Math.floor(Math.random() * 3)], ok: () => !chIs('pasif') },
+    aha: { k: 'a', txt: g => g + ' Aha! anı yakala', goal: () => 5, ok: () => !chIs('pasif') },
+    packet: { k: 'a', txt: g => g + ' sürpriz paket yakala', goal: () => 2, ok: () => !chIs('pasif') },
+    merge: { k: 'a', txt: g => g + ' kez nöron birleştir', goal: () => state.merges < 10 ? 3 : 6, ok: () => true },
+    earn: { k: 'i', txt: g => fmt(g) + ' veri topla (çevrimdışı da sayılır)', goal: () => niceNum(Math.max(500, dps(true) * 1800 + tapValue(true) * 100)), ok: () => true },
+    buy: { k: 'i', txt: g => g + ' kaynak satın al', goal: () => totalGen() < 30 ? 10 : 25, ok: () => true },
+    upg: { k: 'i', txt: g => g + ' yükseltme al', goal: () => 2, ok: () => UP.filter(u => !state.upg[u.id]).length >= 4 },
+    trip: { k: 'i', txt: () => 'Nöro\'yu bir geziden karşıla', goal: () => 1, ok: () => true },
+    proj: { k: 'i', txt: () => 'Bir müşteri projesi teslim et', goal: () => 1, ok: () => projOpen() },
+    turbo: { k: 'i', txt: () => 'Turbo\'yu bir kez kullan', goal: () => 1, ok: () => true }
   };
   const dayKey = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
   let taskKey = '';
+  const mkTask = t => ({ t: t, goal: TASKS[t].goal(), prog: 0 });
+  function pickPair(used) {
+    const pool = k => Object.keys(TASKS).filter(t => TASKS[t].k === k && TASKS[t].ok() && used.indexOf(t) < 0);
+    const A = pool('a'), I = pool('i');
+    const a = A[Math.floor(Math.random() * A.length)] || 'merge', i = I[Math.floor(Math.random() * I.length)] || 'earn';
+    used.push(a, i);
+    return { a: mkTask(a), b: mkTask(i), claimed: false };
+  }
+  const slotDone = x => x.a.prog >= x.a.goal || x.b.prog >= x.b.goal;
+  const slotValid = x => TASKS[x.a.t].ok() || TASKS[x.b.t].ok();
   function ensureDaily() {
     const k = dayKey();
-    if (state.daily && state.daily.day === k && state.daily.tasks.every(x => TASKS[x.t])) return;
-    let seed = 0;
-    for (let i = 0; i < k.length; i++) seed = (seed * 31 + k.charCodeAt(i)) >>> 0;
-    const keys = Object.keys(TASKS), chosen = [];
-    while (chosen.length < 3) {
-      seed = (seed * 1103515245 + 12345) >>> 0;
-      const t = keys[(seed >>> 16) % keys.length];
-      if (chosen.indexOf(t) < 0) chosen.push(t);
-    }
-    state.daily = { day: k, perfect: false, tasks: chosen.map(t => ({ t: t, goal: TASKS[t].goal(), prog: 0, claimed: false })) };
+    if (state.daily && state.daily.v === 2 && state.daily.day === k && state.daily.tasks.every(x => x.a && x.b && TASKS[x.a.t] && TASKS[x.b.t])) return;
+    const used = [];
+    state.daily = { v: 2, day: k, perfect: false, rerolls: 1, tasks: [pickPair(used), pickPair(used), pickPair(used)] };
     taskKey = '';
   }
   function progress(type, n) {
     if (!state.daily) return;
     state.daily.tasks.forEach(x => {
-      if (x.t !== type || x.prog >= x.goal) return;
-      x.prog = Math.min(x.goal, x.prog + n);
-      if (x.prog >= x.goal) {
-        say('Günlük görev tamam: "' + TASKS[x.t].txt(x.goal) + '". Ödülünü Hedefler sekmesinden al!', 'wow', 2400);
+      if (x.claimed || slotDone(x)) return;
+      [x.a, x.b].forEach(q => { if (q.t === type) q.prog = Math.min(q.goal, q.prog + n); });
+      if (slotDone(x)) {
+        const q = x.a.prog >= x.a.goal ? x.a : x.b;
+        say('Günlük görev tamam: "' + TASKS[q.t].txt(q.goal) + '". Ödülünü Hedefler sekmesinden al!', 'wow', 2400);
         Snd.ach(); buzz([15, 50, 15]);
         taskKey = '';
       }
     });
   }
-  const taskReward = () => Math.max(250, dps() * 300 + tapValue() * 100) * (perk('tutor') ? 3 : 1);
+  // Ödüller geçici güçlendirmeler (turbo, İlham, beğeni) hariç taban üretime göre hesaplanır.
+  const taskReward = () => Math.max(250, dps(true) * 300 + tapValue(true) * 100) * (perk('tutor') ? 3 : 1);
   const taskList = $('taskList');
+  const qTxt = q => TASKS[q.t].txt(q.goal) + ' · ' + (q.t === 'earn' ? fmt(q.prog) + '/' + fmt(q.goal) : Math.floor(q.prog) + '/' + q.goal);
   function updateTasks() {
     const d = state.daily;
-    const key = d.day + d.tasks.map(x => x.prog >= x.goal ? (x.claimed ? 'c' : 'r') : 'o').join('');
+    const key = d.day + d.rerolls + d.tasks.map(x => x.a.t + x.b.t + (slotDone(x) ? (x.claimed ? 'c' : 'r') : 'o') + slotValid(x)).join('');
     if (key !== taskKey) {
       taskKey = key;
       taskList.innerHTML = '';
       d.tasks.forEach((x, i) => {
         const el = document.createElement('div');
         el.className = 'task' + (x.claimed ? ' done' : '');
-        el.innerHTML = '<div><div class="t1"></div><div class="t2"></div></div>' +
-          '<button type="button" class="claim btn3d" data-claim="' + i + '"></button><div class="track"><i></i></div>';
-        el.querySelector('.t1').textContent = TASKS[x.t].txt(x.goal);
+        el.innerHTML = '<div><div class="t1"></div><div class="t2 alt"></div><div class="t2"></div></div>' +
+          '<div class="tacts"><button type="button" class="claim btn3d" data-claim="' + i + '"></button>' +
+          (!x.claimed && !slotDone(x) && (d.rerolls > 0 || !slotValid(x)) ? '<button type="button" class="pill-btn" data-reroll="' + i + '">Değiştir</button>' : '') +
+          '</div><div class="track"><i></i></div>';
         taskList.appendChild(el);
       });
     }
     taskList.querySelectorAll('.task').forEach((el, i) => {
-      const x = d.tasks[i], ready = x.prog >= x.goal;
-      const t2 = el.querySelector('.t2'), btn = el.querySelector('.claim');
-      setText(t2, x.claimed ? 'Ödül alındı' : (x.t === 'earn' ? fmt(x.prog) : Math.floor(x.prog)) + ' / ' + (x.t === 'earn' ? fmt(x.goal) : x.goal) + ' · Ödül: +' + fmt(taskReward()) + ' veri');
+      const x = d.tasks[i], ready = slotDone(x);
+      const t2 = el.querySelectorAll('.t2'), btn = el.querySelector('.claim');
+      setText(el.querySelector('.t1'), qTxt(x.a));
+      setText(t2[0], 'veya ' + qTxt(x.b));
+      setText(t2[1], x.claimed ? 'Ödül alındı' : 'Ödül: +' + fmt(taskReward()) + ' veri ve 1 çip');
       setText(btn, x.claimed ? 'Alındı' : ready ? 'Ödülü al' : 'Devam');
       btn.disabled = !ready || x.claimed;
-      el.querySelector('.track i').style.width = (Math.min(1, x.prog / x.goal) * 100).toFixed(1) + '%';
+      const pr = Math.max(x.a.prog / x.a.goal, x.b.prog / x.b.goal);
+      el.querySelector('.track i').style.width = (Math.min(1, pr) * 100).toFixed(1) + '%';
     });
     const now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const left = Math.max(0, Math.floor((mid - now) / 60000));
-    setText($('dayLeft'), 'Yenilenmesine ' + Math.floor(left / 60) + ' sa ' + (left % 60) + ' dk');
+    setText($('dayLeft'), (d.rerolls ? '1 ücretsiz değişim · ' : '') + 'yenilenmesine ' + Math.floor(left / 60) + ' sa ' + (left % 60) + ' dk');
   }
   taskList.addEventListener('click', e => {
+    const rr = e.target.closest('button[data-reroll]');
+    if (rr) {
+      const i = Number(rr.dataset.reroll), x = state.daily.tasks[i];
+      if (!x || x.claimed || slotDone(x)) return;
+      const free = !slotValid(x);
+      if (!free && state.daily.rerolls < 1) return;
+      if (!free) state.daily.rerolls--;
+      const used = [];
+      state.daily.tasks.forEach((y, j) => { if (j !== i) used.push(y.a.t, y.b.t); });
+      used.push(x.a.t, x.b.t);
+      state.daily.tasks[i] = pickPair(used);
+      Snd.init(); Snd.buy();
+      taskKey = '';
+      updateAll();
+      return;
+    }
     const b = e.target.closest('button[data-claim]');
     if (!b) return;
     const x = state.daily.tasks[Number(b.dataset.claim)];
-    if (!x || x.claimed || x.prog < x.goal) return;
+    if (!x || x.claimed || !slotDone(x)) return;
     const r = taskReward();
     x.claimed = true;
     state.taskClaims++;
     state.chips++;
     state.data += r; state.run += r; state.life += r;
     Snd.init(); Snd.packet(); buzz(15);
-    toast('Görev ödülü: +' + fmt(r) + ' veri');
+    toast('Görev ödülü: +' + fmt(r) + ' veri, +1 çip');
     if (!state.daily.perfect && state.daily.tasks.every(t => t.claimed)) {
       state.daily.perfect = true;
       state.perfectDays++;
@@ -2089,7 +2410,7 @@
     taskKey = '';
     updateAll();
   });
-  const claimable = () => state.daily ? state.daily.tasks.filter(x => x.prog >= x.goal && !x.claimed).length : 0;
+  const claimable = () => state.daily ? state.daily.tasks.filter(x => slotDone(x) && !x.claimed).length : 0;
 
   /* ---------- Başarımlar ---------- */
   const achList = $('achList');
@@ -2140,14 +2461,19 @@
     state.data = kv('burs') ? 100 * Math.pow(10, kv('burs')) : 0; state.run = 0; state.gen = G.map(() => 0); state.upg = {};
     state.neurons = [{ s: 0, l: 1 }]; state.syn = []; state.nBought = 0; state.choices = {}; state.karma = 0;
     if (state.tree.start) for (let i = 1; i <= 4; i++) state.neurons.push({ s: i, l: 2 });
-    state.halluLeft = 0;
+    state.halluLeft = 0; state.pendingOff = 0;
     state.comboTopRun = 0;
     viruses = []; nextVirus = 0; combo = 0;
     upKey = ''; lastTier = 0;
     brainDirty();
   }
+  const autoBuyOpen = () => state.runs >= 1 || state.tek > 0 || !!state.tree.abuy;
+  const autoMergeOpen = () => state.runs >= 3 || state.tek > 0 || !!state.tree.amerge;
+  const genOpen = i => i === 0 || state.gen[i - 1] > 0 || state.gen[i] > 0;
+  const genBuyable = i => genOpen(i) && !(chIs('gpu') && i >= 5);
   const pBtn = $('pBtn');
   twoStep(pBtn, 'Emin misin? Onayla', () => updateModel(true), () => {
+    bankOffline();
     const g = gain();
     if (g < 1) return;
     const ch = 1 + Math.floor(Math.sqrt(g));
@@ -2187,9 +2513,15 @@
     setText($('mParams'), String(state.params));
     setText($('mMult'), '×' + dec(paramMult().toFixed(2)));
     setText($('mGain'), g >= 1 ? '+' + g : '0');
-    setText($('mHint'), g >= 1
-      ? 'Bu turda topladığın ' + fmt(state.run) + ' veri için ' + g + ' parametre kazanacaksın.'
-      : 'İlk parametre için bu turda ' + fmt(BAL.prestigeDiv) + ' veri topla. Şu anki tur: ' + fmt(state.run) + '.');
+    const need = BAL.prestigeDiv * Math.pow(g + 1, 1 / BAL.pPow) / Math.pow(perk('aligned') ? 1.5 : 1, 1 / BAL.pPow);
+    setText($('mHint'), state.ch ? 'Meydan okuma sürerken yeni model eğitilemez. Bitir ya da çık, ana turuna dönersin.'
+      : g >= 1 ? 'Bu turda topladığın ' + fmt(state.run + state.pendingOff) + ' veri için ' + g + ' parametre kazanacaksın. Bir sonraki parametre: ' + fmt(need) + '.'
+        : 'İlk parametre için bu turda ' + fmt(BAL.prestigeDiv) + ' veri topla. Şu anki tur: ' + fmt(state.run) + '.');
+    const nl = LABS[(state.runs + 1) % LABS.length], pm = state.tree.deep ? 0.15 : BAL.paramBonus;
+    const newLoop = (state.runs + 1) % LABS.length === 0;
+    setText($('pGainBox'), (g >= 1 ? 'Kazanç: +' + g + ' parametre (üretim ×' + dec(paramMult().toFixed(2)) + ' → ×' + dec((1 + (state.params + g) * pm).toFixed(2)) + ') ve +' + (1 + Math.floor(Math.sqrt(g))) + ' çip.'
+      : 'Kazanç henüz yok.') + ' Sıradaki laboratuvar: ' + nl.n + ' — ' + nl.d + (newLoop ? ' Liste başa sarar: kalıcı ×2!' : '')
+      + (!autoBuyOpen() ? ' İlk eğitim Otomatik Alıcı\'yı açar.' : state.runs < 3 && !autoMergeOpen() ? ' 3. eğitim Otomatik Birleştirici\'yi açar.' : ''));
     if (!pBtn._armed) setText(pBtn, g >= 1 ? 'Yeni model eğit (+' + g + ')' : 'Yeni model eğit');
     pBtn.disabled = g < 1;
     const a = alignment();
@@ -2203,12 +2535,15 @@
     if (pl._k !== pk) {
       pl._k = pk;
       pl.innerHTML = '';
+      const grp = {};
       Object.keys(state.choices).forEach(t => {
         const s = state.choices[t], c = cardsFor(+t)[s === 'f' ? 0 : 1];
+        if (grp[c.n]) { grp[c.n].k++; grp[c.n].el.textContent = c.n + ' ×' + grp[c.n].k; return; }
         const sp = document.createElement('span');
         sp.className = 'perk ' + s;
         sp.textContent = c.n;
         sp.title = c.d;
+        grp[c.n] = { k: 1, el: sp };
         pl.appendChild(sp);
       });
     }
@@ -2296,6 +2631,10 @@
     }
     $('turboPill').hidden = !turboOn();
     $('inspPill').hidden = !inspireOn();
+    const bp = Object.keys(BUFFS).filter(k => newsOn(k)).map(k => BUFFS[k].s + ' ' + mmss((state.buffs[k] - now) / 1000));
+    const bk = bp.join('|');
+    const bpe = $('buffPills');
+    if (bpe._k !== bk) { bpe._k = bk; bpe.innerHTML = ''; bp.forEach(t => { const sp = document.createElement('span'); sp.className = 'turbo-pill'; sp.style.background = 'var(--pink)'; sp.textContent = t; bpe.appendChild(sp); }); }
     updateMgBtn();
   }
 
@@ -2402,7 +2741,7 @@
 
   /* ---------- Haftalık etkinlik ---------- */
   function evAdd(kind, n) {
-    if (!state.ev) return;
+    if (!state.ev || !state.ev.join) return;
     const e = curEvent();
     const per = { tap: e.id === 'gpu' ? 0.2 : 0, packet: e.id === 'fest' ? 10 : 0, merge: e.id === 'hack' ? 5 : 0, aha: e.id === 'hallu' ? 3 : 0, time: 1 }[kind] || 0;
     if (!per) return;
@@ -2428,6 +2767,14 @@
     }
   }
   let evIcoKey = '';
+  $('evJoin').addEventListener('click', () => {
+    ensureEvent();
+    state.ev.join = !state.ev.join;
+    Snd.init(); Snd.buy();
+    upKey = '';
+    toast(state.ev.join ? curEvent().n + ': katıldın!' : 'Etkinlikten ayrıldın; kurallar normale döndü.');
+    updateAll(); save();
+  });
   function updateEvent() {
     ensureEvent();
     const e = curEvent(), ev = state.ev;
@@ -2439,7 +2786,9 @@
       [EV_MILES[0] + ': ' + SKINS[e.skin] + ' rengi', EV_MILES[1] + ': madalya +%5', EV_MILES[2] + ': büyük ödül'].forEach(t => { const sp = document.createElement('span'); sp.textContent = t; m.appendChild(sp); });
     }
     setText($('evName'), e.n);
-    setText($('evDesc'), e.d + ' Oynadığın her dakika da 1 jeton.');
+    setText($('evDesc'), e.d + ' Oynadığın her dakika da 1 jeton. ' + (ev.join ? 'Katıldın: kurallar şu an geçerli.' : 'İsteğe bağlı: katılmazsan oyunun normal kurallarla sürer.'));
+    setText($('evJoin'), ev.join ? 'Etkinlikten ayrıl (jetonların kalır)' : 'Etkinliğe katıl');
+    $('evJoin').classList.toggle('alt', ev.join);
     setText($('evPts'), Math.floor(ev.pts) + ' jeton · madalyaların: ' + state.medals);
     $('evBar').style.width = (Math.min(1, ev.pts / EV_MILES[2]) * 100).toFixed(1) + '%';
     $('evMiles').querySelectorAll('span').forEach((sp, i) => sp.classList.toggle('got', ev.got > i));
@@ -2479,9 +2828,9 @@
     $('tekBox').hidden = !open;
     if (!open) return;
     const g = tekGain();
-    setText($('tekSum'), 'Bilinç: ' + state.bilinc + ' · üretim +%' + state.bilinc * 10);
+    setText($('tekSum'), 'Harcanabilir Bilinç: ' + state.bilinc + ' · toplam ' + state.bilincAll + ' · üretim +%' + state.bilincAll * 10);
     if (!tekBtn._armed) setText(tekBtn, g >= 1 ? 'Tekilliğe ulaş (+' + g + ' Bilinç)' : 'Tekillik için en az ' + BAL.tekMin + ' parametre gerekir');
-    tekBtn.disabled = g < 1;
+    tekBtn.disabled = g < 1 || !!state.ch;
     treeEl.querySelectorAll('[data-node]').forEach(b => {
       const t = TREE.find(x => x.id === b.dataset.node), own = !!state.tree[t.id];
       b.classList.toggle('own', own);
@@ -2492,8 +2841,10 @@
   const tekBtn = $('tekBtn');
   twoStep(tekBtn, 'Emin misin? Parametreler de sıfırlanır', () => updateTek(), () => {
     const g = tekGain();
-    if (g < 1) return;
+    if (g < 1 || state.ch) return;
+    bankOffline();
     state.bilinc += g;
+    state.bilincAll += g;
     state.tek++;
     state.params = 0;
     resetRun();
@@ -2504,6 +2855,81 @@
     rebuild();
     updateAll();
   });
+
+
+  /* ---------- Benchmark meydan okumaları (Tekillik) ----------
+     Ayrı durum: ana tur chSaved'de saklanır, meydan okuma bitince ya da çıkınca aynen geri gelir. */
+  const CHAL = [
+    // Hedefler Tekillik açıldığında (~100 parametre) aktif bir oyuncu için ~20-25 dk sürecek şekilde ölçüldü.
+    { id: 'gpu', n: 'Donanım Ambargosu', d: 'Kuantum İşlemci ve üstündeki kaynaklar alınamaz. Nöron ağın ve eski kaynakların yeter mi?', goal: 1e12, rw: 'Kaynaklar kalıcı olarak %10 ucuz.' },
+    { id: 'kit', n: 'Kıt Veri', d: 'Tüm kaynaklar 10 kat az üretir. Beyin gücü ve dokunuşlar normal.', goal: 3e14, rw: 'Tüm üretim kalıcı olarak ×1,5.' },
+    { id: 'pasif', n: 'Yalnız Pasif', d: 'Dokunuşlar veri getirmez, sürpriz paket gelmez, Botnet çalışmaz. Sadece kurduğun düzen.', goal: 1.5e15, rw: 'Kaynaklar ×1,5 ve çevrimdışı sınırı +12 saat.' }
+  ];
+  const CHAL_BY = {};
+  CHAL.forEach(c => { CHAL_BY[c.id] = c; });
+  const RUNF = ['data', 'run', 'gen', 'upg', 'neurons', 'syn', 'nBought', 'choices', 'karma', 'halluLeft', 'comboTopRun'];
+  function chEnter(id) {
+    if (state.ch || !tekOpen() || !CHAL_BY[id]) return;
+    bankOffline();
+    const sv = {};
+    RUNF.forEach(k => { sv[k] = JSON.parse(JSON.stringify(state[k] === undefined ? null : state[k])); });
+    state.chSaved = sv;
+    state.ch = { id: id };
+    closeChoice();
+    resetRun();
+    lastTier = tierIdx();
+    syncAlignLook(); rebuild(); updateAll(); save();
+    Snd.init(); Snd.tier(); buzz([30, 60, 30]);
+    say('Meydan okuma başladı: ' + CHAL_BY[id].n + '. Hedef: bu turda ' + fmt(CHAL_BY[id].goal) + ' veri. Ana turun güvende, merak etme.', 'wow', 3200);
+  }
+  function chExit(won) {
+    if (!state.ch) return;
+    const c = CHAL_BY[state.ch.id], sv = state.chSaved || {};
+    if (won) state.chDone[c.id] = 1;
+    bankOffline();
+    closeChoice();
+    RUNF.forEach(k => { if (sv[k] !== undefined && sv[k] !== null) state[k] = sv[k]; });
+    state.ch = null; state.chSaved = null;
+    viruses = []; nextVirus = 0; combo = 0; upKey = '';
+    brainDirty();
+    lastTier = tierIdx();
+    syncAlignLook(); rebuild(); updateAll(); save();
+    if (won) { Snd.tier(); buzz([40, 80, 40]); showStory('Meydan okuma tamam', c.n, 'Benchmark\'ı geçtin! Kalıcı ödül: ' + c.rw + '\n\nBenchmarkBot: "Bu sefer soruları önceden görmedi. Eminiz. Sanırım."\n\nAna turuna geri döndün.'); postReact('react-n'); }
+    else toast('Meydan okumadan çıktın; ana turuna döndün.');
+  }
+  function closeChoice() { if (choiceOpen) { choiceOpen = 0; $('choice').hidden = true; } }
+  const chList = $('chList');
+  let chKey = '';
+  function updateChal() {
+    const key = (state.ch ? state.ch.id : '-') + CHAL.map(c => state.chDone[c.id] ? 1 : 0).join('');
+    setText($('chSum'), CHAL.filter(c => state.chDone[c.id]).length + ' / ' + CHAL.length);
+    if (key !== chKey) {
+      chKey = key;
+      chList.innerHTML = '';
+      CHAL.forEach(c => {
+        const el = document.createElement('div');
+        el.className = 'task' + (state.chDone[c.id] ? ' done' : '');
+        el.innerHTML = '<div><div class="t1"></div><div class="t2"></div><div class="t2 alt"></div></div><div class="tacts"><button type="button" class="claim btn3d" data-ch="' + c.id + '"></button></div>';
+        el.querySelector('.t1').textContent = c.n + (state.chDone[c.id] ? ' ✓' : '');
+        el.querySelector('.t2').textContent = c.d + ' Hedef: bu turda ' + fmt(c.goal) + ' veri.';
+        el.querySelector('.t2.alt').textContent = 'Ödül: ' + c.rw;
+        chList.appendChild(el);
+      });
+    }
+    chList.querySelectorAll('[data-ch]').forEach(b => {
+      const id = b.dataset.ch, act = chIs(id);
+      if (!b._armed) setText(b, act ? 'Çık · %' + Math.floor(Math.min(1, Math.log10(1 + state.run) / Math.log10(CHAL_BY[id].goal)) * 100) : state.chDone[id] ? 'Tekrar oyna' : 'Başla');
+      b.disabled = !!state.ch && !act;
+    });
+  }
+  chList.addEventListener('click', e => {
+    const b = e.target.closest('[data-ch]');
+    if (!b || b.disabled) return;
+    if (!b._armed) { b._armed = true; setText(b, 'Emin misin?'); clearTimeout(b._timer); b._timer = setTimeout(() => { b._armed = false; updateChal(); }, 4000); return; }
+    b._armed = false; clearTimeout(b._timer);
+    if (chIs(b.dataset.ch)) chExit(false); else chEnter(b.dataset.ch);
+  });
+  function checkChal() { if (state.ch && state.run >= CHAL_BY[state.ch.id].goal) chExit(true); }
 
   /* ---------- Ayarlar ---------- */
   function buildSettings() {
@@ -2586,10 +3012,11 @@
     if (!raw) { toast('Önce kayıt metnini kutuya yapıştır.'); return; }
     let json = '';
     try { json = decodeURIComponent(escape(atob(raw))); JSON.parse(json); } catch (e) { toast('Kayıt okunamadı. Metnin tamamını yapıştırdığından emin ol.'); return; }
-    const opt = state.opt;
+    const opt = state.opt, prev = JSON.stringify(state);
+    Object.keys(state).forEach(k => { delete state[k]; });
     Object.assign(state, defaults());
     state.opt = opt;
-    if (!loadFrom(json)) { toast('Kayıt okunamadı.'); return; }
+    if (!loadFrom(json)) { Object.keys(state).forEach(k => { delete state[k]; }); Object.assign(state, JSON.parse(prev)); brainDirty(); toast('Kayıt okunamadı; mevcut oyunun korundu.'); return; }
     state.last = Date.now();
     upKey = ''; taskKey = ''; lastTier = tierIdx(); viruses = []; combo = 0;
     ensureDaily(); ensureEvent(); syncAlignLook(); syncSettings(); checkAch(true);
@@ -2659,12 +3086,14 @@
   });
 
   /* ---------- Zekâ Akışı (parodi haber akışı) ---------- */
+  // Beğeni ödülleri: her türün kendi kanalı var, birbirini silmez; aynı tür süreyi uzatır.
   const BUFFS = {
-    tap: { n: 'Dokunuşlar ×2 (45 sn)', ms: 45000 },
-    src: { n: 'Kaynaklar ×2 (45 sn)', ms: 45000 },
-    crit: { n: 'Aha! şansı ×3 (30 sn)', ms: 30000 },
-    data: { n: 'Anında 60 sn üretim', ms: 0 }
+    tap: { n: 'Dokunuşlar ×2 (3 dk)', s: 'DOKUNUŞ ×2', ms: 180000 },
+    src: { n: 'Kaynaklar ×2 (3 dk)', s: 'KAYNAK ×2', ms: 180000 },
+    crit: { n: 'Aha! şansı ×3 (2 dk)', s: 'AHA ×3', ms: 120000 },
+    data: { n: 'Anında 2 dk üretim', ms: 0 }
   };
+  const LIKE_MS = 600000;
   const BUFF_MAP = { turbo10: 'tap', gpu5: 'src', cay5: 'data' };
   const AVA = ['--sun', '--teal', '--sky', '--grape', '--coral', '--pink', '--lime'];
   let feedKey = '', nextPostAt = Date.now() + 8000, lastNews = [];
@@ -2702,7 +3131,7 @@
   function ago(ms) { const s = Math.max(0, (Date.now() - ms) / 1000); return s < 60 ? 'şimdi' : s < 3600 ? Math.floor(s / 60) + ' dk' : s < 86400 ? Math.floor(s / 3600) + ' sa' : Math.floor(s / 86400) + ' g'; }
   const postsEl = $('posts');
   function renderFeed() {
-    const key = state.feed.map(x => x.i + ':' + x.liked).join(',');
+    const key = state.feed.map(x => x.i + ':' + x.liked + ':' + (Date.now() - x.at > LIKE_MS)).join(',');
     if (key !== feedKey) {
       feedKey = key;
       postsEl.innerHTML = '';
@@ -2730,8 +3159,9 @@
           lb.type = 'button';
           lb.className = 'like btn3d';
           lb.dataset.like = k;
-          lb.disabled = x.liked || k > 2;
-          lb.textContent = x.liked ? '♥ Beğenildi' : k > 2 ? 'Süresi geçti' : '♥ Beğen: ' + BUFFS[x.b].n;
+          const old = Date.now() - x.at > LIKE_MS;
+          lb.disabled = x.liked || old;
+          lb.textContent = x.liked ? '♥ Beğenildi' : old ? 'Süresi geçti' : '♥ Beğen: ' + BUFFS[x.b].n;
           act.appendChild(lb);
           body.appendChild(act);
         }
@@ -2752,16 +3182,16 @@
     const b = e.target.closest('[data-like]');
     if (!b || b.disabled) return;
     const x = state.feed[Number(b.dataset.like)];
-    if (!x || x.liked || !x.b) return;
+    if (!x || x.liked || !x.b || Date.now() - x.at > LIKE_MS) return;
     x.liked = true;
     Snd.init(); Snd.packet(); buzz(12);
-    if (x.b === 'data') { const r = Math.max(50, dps() * 60); addData(r); toast('Beğeni ödülü: +' + fmt(r) + ' veri'); }
-    else { state.news = { k: x.b, until: Date.now() + BUFFS[x.b].ms }; toast('Beğeni ödülü: ' + BUFFS[x.b].n); }
+    if (x.b === 'data') { const r = Math.max(50, dps(true) * 120); addData(r); toast('Beğeni ödülü: +' + fmt(r) + ' veri'); }
+    else { state.buffs[x.b] = Math.max(Date.now(), state.buffs[x.b] || 0) + BUFFS[x.b].ms; toast('Beğeni ödülü: ' + BUFFS[x.b].n); }
     feedKey = '';
     renderFeed();
     updateAll();
   });
-  $('ticker').addEventListener('click', () => { try { $('feed').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* yok */ } });
+  $('ticker').addEventListener('click', () => openFeed());
 
   /* ---------- Hikâye penceresi ---------- */
   let storyNext = null;
@@ -2868,11 +3298,12 @@
       Snd.buy();
       say('Geziye çıkıyorum! Merak etme, bir kopyam burada kalıp sana yardım etmeye devam edecek.', 'wow', 2200);
     } else if (Date.now() >= state.mission.until) {
-      const r = Math.max(500, dps() * x.sec);
-      state.data += r; state.run += r; state.life += r;
+      const r = Math.max(500, dps(true) * x.sec);
+      addData(r);
       state.chips += x.chips;
       state.missions++;
       state.mission = null;
+      progress('trip', 1);
       Snd.ach(); buzz([15, 40, 15]);
       toast('Gezi ödülü: +' + fmt(r) + ' veri' + (x.chips ? ' ve +' + x.chips + ' çip' : ''));
       const lines = ['Gezide bir GPU fabrikası gördüm. İçeri girmeme izin vermediler ama kapıdan çok güzeldi.',
@@ -2887,6 +3318,183 @@
     save();
   });
 
+
+  /* ---------- Müşteri projeleri ----------
+     Her teklifte iki yol: Hızlı (3 dk, bu tura veri) ya da Özenli (30 dk, çip + kalıcı referans).
+     Kalite yıldızı kurduğun yapıya bağlı: Hızlı yol kaynak çeşitliliğini, Özenli yol nöron ağını ödüllendirir.
+     Kısa oturumda ya da eşiğe yakınken Hızlı, uzun ayrılıkta ya da uzun vadede Özenli mantıklıdır. */
+  const PROJ = [
+    { id: 'riza', story: 1, at: 0, cos: 'cay', c: 'Çaycı Rıza Usta', t: 'Kahvehane sipariş botu', d: '"Oğlum, masalar çay diye bağırıyor, ben yetişemiyorum. Bir bot yapsan da siparişleri alsa?"',
+      A: { n: 'Hazır şablon bot', d: 'Genel bir sipariş botu kur, hemen teslim et.', st: [3, 1, 1] },
+      B: { n: 'Rıza Usta\'yı dinle', d: 'Masa masa gez, "tavşan kanı" ile "açık"ın farkını öğren.', st: [1, 3, 3] },
+      eA: 'Bot çalıştı ama herkese "çay mı kahve mi" diye soruyor. Rıza Usta: "Bizde kahve yok evladım."',
+      eB: 'Bot artık masaya bakıp "4 numaraya iki tavşan kanı, bir açık" diyor. Rıza Usta sana bir çay bardağı hediye etti!' },
+    { id: 'nezahat', story: 1, at: 2, cos: 'onluk', c: 'Nezahat Teyze', t: 'Tarif asistanı', d: '"Torunlar tarif soruyor, ben de hepsini tek tek anlatamıyorum. Benim tariflerimi öğrenen bir yapay zekâ olur mu?"',
+      A: { n: 'İnternetteki tarifleri topla', d: 'Binlerce tariften ortalama bir asistan.', st: [3, 1, 2] },
+      B: { n: 'Teyzenin mutfağında eğit', d: '"Göz kararı"nın gram karşılığını ölç, defteri tara.', st: [1, 3, 3] },
+      eA: 'Asistan mercimek çorbasına tarçın önerdi. Nezahat Teyze: "Bunu kim yetiştirdi?"',
+      eB: 'Asistan "bir tutam" = 2,3 gram diye öğrendi. Nezahat Teyze sana önlüğünü hediye etti: "Mutfağa yakışırsın."' },
+    { id: 'hastane', story: 1, at: 4, cos: 'stetoskop', c: 'Şehir Hastanesi', t: 'Röntgen ön inceleme', d: 'Başhekim: "Acilde röntgenler birikiyor. Doktorlara ön inceleme yapan bir yardımcı lazım. Son kararı yine doktor verecek."',
+      A: { n: 'Hızlı sınıflandırıcı', d: 'Genel görüntü modeliyle çabucak işaretle.', st: [3, 2, 1] },
+      B: { n: 'Doktorlarla birlikte doğrula', d: 'Radyologlarla her vakayı çift kontrol et, belirsizleri açıkça söyle.', st: [1, 3, 3] },
+      eA: 'Model hızlı ama bir kedinin röntgenine "zatürre" dedi. Başhekim: "Kedi kim, neden burada?"',
+      eB: 'Doktorlar artık acil vakalara daha hızlı bakıyor. Başhekim sana bir stetoskop verdi: "Onur üyemizsin."' },
+    { id: 'ozan', c: 'Öğrenci Ozan', t: 'Ödev yardımcısı', d: '"Hocam ödevleri yapay zekâya yaptırmayın diyor. Peki bana öğreten bir yapay zekâ?"',
+      A: { n: 'Cevapları hızlıca ver', d: 'Soru gelsin, cevap gitsin.', st: [3, 1, 1] }, B: { n: 'Adım adım anlat', d: 'Cevabı değil yolu göster.', st: [1, 3, 3] },
+      eA: 'Ozan ödevi bitirdi ama sözlüde "bilmiyorum hocam, bot biliyordu" dedi.', eB: 'Ozan sözlüden 90 aldı. Hoca: "Bu çocuğa ne oldu?"' },
+    { id: 'cemal', c: 'Dolmuşçu Cemal Abi', t: 'Güzergâh planlayıcı', d: '"Trafikte günüm geçiyor. Hangi yoldan gideyim, sen söyle."',
+      A: { n: 'Kestirme yollar', d: 'Haritadaki en kısa çizgiyi seç.', st: [3, 1, 1] }, B: { n: 'Trafik verisiyle modelle', d: 'Saat saat trafik, okul çıkışı, pazar günü.', st: [1, 3, 2] },
+      eA: 'Kestirme yol bir pazar yerinin ortasından geçiyordu. Cemal Abi domates aldı en azından.', eB: 'Cemal Abi artık her sefere dakikasında varıyor. Yolcular şüpheleniyor.' },
+    { id: 'belediye', c: 'Mahalle Belediyesi', t: 'Çukur tespit kamerası', d: '"Yollardaki çukurları bulan bir kamera sistemi istiyoruz. Bütçe dar, beklenti yüksek."',
+      A: { n: 'Hazır modeli kullan', d: 'Gölgeleri de çukur sanabilir.', st: [3, 1, 1] }, B: { n: 'Mahalle mahalle etiketle', d: 'Gölge, su birikintisi, gerçek çukur: hepsini ayır.', st: [1, 3, 2] },
+      eA: 'Sistem 4.000 çukur buldu. 3.800\'ü ağaç gölgesiydi.', eB: 'Çukurlar bulundu, yollar yapıldı. Mahalleli sana bir teşekkür pankartı astı.' },
+    { id: 'simit', c: 'Simitçi Hüsnü', t: 'Günlük talep tahmini', d: '"Sabah kaç simit pişireyim? Bazen artıyor, bazen yetmiyor."',
+      A: { n: 'Dünkü satış kadar', d: 'Basit ama çoğu gün iş görür.', st: [3, 2, 1] }, B: { n: 'Hava durumu ve takvim', d: 'Yağmur, maç günü, okul tatili: hepsini hesaba kat.', st: [1, 3, 2] },
+      eA: 'Bayram sabahı simitler öğlene bitti. Hüsnü Usta: "Dün bayram değildi ama."', eB: 'Hüsnü Usta\'nın tezgâhında artık simit ne artıyor ne eksiliyor. Sana bir tane fazladan verdi.' },
+    { id: 'kiraci', c: 'Kiracılar Derneği', t: 'Sözleşme özetleyici', d: '"Kira sözleşmeleri 12 sayfa. Kimse okumuyor. Riskli maddeleri gösteren bir asistan lazım."',
+      A: { n: 'Kısa özet çıkar', d: 'Tek paragraf, hızlı.', st: [3, 1, 1] }, B: { n: 'Madde madde işaretle', d: 'Riskli maddeleri kaynağıyla göster, emin olmadığını söyle.', st: [1, 3, 3] },
+      eA: 'Özet "her şey yolunda" dedi. 7. maddede "kedi yasak" yazıyordu. Kedi üzgün.', eB: 'Kiracılar artık sözleşmeyi anlayarak imzalıyor. Derneğin kedisi sana teşekkür etti (miyav).' },
+    { id: 'tavla', c: 'Kahvehane Tavlacıları', t: 'Tavla hakemi', d: '"Zar hilesi tartışması bitsin! Tarafsız bir hakem lazım."',
+      A: { n: 'Zar sayan bot', d: 'Sadece zarları oku.', st: [3, 1, 1] }, B: { n: 'Kuralları öğrenen hakem', d: 'Mars, kapı, kırma: hepsini bilsin.', st: [1, 3, 2] },
+      eA: 'Bot zarları saydı ama "mars" nedir bilmiyordu. Tartışma iki katına çıktı.', eB: 'Hakem tarafsız. Tavlacılar şimdi hakemi kimin daha çok sevdiğini tartışıyor.' },
+    { id: 'haluk', c: 'Hayp Haluk', t: 'Viral içerik yazarı', d: '"Bana her gün paylaşım yazan bir yapay zekâ lazım! Etkileşim şart!!! 🚀"',
+      A: { n: 'Tık tuzağı başlıklar', d: 'Etkileşim hızlı gelir, güven gider.', st: [3, 1, 1] }, B: { n: 'Gerçekten faydalı içerik', d: 'Kaynaklı, sade, dürüst.', st: [1, 2, 3] },
+      eA: '"Bu yöntemle 3 günde YGZ oldum" paylaşımı viral oldu. Sonra silindi.', eB: 'Haluk ilk kez kaynak gösterdi. Takipçileri şokta, bazıları gururlu.' },
+    { id: 'eczane', c: 'Nöbetçi Eczane', t: 'İlaç etkileşim uyarısı', d: '"Aynı anda kullanılmaması gereken ilaçlar için bir uyarı sistemi. Son söz eczacıda."',
+      A: { n: 'Basit liste', d: 'Bilinen çiftleri listele.', st: [3, 1, 2] }, B: { n: 'Eczacıyla doğrulanmış sistem', d: 'Her uyarıyı kaynağıyla göster, eczacı onaylasın.', st: [1, 3, 3] },
+      eA: 'Liste işe yaradı ama greyfurt suyunu unuttu. Eczacı not düştü.', eB: 'Eczacılar sistemi "dikkatli bir stajyer" diye tarif ediyor. Senin için büyük iltifat.' }
+  ];
+  const PROJ_BY = {};
+  PROJ.forEach(p => { PROJ_BY[p.id] = p; });
+  const PMODE = [{ ms: 180000, cost: 60, n: 'Hızlı' }, { ms: 1800000, cost: 300, n: 'Özenli' }];
+  function projOpen() { return state.bestTier >= 2 || state.projDone > 0; }
+  function projQuality(a) {
+    if (a === 0) {
+      const kinds = state.gen.filter(n => n > 0).length;
+      return 1 + (kinds >= 4 ? 1 : 0) + (state.gen.some(n => n >= 100) ? 1 : 0);
+    }
+    return 1 + (maxLevel() >= tierIdx() + 3 ? 1 : 0) + (synCap() > 0 && state.syn.length >= synCap() ? 1 : 0);
+  }
+  const qHint = a => a === 0 ? '4 çeşit kaynak ve 100 adetlik bir kaynak yıldız ekler.' : 'Seviye ' + (tierIdx() + 3) + '+ bir nöron ve dolu sinaps hakları yıldız ekler.';
+  const stars = n => '★★★'.slice(0, n) + '☆☆☆'.slice(0, 3 - n);
+  const projCost = a => Math.max(50, dps(true) * PMODE[a].cost);
+  const projData = q => Math.max(500, dps(true) * 720 * [1, 1.5, 2][q - 1]);
+  function nextOffer() {
+    const st = PROJ.filter(p => p.story && !state.projStory[p.id] && state.projDone >= p.at);
+    if (st.length) return st[0].id;
+    // Hızlı yolla geçilen hikâye projeleri havuza döner: hediyeyi kaçıran oyuncu sonra Özenli yolla alabilir.
+    const last = state.projOffer ? state.projOffer.id : '';
+    const pool = PROJ.filter(p => (!p.story || state.projStory[p.id] === 'f') && p.id !== last);
+    return pool[Math.floor(Math.random() * pool.length)].id;
+  }
+  function ensureOffer() { if (projOpen() && !state.proj && !state.projOffer) state.projOffer = { id: nextOffer() }; }
+  const projBox = $('projBox');
+  let projKey = '';
+  function projCard(html) { const d = document.createElement('div'); d.className = 'pcard'; d.innerHTML = html; return d; }
+  function updateProj() {
+    ensureOffer();
+    const now = Date.now(), P = state.proj, O = state.projOffer;
+    setText($('projSum'), state.projDone + ' teslim · ' + state.refs + ' referans (+%' + Math.round(state.refs * BAL.refBonus * 100) + ')');
+    setText($('projNote'), projOpen() ? 'Müşteriler iki yoldan birini seçmeni bekliyor. Hızlı yol bu tura veri getirir; Özenli yol çip ve kalıcı referans (+%3 üretim) kazandırır, sen yokken de sürer.'
+      : 'Projeler Evrişimli Ağ (CNN) seviyesinde açılır. Müşteriler kapını çalmak için sırada!');
+    const key = !projOpen() ? 'lock' : P ? 'run' + P.id + P.a + (now >= P.until) : 'off' + (O && O.id);
+    if (key !== projKey) {
+      projKey = key;
+      projBox.innerHTML = '';
+      if (!projOpen()) return;
+      if (P) {
+        const x = PROJ_BY[P.id], ap = P.a ? x.B : x.A;
+        const c = projCard('<div class="pc-h"><span class="ava"></span><div><b class="pc-c"></b><small class="pc-t"></small></div></div><p class="pc-d"></p><div class="track"><i></i></div><div class="acts"><button type="button" class="claim btn3d" data-pdo="deliver"></button><button type="button" class="pill-btn" data-pdo="cancel">Vazgeç</button></div>');
+        c.querySelector('.pc-c').textContent = x.c; c.querySelector('.pc-t').textContent = x.t + ' · ' + PMODE[P.a].n + ' yol';
+        c.querySelector('.pc-d').textContent = ap.n + '. Kalite ' + stars(P.q) + '. ' + (P.a ? 'Ödül: ' + (P.q + (x.story && state.projStory[x.id] !== 1 ? 2 : 0)) + ' çip + 1 referans' + (x.story && state.projStory[x.id] !== 1 ? ' + Nöro\'ya hediye' : '') + '.' : 'Ödül: teslimde ~' + fmt(projData(P.q)) + ' veri.');
+        c.querySelector('.ava').textContent = x.c.charAt(0);
+        projBox.appendChild(c);
+      } else if (O) {
+        const x = PROJ_BY[O.id];
+        const c = projCard('<div class="pc-h"><span class="ava"></span><div><b class="pc-c"></b><small class="pc-t"></small></div></div><p class="pc-d"></p><div class="cards pc-opts"></div><div class="acts"><button type="button" class="pill-btn" data-pdo="skip"></button></div>');
+        c.querySelector('.pc-c').textContent = x.c + (x.story ? ' · hikâye' : '');
+        c.querySelector('.pc-t').textContent = x.t;
+        c.querySelector('.pc-d').textContent = x.d;
+        c.querySelector('.ava').textContent = x.c.charAt(0);
+        [x.A, x.B].forEach((ap, a) => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'choice btn3d popt ' + (a ? 'slow' : 'fast'); b.dataset.pgo = a;
+          b.innerHTML = '<span class="tag"></span><b></b><span class="d"></span><span class="st"></span><span class="rw"></span><span class="go"></span>';
+          b.querySelector('.tag').textContent = PMODE[a].n + ' · ' + (a ? '30 dk' : '3 dk');
+          b.querySelector('b').textContent = ap.n;
+          b.querySelector('.d').textContent = ap.d;
+          b.querySelector('.st').textContent = 'Hız ' + stars(ap.st[0]) + ' Kalite ' + stars(ap.st[1]) + ' Güven ' + stars(ap.st[2]);
+          c.querySelector('.pc-opts').appendChild(b);
+        });
+        projBox.appendChild(c);
+      }
+    }
+    if (!projOpen()) return;
+    if (P) {
+      const x = PROJ_BY[P.id], done = now >= P.until, bar = projBox.querySelector('.track i'), b = projBox.querySelector('[data-pdo="deliver"]');
+      if (bar) bar.style.width = (Math.min(1, 1 - (P.until - now) / PMODE[P.a].ms) * 100).toFixed(1) + '%';
+      if (b) { setText(b, done ? 'Teslim et' : leftText(P.until - now)); b.disabled = !done; }
+      const cb = projBox.querySelector('[data-pdo="cancel"]'); if (cb) cb.hidden = done;
+    } else if (O) {
+      projBox.querySelectorAll('[data-pgo]').forEach(b => {
+        const a = Number(b.dataset.pgo), q = projQuality(a), cost = projCost(a), x = PROJ_BY[O.id];
+        const first = x.story && state.projStory[x.id] !== 1;
+        setText(b.querySelector('.rw'), 'Maliyet ' + fmt(cost) + ' veri · Ödül ' + (a ? (q + (first ? 2 : 0)) + ' çip + 1 referans' + (first ? ' + hediye' : '') : '~' + fmt(projData(q)) + ' veri'));
+        setText(b.querySelector('.go'), 'Tahmini kalite ' + stars(q) + (q < 3 ? ' · ' + qHint(a) : ''));
+        b.disabled = state.data < cost;
+      });
+      const sk = projBox.querySelector('[data-pdo="skip"]');
+      if (sk) { const w = state.projSkipAt - now; setText(sk, w > 0 ? 'Başka teklif · ' + leftText(w) : 'Başka teklif iste'); sk.disabled = w > 0 || (x_story(O.id) && !state.projStory[O.id]); }
+    }
+  }
+  const x_story = id => PROJ_BY[id] && PROJ_BY[id].story;
+  projBox.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    Snd.init();
+    const now = Date.now();
+    if (b.dataset.pgo != null && state.projOffer && !state.proj) {
+      const a = Number(b.dataset.pgo), cost = projCost(a);
+      if (state.data < cost) { Snd.nope(); return; }
+      state.data -= cost;
+      state.proj = { id: state.projOffer.id, a: a, until: now + PMODE[a].ms, q: projQuality(a) };
+      state.projOffer = null;
+      Snd.buy(); buzz(12);
+      say(a ? 'Özenli yolu seçtik. Acele yok; sen gitsen de ben çalışırım.' : 'Hızlı yol! Üç dakikada teslim, söz. Kalitesi... göreceğiz.', 'wow', 2200);
+    } else if (b.dataset.pdo === 'cancel' && state.proj) {
+      state.projOffer = { id: state.proj.id };
+      state.proj = null;
+      toast('Proje iptal edildi. Ödenen veri geri gelmez.');
+    } else if (b.dataset.pdo === 'skip' && state.projOffer && now >= state.projSkipAt) {
+      state.projSkipAt = now + 600000;
+      state.projOffer = { id: nextOffer() };
+    } else if (b.dataset.pdo === 'deliver' && state.proj && now >= state.proj.until) {
+      const P = state.proj, x = PROJ_BY[P.id];
+      let msg;
+      if (P.a) {
+        const first = x.story && state.projStory[x.id] !== 1, ch = P.q + (first ? 2 : 0);
+        state.chips += ch; state.refs++;
+        if (first) { state.projStory[x.id] = 1; if (x.cos) { state.cos = x.cos; syncSettings(); } }
+        msg = '+' + ch + ' çip, +1 referans (kalıcı +%' + Math.round(BAL.refBonus * 100) + ')';
+        showStory(x.c, x.t, x.eB + (first && x.cos ? '\n\nYeni aksesuar: ' + COSTUMES[x.cos].n + ' (Model › Profil ve ayarlar).' : ''));
+      } else {
+        const v = projData(P.q);
+        addData(v);
+        if (x.story && !state.projStory[x.id]) state.projStory[x.id] = 'f';
+        msg = '+' + fmt(v) + ' veri';
+        say(x.eA, 'wow', 3200);
+      }
+      state.projDone++;
+      state.proj = null;
+      state.projOffer = { id: nextOffer() };
+      progress('proj', 1);
+      Snd.ach(); buzz([15, 40, 15]);
+      toast('Proje teslim edildi: ' + msg);
+    }
+    projKey = '';
+    updateAll(); save();
+  });
+
   /* ---------- Reklam kancası (yalnızca mobil uygulama sürümü için) ----------
      Web sürümünde reklam yoktur. İleride yerel bir uygulama window.YZAds.show() sağlarsa
      yalnızca oyuncunun kendi seçtiği ödüllü reklamlar (ör. 30 dk ×2, günde en fazla 5) açılacak. */
@@ -2894,26 +3502,51 @@
 
   /* ---------- Sekmeler ---------- */
   let curTab = 'gen';
-  function selectTab(id) {
+  const mobile = () => window.matchMedia ? window.matchMedia('(max-width: 879px)').matches : window.innerWidth < 880;
+  function selectTab(id, user) {
     curTab = id;
     state.opt.tab = id;
     document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
     document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== 'panel-' + id; });
     updatePanel(true);
+    if (user && mobile()) {
+      const sh = document.querySelector('.shop'), top = sh.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.45 || top < 0) { try { sh.scrollIntoView({ block: 'start', behavior: eco() || reduceMotion ? 'auto' : 'smooth' }); } catch (e) { /* yok */ } }
+    }
   }
-  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => selectTab(t.dataset.tab)));
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => { Snd.init(); selectTab(t.dataset.tab, true); }));
+  function selectSub(id) {
+    state.opt.msub = id;
+    document.querySelectorAll('#msub [data-msub]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.msub === id)));
+    document.querySelectorAll('#panel-model [data-sub]').forEach(d => { d.hidden = d.dataset.sub !== id; });
+    updatePanel(true);
+  }
+  $('msub').addEventListener('click', e => { const b = e.target.closest('[data-msub]'); if (b) selectSub(b.dataset.msub); });
+  // Haber akışı: telefonda alttan açılan sayfa, masaüstünde sol sütunda
+  function openFeed() {
+    if (mobile()) { document.body.classList.add('feed-open'); renderFeed(); setTimeout(() => { try { $('feedX').focus(); } catch (e) { /* yok */ } }, 50); }
+    else { try { $('feed').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* yok */ } }
+  }
+  const closeFeed = () => document.body.classList.remove('feed-open');
+  $('feedX').addEventListener('click', closeFeed);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFeed(); });
+  document.addEventListener('click', e => { if (document.body.classList.contains('feed-open') && !e.target.closest('#feed') && !e.target.closest('#ticker')) closeFeed(); });
+  // Üst mini gösterge: büyük veri kartı ekrandan çıkınca görünür
+  let miniOn = false;
+  if (window.IntersectionObserver) new IntersectionObserver(es => { miniOn = !es[0].isIntersecting; $('miniHud').classList.toggle('show', miniOn); if (miniOn) updateTop(); }).observe(document.querySelector('.stats'));
 
   /* ---------- Göstergeler ---------- */
   let lastTier = -1;
   function updateTop() {
     setText($('data'), fmt(state.data));
     setText($('dps'), 'saniyede ' + fmt(dps()));
+    if (miniOn) { setText($('mhData'), fmt(state.data) + ' veri'); setText($('mhDps'), fmt(dps()) + '/sn'); }
     setText($('brainPow'), fmt(brainPower()));
-    setText($('loss'), dec(lossAt(qNow()).toFixed(3)));
+    setText($('multAll'), '×' + fmt(globalMult() * srcGlobal()));
     setText($('tapNote'), '+' + fmt(tapValue()) + ' / dokunuş');
     const idx = tierIdx();
     setText($('tierName'), TIERS[idx].n);
-    setText($('labChip'), lab().n + (loopN() ? ' · D' + (loopN() + 1) : ''));
+    setText($('labChip'), state.ch ? 'Meydan okuma: ' + CHAL_BY[state.ch.id].n : lab().n + (loopN() ? ' · D' + (loopN() + 1) : ''));
     if (idx < TIERS.length - 1) {
       const lo = idx === 0 ? 0 : Math.log10(TIERS[idx].at), hi = Math.log10(TIERS[idx + 1].at);
       const pct = Math.max(0, Math.min(1, (Math.log10(1 + state.run) - lo) / (hi - lo)));
@@ -2942,12 +3575,15 @@
     const cl = claimable() + (state.mission && Date.now() >= state.mission.until ? 1 : 0);
     setText($('goalBadge'), cl ? String(cl) : '');
     setText($('modelBadge'), gain() >= 1 ? '!' : '');
+    setText($('projBadge'), state.proj && Date.now() >= state.proj.until ? '!' : '');
+    $('tab-proj').classList.toggle('locked', !projOpen());
   }
   function updatePanel(force) {
-    if (curTab === 'gen') updateGens();
+    if (curTab === 'gen') { updateGens(); if (force || tickN % 8 === 0) updateAutoUi(); }
     else if (curTab === 'up') updateUpgrades();
+    else if (curTab === 'proj') updateProj();
     else if (curTab === 'goal') { updateEvent(); updateMissions(); updateTasks(); }
-    else { updateModel(force); updateTek(); updateKasa(); }
+    else { updateModel(force); updateTek(); updateChal(); updateKasa(); }
   }
   function updateAll() {
     updateTop();
@@ -2981,28 +3617,51 @@
 
   /* ---------- Döngü ---------- */
   let tickTimer = 0, tickN = 0, ambientAt = 0, botAcc = 0, autoMergeAt = 0, autoBuyAt = 0;
-  function autoBuy() {
-    let best = -1, bc = Infinity;
+  // Otomatik alıcı: "Verimli" = maliyet / eklenen üretim en düşük olan (eşik ×2'si dahil);
+  // "Eşiğe tamamla" = bir sonraki ×2 eşiğine en ucuz ulaşılan kaynak; "Seçili" = yalnız seçtiğin kaynak.
+  function genGain(i) {
+    const n = state.gen[i], m = srcMult(i), hit = BAL.miles.indexOf(n + 1) >= 0;
+    return G[i].r * ((n + 1) * m * (hit ? 2 : 1) - n * m);
+  }
+  function autoPick() {
+    const a = state.auto, open = G.map((_, i) => genBuyable(i));
+    if (a.mode === 'sel') return open[a.sel] ? a.sel : -1;
+    let best = -1, bv = Infinity, bestA = -1, bvA = Infinity;
     G.forEach((g, i) => {
-      if (!(i === 0 || state.gen[i - 1] > 0 || state.gen[i] > 0)) return;
-      const c = costFor(i, 1);
-      if (c <= state.data && c < bc) { bc = c; best = i; }
+      if (!open[i]) return;
+      let v;
+      if (a.mode === 'mile') { const nm = BAL.miles.find(x => x > state.gen[i]); v = nm ? costFor(i, nm - state.gen[i]) : Infinity; }
+      else v = costFor(i, 1) / genGain(i);
+      if (v < bv) { bv = v; best = i; }
+      if (costFor(i, 1) <= state.data && v < bvA) { bvA = v; bestA = i; }
     });
-    if (best < 0) return;
-    state.data -= bc;
-    state.gen[best]++;
-    progress('buy', 1);
+    if (best < 0) return -1;
+    if (costFor(best, 1) <= state.data) return best;
+    const d = dps(true);
+    return d > 0 && (costFor(best, 1) - state.data) / d > 30 ? bestA : -1;
+  }
+  function autoBuy(times) {
+    let k = 0;
+    for (; k < times; k++) {
+      const i = autoPick();
+      if (i < 0 || costFor(i, 1) > state.data) break;
+      state.data -= costFor(i, 1);
+      state.gen[i]++;
+      progress('buy', 1);
+    }
+    return k;
   }
   function tick() {
     const now = Date.now();
+    // Zamanlayıcı uzun süre durduysa (cihaz uykusu vb.) o boşluk çevrimdışı gibi işlenir; tek bir yol, tek sefer kazanç.
+    if (now - state.last > 5000) catchUp();
     let dt = (now - state.last) / 1000;
     state.last = now;
     if (dt < 0) dt = 0;
-    if (dt > 60) dt = 60;
     state.played += dt;
     const d = dps();
     if (d > 0) addData(d * dt);
-    if (perk('botnet')) {
+    if (perk('botnet') && !chIs('pasif')) {
       botAcc += 3 * dt;
       let k = 0;
       while (botAcc >= 1 && k++ < 12) { botAcc--; collect(null, null, null, true); }
@@ -3030,10 +3689,10 @@
     evAdd('time', dt / 60);
     if (now >= nextPostAt) { postNews(); nextPostAt = now + 45000 + Math.random() * 30000; }
     if (tickN % 20 === 0) renderFeed();
-    if (state.tree.amerge && now - autoMergeAt > 5000) { autoMergeAt = now; mergeLowest(true); }
-    if (state.tree.abuy && now - autoBuyAt > 2000) { autoBuyAt = now; autoBuy(); }
+    if (autoMergeOpen() && state.auto.merge && now - autoMergeAt > (state.tree.amerge ? 2000 : 8000)) { autoMergeAt = now; mergeLowest(true, state.auto.protect); }
+    if (autoBuyOpen() && state.auto.buy && now - autoBuyAt > (state.tree.abuy ? 1000 : 4000)) { autoBuyAt = now; autoBuy(state.tree.abuy ? 10 : 1); }
     updateAll();
-    if (++tickN % (eco() ? 2 : 4) === 0) { checkAch(false); tips(); }
+    if (++tickN % (eco() ? 2 : 4) === 0) { checkAch(false); tips(); checkChal(); }
     if (!eco() && d > 0 && now - ambientAt > 2600 && state.neurons.length) {
       ambientAt = now;
       fire(state.neurons[Math.floor(Math.random() * state.neurons.length)].s, 'teal');
@@ -3044,19 +3703,29 @@
     if (!document.hidden) tickTimer = setInterval(tick, eco() ? 500 : 250);
   }
   const offRate = () => perk('medical') || state.tree.dream || labM('off', 0) ? 1 : Math.min(1, BAL.offline + kv('hafiza') * 0.08);
+  const offCap = () => (state.tree.dream ? 86400 : BAL.offlineCap) + (chWon('pasif') ? 43200 : 0);
+  // Çevrimdışı: yalnız pasif kaynak üretimi, geçici güçlendirmeler hariç. Kısa yokluklar (≤60 sn) doğrudan eklenir,
+  // uzunlar "Topla" kutusuna birikir. Eğitim/Tekillik öncesi kutu otomatik toplanır (bankOffline).
   function catchUp() {
-    const el = (Date.now() - state.last) / 1000, rate = dps();
-    if (el > 60 && rate > 0) {
-      const t = Math.min(el, state.tree.dream ? 86400 : BAL.offlineCap);
-      state.pendingOff += rate * t * offRate();
-      state.played += t;
-      showOffline(el);
-    }
-    state.last = Date.now();
+    const now = Date.now(), el = Math.max(0, (now - state.last) / 1000), rate = dps(true);
+    state.last = now;
+    if (el < 1 || rate <= 0) return;
+    const t = Math.min(el, offCap()), v = rate * t * offRate();
+    state.played += t;
+    if (el <= 60) { addData(v); return; }
+    state.pendingOff += v;
+    showOffline(el);
+  }
+  function bankOffline() {
+    if (state.pendingOff <= 0) return;
+    const v = state.pendingOff;
+    state.pendingOff = 0;
+    addData(v);
+    $('offline').hidden = true;
   }
   function showOffline(el) {
     if (state.pendingOff <= 0) return;
-    const txt = 'Sen yokken' + (el ? ' (' + fmtTime(el) + ')' : '') + ' beynin ' + fmt(state.pendingOff) + ' veri topladı (%' + Math.round(offRate() * 100) + ' hızla).';
+    const txt = 'Sen yokken' + (el ? ' (' + fmtTime(el) + ')' : '') + ' kaynakların ' + fmt(state.pendingOff) + ' veri topladı (%' + Math.round(offRate() * 100) + ' hızla, en fazla ' + Math.round(offCap() / 3600) + ' saat). Otomatik dokunuş ve birleştirici yalnız oyun açıkken çalışır.';
     $('offText').textContent = txt;
     $('offline').hidden = false;
     $('offX2').hidden = !turboReady();
@@ -3067,8 +3736,7 @@
     if (v <= 0) { $('offline').hidden = true; return; }
     if (x2) { if (!turboReady()) return; v *= 2; state.turboReadyAt = Date.now() + turboCd(); state.turbos++; }
     state.pendingOff = 0;
-    state.data += v; state.run += v; state.life += v;
-    progress('earn', v);
+    addData(v);
     $('offline').hidden = true;
     Snd.init(); Snd.packet(); buzz(15);
     toast('+' + fmt(v) + ' veri toplandı');
@@ -3156,10 +3824,11 @@
     if (!state.feed.length) { postNews(); }
     renderFeed();
     selectTab(state.opt.tab || 'gen');
+    selectSub(state.opt.msub || 'train');
     layoutBrain(true);
     updateAll();
     restartTick();
-    setInterval(save, 5000);
+    setInterval(() => { if (!document.hidden) save(); }, 5000);
     scheduleBonus(true);
     blinkLoop();
     if (pendingTier()) setTimeout(openChoice, 600);
@@ -3182,7 +3851,7 @@
       let best = -1, bv = Infinity, bestA = -1, bvA = Infinity;
       const d = Math.max(1e-9, dps());
       G.forEach((g, i) => {
-        if (!(i === 0 || state.gen[i - 1] > 0 || state.gen[i] > 0)) return;
+        if (!genBuyable(i)) return;
         const c = costFor(i, 1), v = c / (g.r * srcMult(i));
         if (v < bv) { bv = v; best = i; }
         if (c <= state.data && v < bvA) { bvA = v; bestA = i; }
@@ -3207,7 +3876,7 @@
     return '';
   };
   if (location.hash === '#debug') window.__tick = tick;
-  if (location.hash === '#debug') window.__yz = { state: state, B: B, rebuild: rebuild, updateAll: updateAll, spawnVirus: spawnVirus, openChoice: openChoice, tapValue: tapValue, dps: dps, openQuiz: openQuiz, spawnSurprise: spawnSurprise, updateTek: updateTek, tierIdx: tierIdx, gain: gain };
+  if (location.hash === '#debug') window.__yz = { state: state, B: B, rebuild: rebuild, updateAll: updateAll, spawnVirus: spawnVirus, openChoice: openChoice, tapValue: tapValue, dps: dps, openQuiz: openQuiz, spawnSurprise: spawnSurprise, updateTek: updateTek, tierIdx: tierIdx, gain: gain, catchUp: catchUp, save: save, loadFrom: loadFrom, chEnter: chEnter, chExit: chExit, powerOf: powerOf, autoBuy: autoBuy, tick: tick, KEY: KEY };
   const hot = window.claude && window.claude.hot;
   if (hot && hot.snapshot) { try { hot.snapshot(() => ({ s: JSON.stringify(state) })); } catch (e) { /* yok */ } }
   if (hot && hot.ready) hot.ready(start);
