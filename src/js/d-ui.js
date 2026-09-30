@@ -579,12 +579,21 @@
 
   /* ---------- Sekmeler ---------- */
   let curTab = 'gen';
+  // Kompakt sahne: Kaynaklar dışındaki sekmelerde ya da liste aşağı kaydırılınca beyin küçülür, liste büyür.
+  const appEl = document.querySelector('.app'), panelsEl = $('panels');
+  function syncCompact() {
+    const st = panelsEl.scrollTop, on = appEl.classList.contains('compact');
+    const want = curTab !== 'gen' || (on ? st > 8 : st > 60);
+    if (want !== on) appEl.classList.toggle('compact', want);
+  }
+  panelsEl.addEventListener('scroll', syncCompact, { passive: true });
   function selectTab(id) {
     curTab = id;
     state.opt.tab = id;
     document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
     document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== 'panel-' + id; });
     $('panels').scrollTop = 0;
+    syncCompact();
     updatePanel(true);
   }
   document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => { Snd.init(); selectTab(b.dataset.tab); }));
@@ -926,8 +935,19 @@
   if (window.ResizeObserver) new ResizeObserver(() => layoutBrain()).observe(brainBtn);
   else window.addEventListener('resize', () => layoutBrain());
 
+  // Japonca/Çince yazı tipi yalnız o dil seçilince yüklenir (diğer dillerin açılışı ağırlaşmasın).
+  const CJK_FONT = { ja: 'Noto+Sans+JP:wght@400;500;700', zh: 'Noto+Sans+SC:wght@400;500;700' };
+  function loadCjkFont(id) {
+    if (!CJK_FONT[id] || document.getElementById('font-' + id)) return;
+    const l = document.createElement('link');
+    l.id = 'font-' + id; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=' + CJK_FONT[id] + '&display=swap';
+    l.onload = () => { readColors(); layoutBrain(true); };
+    document.head.appendChild(l);
+  }
   function applyLang(id) {
     LANG = LANGS[id] || LANGS.en || LANGS.tr;
+    loadCjkFont(LANG.meta.id);
     const r = document.documentElement;
     r.lang = LANG.meta.id; r.dir = LANG.meta.dir;
     document.title = LANG.meta.title;

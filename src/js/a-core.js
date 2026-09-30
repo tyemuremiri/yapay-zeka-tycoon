@@ -7,7 +7,7 @@
   /* ---------- Dil ----------
      Tüm metinler src/lang/*.js dosyalarında. t('anahtar', {degisken}) arayüz metni verir, TX() o dilin içeriğini
      (kaynak adları, espriler, haber akışı, sorular...). Eksik anahtar Türkçeye düşer. */
-  const LANG_IDS = ['tr', 'az', 'en', 'ru', 'ar', 'es', 'de'].filter(k => LANGS[k]);
+  const LANG_IDS = ['tr', 'az', 'en', 'ru', 'ar', 'es', 'de', 'ja', 'zh'].filter(k => LANGS[k]);
   function detectLang() {
     const ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']);
     for (let i = 0; i < ls.length; i++) { const k = String(ls[i]).toLowerCase().slice(0, 2); if (LANG_IDS.indexOf(k) >= 0 && LANGS[k]) return k; }
@@ -51,13 +51,14 @@
   function fmt(n) {
     if (!isFinite(n)) return '∞';
     if (n < 0) n = 0;
-    const SUF = LANG.meta.suf;
+    const SUF = LANG.meta.suf, G3 = LANG.meta.grp || 3, BASE = Math.pow(10, G3); // Japonca/Çince 4 haneli grup (万, 億…)
     if (state.opt.sci && n >= 1e6) return dec(n.toExponential(2).replace('e+', 'e'));
     if (n < 1000) return n < 10 ? dec((Math.floor(n * 10 + 1e-9) / 10).toFixed(1)) : String(Math.floor(n));
-    let i = Math.floor(Math.log10(n) / 3);
+    if (n < BASE) return String(Math.floor(n));
+    let i = Math.floor(Math.log10(n) / G3);
     if (i >= SUF.length) return dec(n.toExponential(2).replace('e+', 'e'));
-    let s = (v => v < 10 ? v.toFixed(2) : v < 100 ? v.toFixed(1) : v.toFixed(0))(n / Math.pow(1000, i));
-    if (parseFloat(s) >= 1000 && i + 1 < SUF.length) { i++; s = (n / Math.pow(1000, i)).toFixed(2); }
+    let s = (v => v < 10 ? v.toFixed(2) : v < 100 ? v.toFixed(1) : v.toFixed(0))(n / Math.pow(BASE, i));
+    if (parseFloat(s) >= BASE && i + 1 < SUF.length) { i++; s = (n / Math.pow(BASE, i)).toFixed(2); }
     return dec(s) + LANG.meta.sp + SUF[i];
   }
   const fmtInt = n => n < 1000 ? String(Math.floor(n)) : fmt(n);

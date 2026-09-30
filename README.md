@@ -3,7 +3,7 @@
 Tek bir nörondan yapay zekâ beyni kurduğun, Türkçe, çizgi film tarzı tıklama (idle/incremental) oyunu.
 
 - `src/style.css`, `src/body.html`, `src/js/*.js`: oyunun kaynağı (tasarım, iskelet, mantık).
-- `src/lang/{tr,az,en,ru,ar,es,de}.js`: bütün metinler. Her dilin kendi espri, parodi şirket ve karakterleri var (tam yerelleştirme, Arapça sağdan sola).
+- `src/lang/{tr,az,en,ru,ar,es,de,ja,zh}.js`: bütün metinler. Her dilin kendi espri, parodi şirket ve karakterleri var (tam yerelleştirme, Arapça sağdan sola).
 - `python3 build.py`: parçaları birleştirir → `index.html` (tek başına çalışan PWA) ve `dist/game.html` (Claude artifact sürümü).
 - `manifest.webmanifest`, `sw.js`, `icon-*.png`: telefona "Ana ekrana ekle" ve çevrimdışı oynama için.
 - `tools/keycheck.js`: her dilde eksik metin, yer tutucu uyumsuzluğu ve quiz cevabı kontrolü. `tools/smoke.js`: Playwright ile uçtan uca kontrol. `tools/sim.js`: tempo simülasyonu.
@@ -30,6 +30,15 @@ Son JSON, `src/game.html` içindeki `BAL` denge ayarlarını geçici olarak değ
 
 Güncel denge (bot ölçümü, v6): aktif oyuncu ilk yeni modele ~40 dk'da, rahat oyuncu ~68 dk'da ulaşır; turlar 20-60 dk arası sürer ve giderek uzar.
 Benchmark meydan okumalarının hedefleri, Tekillik açıldığında (~100 parametre) aktif oyuncu için ~20-25 dk olacak şekilde ölçüldü.
+
+## v9'da neler değişti
+- **Beyin ekrana sığar:** kamera artık kırpmaz; ilk seviyelerde nöronlar daha iri çizilir.
+- **Kompakt sahne (telefon):** Kaynaklar dışındaki sekmelerde ya da liste aşağı kaydırılınca beyin küçülür, liste büyür.
+- **Sabit satın alma satırı:** ×1/×10/×25/×100/Sonraki/Maks liste kayarken üstte kalır.
+- **Gerçek isim yok:** şirket, model ve kişi adları tanınır ama farklı parodi adlarla (ör. Sam Altmış, Klodiş Öpüş, Kıskançya, Gırgır; Entropic, Clawd Octopus, Grump…); bilim insanı adları bilgilerden çıkarıldı.
+- **2 yeni dil:** 日本語 (源さん, ハルばあちゃん, オワタ先輩, 適量 ve しりとり şakaları) ve 中文 简体 (胡同茶馆的老王, 李奶奶, 丧气的老周, 盐少许, 996, 下象棋的大爷). Toplam 9 dil.
+- **万/億 sayıları:** Japonca ve Çincede sayılar 4 haneli gruplarla (5.23万). CJK yazı tipi yalnız o dil seçilince yüklenir.
+- **Birleştirme paneli** beynin altına taşındı, metni dokunuşu engellemez; düzenleme modunda Nöro gizlenir.
 
 ## v8'de neler değişti
 - **Kaynak döngü çubukları:** her kaynakta dolan çubuk ve "+X" (görsel; veri kesintisiz akar, denge ve çevrimdışı değişmez).

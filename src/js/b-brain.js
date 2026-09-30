@@ -252,7 +252,9 @@
     B.path.closePath();
     rebuild();
   }
-  const CAMZ = [1.75, 1.45, 1.2, 1.08, 1, 1, 1, 1];
+  // Kamera artık kırpmaz: beyin hep ekrana sığar. Erken seviyelerde nöronlar daha iri çizilir.
+  const CAMZ = [1, 1, 1, 1, 1, 1, 1, 1];
+  const NBOOST = [1.45, 1.3, 1.15, 1.06, 1, 1, 1, 1];
   function camFor(tier) {
     const z = CAMZ[Math.min(tier, 7)], upto = Math.min(REG.length - 1, tier + 1);
     let fx = 0, fy = 0;
@@ -277,7 +279,7 @@
     const tg = camFor(tierIdx());
     if (Math.abs(B.cam.z - tg.z) > 0.004 || Math.abs(B.cam.fx - tg.fx) > 0.002 || Math.abs(B.cam.fy - tg.fy) > 0.002) camRaf = requestAnimationFrame(camStep);
   }
-  const nRad = l => B.nr * (0.85 + 0.06 * Math.min(l, 9));
+  const nRad = l => B.nr * NBOOST[Math.min(7, tierIdx())] * (0.85 + 0.06 * Math.min(l, 9));
   function brainTint() { const a = alignment(); return a === 'f' ? col['brain-f'] : a === 'h' ? col['brain-h'] : col['brain-line']; }
   // Statik katman (beyin silueti, bölgeler, bağlar, nöronlar) yalnız değişince çizilir; animasyonlar üstüne biner.
   function rebuild() {
@@ -729,6 +731,7 @@
   function updateEdit() {
     const bar = $('editBar');
     bar.hidden = !edit.mode;
+    $('brainWrap').classList.toggle('editing', !!edit.mode);
     if (!edit.mode) return;
     $('editActs').innerHTML = '';
     const A = edit.a != null ? neuronAt(edit.a) : null, Bn = edit.b != null ? neuronAt(edit.b) : null;

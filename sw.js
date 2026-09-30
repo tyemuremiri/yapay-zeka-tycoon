@@ -1,6 +1,6 @@
 // Oyunu çevrimdışı çalıştırır: önce ağ, olmazsa önbellek (güncellemeler hemen gelsin diye).
 // Google Fonts yanıtları da önbelleğe alınır; sayfa yedeği (index.html) yalnız sayfa gezintisinde döner.
-const CACHE = 'yz-tycoon-v8';
+const CACHE = 'yz-tycoon-v9';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon.svg'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
