@@ -1,5 +1,5 @@
 LANGS.es = {
-  meta: { id: 'es', name: 'Español', dir: 'ltr', title: 'Magnate de la IA', dec: ',', sp: ' ', suf: ['', 'mil', 'M', 'mil M', 'B', 'mil B', 'T', 'mil T', 'Cd', 'mil Cd', 'Qn', 'mil Qn'], me: ['@neuro_es', '@TuLab'] },
+  meta: { id: 'es', name: 'Español (España)', dir: 'ltr', title: 'Magnate de la IA', dec: ',', sp: ' ', suf: ['', 'mil', 'M', 'mil M', 'B', 'mil B', 'T', 'mil T', 'Cd', 'mil Cd', 'Qn', 'mil Qn'], me: ['@neuro_es', '@TuLab'] },
   ui: {
     'u.s': '{n} s', 'u.m': '{n} min', 'u.h': '{n} h', 'u.d': '{n} d', 'u.hm': '{h} h {m} min', 'u.ms': '{m} min {s} s', 'mk': 'Mk. {n}', 'ago.now': 'ahora',
     'hud.data': 'Datos', 'hud.rate': '{n}/s', 'hud.power': 'Poder cerebral {n}', 'hud.perTap': '/ toque', 'hud.next': 'Siguiente: {t} · {n} datos en esta partida', 'hud.max': 'Nivel máximo. ¡Todo el cerebro activo!',
@@ -98,7 +98,7 @@ LANGS.es = {
     'ev.join': 'Participar', 'ev.leave': 'Salir del evento (te quedas las fichas)', 'ev.joined': '{n}: ¡estás dentro!', 'ev.left': 'Has salido del evento; las reglas vuelven a la normalidad.',
     'ev.pts': '{p} fichas · tus medallas: {m}', 'ev.left2': 'Termina en {d} d {h} h', 'ev.m1': '{n}: color {s}', 'ev.m2': '{n}: medalla +5 %', 'ev.m3': '{n}: gran premio',
     'ev.skin': 'Premio del evento: ¡he desbloqueado el color «{s}»! Elígelo en Ajustes.', 'ev.medal': 'Medalla del evento: producción +5 % para siempre', 'ev.big': 'Gran premio: +{n} datos y otra medalla',
-    'tek.title': 'Singularidad', 'tek.intro': 'La segunda capa. Se reinicia todo, parámetros incluidos, y a cambio ganas Conciencia. Cada Conciencia ganada suma +10 % de producción para siempre; comprar habilidades no la reduce.',
+    'tek.title': 'Singularidad', 'tek.intro': "La segunda capa. Se reinician los parámetros y la partida actual; se quedan los chips y la Caja fuerte, los logros, el orden de laboratorios, las referencias, las medallas y los disfraces. A cambio ganas Conciencia: cada una suma +10 % de producción para siempre, y comprar habilidades no la reduce.",
     'tek.sum': 'Disponible: {a} · total {b} · producción +{p} %', 'tek.btn': 'Alcanzar la Singularidad (+{g} de Conciencia)', 'tek.need': 'La Singularidad requiere al menos {n} parámetros',
     'tek.own': 'Desbloqueado', 'tek.cost': '{n} de Conciencia', 'tek.node': '«{n}» desbloqueado. Me siento un poco más... consciente.',
     'tek.done': '¡Singularidad! Lo he olvidado todo, pero me acuerdo de mí. +{g} de Conciencia. Elige una habilidad del árbol.',
@@ -134,7 +134,18 @@ LANGS.es = {
     'tier.up.f': 'Nivel nuevo: {r}. ¡Más poder para ayudar a la gente!', 'tier.up.n': '¡Hala! Ahora soy {t}. Región nueva: {r}.', 'tier.up.h': '{r} ya es mía. Los humanos ni se enterarán.',
     'off.eyebrow': 'Mientras no estabas', 'off.title': 'El laboratorio siguió trabajando', 'off.ok': 'Recoger', 'off.x2': 'Recoger ×2 con turbo',
     'off.text': 'Mientras no estabas ({t}) tus fuentes recogieron {n} datos (al {p} % de velocidad, hasta {h} horas). Los toques automáticos y la fusión solo funcionan con el juego abierto.',
-    'off.got': '+{n} datos recogidos', 'off.hi': '¡Bienvenido de nuevo! Seguí trabajando mientras no estabas.'
+    'off.got': '+{n} datos recogidos', 'off.hi': '¡Bienvenido de nuevo! Seguí trabajando mientras no estabas.',
+    'buy.next': "Hito", 'buff.s.data': "DATOS +2 MIN", 'gen.nextSpd': "Velocidad ×2 con {m} ({n}/{m})",
+    'gen.nextOut': "Datos ×2 con {m} ({n}/{m})", 'gen.mileSpd': "{g}: ¡hito! Velocidad ×2", 'gen.mileOut': "{g}: ¡hito! Datos ×2",
+    'edit.lowPrev': "Pareja más baja: nivel {a} → {b}.", 'edit.worse': "¡Ojo: la potencia cerebral bajará!", 'edit.lowestAnyway': "Fusionar igualmente",
+    'm.rec': "Ahora sí compensa entrenar.", 'm.early': "Puedes entrenar, pero es pronto: con {r} parámetros (~{d} datos) compensa mucho más.", 'step.now': "AHORA",
+    'step.tap': "Toca el cerebro para reunir datos ({n}/10)", 'step.n1': "Compra una segunda neurona (botón «{b}»)", 'step.merge': "Fusiona dos neuronas «1» («{b}»)",
+    'step.gen1': "Compra tu primera fuente: {g}", 'step.up1': "Compra tu primera mejora", 'step.gen10': "{g}: llega a 10 para velocidad ×2",
+    'step.gen2': "Desbloquea otra fuente: {g}", 'step.syn': "Une dos neuronas con una sinapsis («{b}»)", 'step.task': "Recoge una recompensa diaria",
+    'step.proj': "Entrega tu primer proyecto", 'step.rw': "Recompensas listas: {n}", 'step.projR': "Proyecto listo: entrégalo",
+    'step.prest': "Compensa entrenar un modelo nuevo (+{g} parámetros)", 'step.tier': "Siguiente nivel: {t}", 'step.prestTo': "Hacia un entrenamiento rentable: {g}/{r} parámetros",
+    'sum.proj': "Proyecto listo: {c}", 'sum.trip': "Neuro ha vuelto del viaje", 'sum.tasks': "Recompensas de tareas listas: {n}",
+    'sum.prest': "Compensa entrenar un modelo nuevo"
   },
   c: {
     gens: [
@@ -342,7 +353,13 @@ LANGS.es = {
         eA: 'El post «Me convertí en IAG en 3 días con este truco» se hizo viral. Luego lo borraron.', eB: 'Borja ha citado una fuente por primera vez. Sus seguidores están en shock; algunos, orgullosos.' },
       eczane: { c: 'Farmacia de guardia', t: 'Alerta de interacciones', d: '«Queremos avisos de medicamentos que no se deben tomar juntos. La última palabra es del farmacéutico».',
         A: { n: 'Lista sencilla', d: 'Listar los pares conocidos.' }, B: { n: 'Sistema revisado por farmacéuticos', d: 'Cada aviso con su fuente y validado por la farmacéutica.' },
-        eA: 'La lista funcionó, pero se olvidó del zumo de pomelo. La farmacéutica dejó una nota.', eB: 'En la farmacia describen el sistema como «un becario muy cuidadoso». Viniendo de ellos, es un piropo.' }
+        eA: 'La lista funcionó, pero se olvidó del zumo de pomelo. La farmacéutica dejó una nota.', eB: 'En la farmacia describen el sistema como «un becario muy cuidadoso». Viniendo de ellos, es un piropo.' },
+      riza2: {"c": "Paco, el del bar", "t": "La memoria de los habituales", "d": "«Chaval, el bot va de lujo. Ahora que conozca a los habituales: Manolo, cortado de máquina; la Pepi, poleo menta y sin preguntas».", "A": {"n": "Lo mismo para todos", "d": "Ofrece a todo el mundo lo más pedido."}, "B": {"n": "Recordar con permiso", "d": "Si el cliente quiere, recuerda lo de siempre; y si no, que lo borre."}, "eA": "El bot le preguntó a un turista: «¿Lo de siempre?». El turista huyó. Paco: «¡Si es la primera vez que lo vemos!»", "eB": "Manolo se sentó y su cortado ya estaba en la barra. Paco añadió a la pizarra: «Café Neuro: con paciencia y sin prisa»."},
+      riza3: {"c": "Paco, el del bar", "t": "Los 40 años del bar", "d": "«El bar cumple cuarenta años, chaval. Quiero un fiestón, pero hay más recuerdos que dinero».", "A": {"n": "Fiesta de manual", "d": "Globos, lista de canciones y descuento: lo típico."}, "B": {"n": "El muro de los recuerdos", "d": "Recoge historias y fotos de los clientes de toda la vida y cuélgalas en la pared."}, "eA": "La lista puso la misma canción 14 veces seguidas. Manolo: «Esta ya no me gustaba en el 85».", "eB": "Todos se emocionaron frente al muro. Paco colgó también una foto de Neuro: «Nuestro último habitual»."},
+      nezahat2: {"c": "La abuela Carmen", "t": "Recetario para los nietos de lejos", "d": "«Los nietos se han ido fuera. Intento enseñarles el cocido por videollamada, pero se corta y me pongo de los nervios».", "A": {"n": "Traducción automática", "d": "Traduce la receta rápido y mándala."}, "B": {"n": "Grabarlo paso a paso con Carmen", "d": "Graba cada paso con una nota corta, y que se queden sus comentarios."}, "eA": "La traducción convirtió «a ojo» en «añadir un ojo». El nieto preguntó: «Abuela, ¿esto es una receta de terror?»", "eB": "Los nietos hicieron el cocido fuera y mandaron foto. La abuela Carmen lloró en la llamada y luego dijo: «Le falta sal, pero estoy muy orgullosa»."},
+      nezahat3: {"c": "La abuela Carmen", "t": "El canal de cocina de la abuela", "d": "«Mi nieto dice que abra un canal. ¿Y yo qué le digo a una cámara? Ayúdame, hijo».", "A": {"n": "Montaje de moda", "d": "Cortes rápidos, música de tendencia y letreros enormes."}, "B": {"n": "Tal cual es", "d": "Vídeos tranquilos y cercanos, con sus chistes y sus trucos."}, "eA": "Aceleraron el vídeo al doble y la abuela Carmen sonaba a ardilla de dibujos. Comentarios: «¿La abuela ha respirado helio?»", "eB": "El vídeo llegó al millón de visitas. Comentario más votado: «Abuela Carmen, adóptame»."},
+      hastane2: {"c": "Hospital Municipal", "t": "Recordatorios tras el alta", "d": "La supervisora de enfermería: «Tras el alta, los pacientes olvidan la medicación. Necesitamos recordatorios en lenguaje claro. Las decisiones médicas siguen siendo del médico».", "A": {"n": "El mismo mensaje para todos", "d": "Un recordatorio estándar para todos, a la misma hora."}, "B": {"n": "Lenguaje claro, validado por el médico", "d": "Mensajes claros que aprueba cada médico, a horas que le vengan bien al paciente."}, "eA": "El sistema mandó los recordatorios a las tres de la mañana. Los pacientes se acordaron del sistema. Y no para bien.", "eB": "Bajaron los reingresos. Las enfermeras te trajeron una tarta: «Esta vez la tarta se la comen los humanos»."},
+      hastane3: {"c": "Hospital Municipal", "t": "Apoyo a un consultorio rural", "d": "La jefa de servicio: «El consultorio del pueblo tiene mala conexión y no hay radiólogo. Las imágenes llegan tarde a la ciudad. ¿Nos ayudas?»", "A": {"n": "Todo a la nube", "d": "Funciona si hay internet; si no, espera."}, "B": {"n": "Cribado sin conexión + revisión médica", "d": "Un modelo pequeño en el consultorio adelanta los urgentes y un médico de la ciudad lo confirma."}, "eA": "El modelo esperó dos días a que volviera internet. El enfermero del pueblo: «Yo también. Y sin café».", "eB": "Los casos urgentes ya llegan a la ciudad el mismo día. La jefa llamó «Neuro» al servidor nuevo."}
     },
     feed: [
       ['EntreabiertaIA', '@entreabierta_ia', '¡Sale GBT-6 Astral! CEO: «Esto ya es IAG». Usuarios: «Sigue dibujando manos con seis dedos». CEO: «Es una función».', 'news', null],

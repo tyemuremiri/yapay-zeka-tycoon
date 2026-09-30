@@ -28,7 +28,14 @@
   function loadInto(raw) {
     try {
       const o = JSON.parse(raw);
-      if (!o || typeof o !== 'object' || (o.ver != null && typeof o.ver !== 'number')) return false;
+      // Yalnız gerçek bir oyun kaydı kabul edilir; '{}', '[]' ya da eksik alanlı metin mevcut oyunu silmez.
+      if (!o || typeof o !== 'object' || Array.isArray(o) || (o.ver != null && typeof o.ver !== 'number')) return false;
+      if (!Array.isArray(o.gen) || o.gen.length < 1 || typeof o.data !== 'number' || !Array.isArray(o.neurons) || !o.neurons.length) return false;
+      // Temiz bir durumdan başla: önceki oyundan yükseltme/başarım vb. sızmasın (cihaz ayarları korunur).
+      const keepOpt = Object.assign({}, state.opt);
+      Object.keys(state).forEach(k => { delete state[k]; });
+      Object.assign(state, defaults());
+      state.opt = keepOpt;
       const num = (v, d) => (typeof v === 'number' && isFinite(v) && v >= 0 ? v : d);
       ['data', 'run', 'life', 'clicks', 'runs', 'merges', 'synMade', 'crits', 'comboTop', 'viruses', 'bestTier', 'nBought', 'turboUntil', 'turboReadyAt',
         'played', 'packets', 'turbos', 'upgBought', 'taskClaims', 'perfectDays', 'pendingOff',
@@ -91,7 +98,7 @@
         state.opt.lang = LANG_IDS.indexOf(o.opt.lang) >= 0 ? o.opt.lang : null;
         state.opt.theme = ['auto', 'dark', 'light'].indexOf(o.opt.theme) >= 0 ? o.opt.theme : 'auto';
       }
-      state.buyMode = (o.buyMode === 10 || o.buyMode === 'max') ? o.buyMode : 1;
+      state.buyMode = [10, 25, 100, 'max', 'next'].indexOf(o.buyMode) >= 0 ? o.buyMode : 1;
       brainDirty();
       return true;
     } catch (e) { return false; }
@@ -121,17 +128,42 @@
     if (m !== 'happy') { void bot.getBoundingClientRect(); bot.classList.add('mood-' + m); }
   }
   let lastSayAt = 0, nextQuip = Date.now() + 70000;
-  // Konuşma balonu beynin üstünde süzülür; okuma süresi kadar kalır, sonra kaybolur (Nöro'ya dokununca yeniden).
-  function say(text, m, hold) {
-    lastSayAt = Date.now();
-    setText(bubble, text);
+  // Konuşma balonu: dokunana kadar (en fazla 30 sn) kalır. Önemli mesajlar sıraya girer, sohbet (prio 0) önemli mesajı ezmez.
+  const bubbleTxt = $('bubbleTxt'), bubbleMore = $('bubbleMore');
+  const sayQ = [];
+  let cur = null;
+  function showMsg(m) {
+    cur = m; m.at = Date.now();
+    setText(bubbleTxt, m.text);
     bubble.classList.remove('gone');
+    syncMore();
     clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => bubble.classList.add('gone'), Math.max(5000, Math.min(12000, text.length * 70)));
+    bubbleTimer = setTimeout(nextMsg, 30000);
+  }
+  function nextMsg() {
+    clearTimeout(bubbleTimer);
+    // Sırada 2 dakikadan uzun bekleyen sıradan mesajlar artık bayat: atlanır.
+    while (sayQ.length && sayQ[0].prio < 2 && Date.now() - sayQ[0].q > 120000) sayQ.shift();
+    if (sayQ.length) { showMsg(sayQ.shift()); return; }
+    cur = null;
+    bubble.classList.add('gone');
+    syncMore();
+  }
+  function syncMore() { setText(bubbleMore, sayQ.length ? '▸ ' + sayQ.length : ''); }
+  function clearSay() { sayQ.length = 0; nextMsg(); }
+  function say(text, m, hold, prio) {
+    if (prio == null) prio = 1;
+    lastSayAt = Date.now();
+    const msg = { text: text, prio: prio, q: Date.now() };
+    if (!cur || prio >= 2 && cur.prio < 2 || cur.prio === 0 || prio === 3) showMsg(msg);
+    else if (prio > 0 && cur.text !== text && !sayQ.some(x => x.text === text)) { sayQ.push(msg); if (sayQ.length > 6) sayQ.shift(); syncMore(); }
+    else if (prio > 0) return;
+    else return;
     setMood(m || 'happy');
     clearTimeout(moodTimer);
     if (m && m !== 'happy') moodTimer = setTimeout(() => setMood('happy'), hold || 2500);
   }
+  bubble.addEventListener('click', () => { Snd.init(); Snd.click(); nextMsg(); });
   // Karaktere göre konuşma: anahtar + '.f' / '.n' / '.h'
   const sayA = (k, v, m, hold) => say(t(k + '.' + alignment(), v), m, hold);
   function syncAlignLook() {
@@ -158,13 +190,14 @@
     Snd.init();
     touchAct();
     factIdx++;
+    if (sayQ.length) { nextMsg(); return; }
     const Q = TX().quips, pool = Q[alignment()].concat(Q.n), F = TX().facts;
-    say(factIdx % 2 ? F[factIdx % F.length] : pick(pool), 'wow', 1800);
+    say(factIdx % 2 ? F[factIdx % F.length] : pick(pool), 'wow', 1800, 3);
     Snd.tone(700, 0.08, 'sine', 0.05, 0, 1.4);
   });
   function touchAct() {
     lastAct = Date.now();
-    if (mood === 'sleep') say(t('nero.wake'), 'wow', 1500);
+    if (mood === 'sleep') say(t('nero.wake'), 'wow', 1500, 0);
   }
 
   /* ---------- Beyin sahnesi (canvas) ---------- */
@@ -193,12 +226,15 @@
     const dpr = Math.min(window.devicePixelRatio || 1, eco() ? 1.5 : 2);
     const sig = w + 'x' + h + '|' + dpr;
     if (!force && sig === B.sig) return;
+    if (B.w !== w || B.h !== h || B.dpr !== dpr) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
     B.sig = sig; B.w = w; B.h = h; B.dpr = dpr;
-    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     const aspect = 1.3;
     let bw = w - 24, bh = bw / aspect;
     if (bh > h - 20) { bh = h - 20; bw = bh * aspect; }
-    B.box = { x: (w - bw) / 2, y: (h - bh) / 2 + 2, w: bw, h: bh };
+    // Kamera: başta çekirdeğe yakın ve iri, beyin büyüdükçe uzaklaşır (B.cam tween ile yumuşak geçer).
+    const c = B.cam || (B.cam = camFor(tierIdx()));
+    bw *= c.z; bh *= c.z;
+    B.box = { x: w / 2 - c.fx * bw, y: h / 2 + 2 - c.fy * bh, w: bw, h: bh };
     B.slots = [];
     REG.forEach((r, ri) => {
       for (let k = 0; k < r.k; k++) {
@@ -206,7 +242,7 @@
         B.slots.push({ x: B.box.x + r.x * B.box.w + Math.cos(a) * rad, y: B.box.y + r.y * B.box.h + Math.sin(a) * rad, ri: ri });
       }
     });
-    B.nr = Math.max(7, Math.min(14, B.box.w * 0.024));
+    B.nr = Math.max(7, Math.min(19, B.box.w * 0.024));
     B.path = new Path2D();
     const P = OUT.map(p => [B.box.x + p[0] * B.box.w, B.box.y + p[1] * B.box.h]);
     const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
@@ -215,6 +251,31 @@
     for (let i = 0; i < P.length; i++) { const m = mid(P[i], P[(i + 1) % P.length]); B.path.quadraticCurveTo(P[i][0], P[i][1], m[0], m[1]); }
     B.path.closePath();
     rebuild();
+  }
+  const CAMZ = [1.75, 1.45, 1.2, 1.08, 1, 1, 1, 1];
+  function camFor(tier) {
+    const z = CAMZ[Math.min(tier, 7)], upto = Math.min(REG.length - 1, tier + 1);
+    let fx = 0, fy = 0;
+    for (let i = 0; i <= upto; i++) { fx += REG[i].x; fy += REG[i].y; }
+    fx /= upto + 1; fy /= upto + 1;
+    const k = Math.min(1, (z - 1) / 1.1);
+    return { z: z, fx: 0.5 + (fx - 0.5) * k, fy: 0.5 + (fy - 0.5) * k };
+  }
+  let camRaf = 0;
+  function camStep() {
+    camRaf = 0;
+    const tg = camFor(tierIdx()), c = B.cam;
+    if (!c) return;
+    const done = Math.abs(c.z - tg.z) < 0.004 && Math.abs(c.fx - tg.fx) < 0.002 && Math.abs(c.fy - tg.fy) < 0.002;
+    if (done || eco() || document.hidden) { B.cam = tg; layoutBrain(true); return; }
+    c.z += (tg.z - c.z) * 0.14; c.fx += (tg.fx - c.fx) * 0.14; c.fy += (tg.fy - c.fy) * 0.14;
+    layoutBrain(true);
+    camRaf = requestAnimationFrame(camStep);
+  }
+  function camCheck() {
+    if (camRaf || !B.cam) return;
+    const tg = camFor(tierIdx());
+    if (Math.abs(B.cam.z - tg.z) > 0.004 || Math.abs(B.cam.fx - tg.fx) > 0.002 || Math.abs(B.cam.fy - tg.fy) > 0.002) camRaf = requestAnimationFrame(camStep);
   }
   const nRad = l => B.nr * (0.85 + 0.06 * Math.min(l, 9));
   function brainTint() { const a = alignment(); return a === 'f' ? col['brain-f'] : a === 'h' ? col['brain-h'] : col['brain-line']; }
@@ -232,7 +293,7 @@
     g.fillStyle = col.brain; g.globalAlpha = col.dark ? 0.55 : 0.9; g.fill(B.path); g.globalAlpha = 1;
     g.save();
     if (col.dark && !eco()) { g.shadowColor = line; g.shadowBlur = 14; }
-    g.lineWidth = 2; g.strokeStyle = line; g.stroke(B.path);
+    g.lineWidth = 1.6 + Math.min(tier, 7) * 0.2; g.strokeStyle = line; g.stroke(B.path);
     g.restore();
     // Kıvrımlar
     g.save(); g.clip(B.path);
@@ -246,6 +307,7 @@
     L([0.66, 0.80, 0.73, 0.84, 0.80, 0.80]);
     g.restore();
     g.globalAlpha = 1;
+    stageDeco(g, bx, tier, line);
     // Açık bölgeler ve sıradaki kilitli bölge
     REG.forEach((r, ri) => {
       const cx = bx.x + r.x * bx.w, cy = bx.y + r.y * bx.h, R = r.R * bx.w + B.nr * 0.9;
@@ -290,6 +352,48 @@
     // Nöronlar
     ns.forEach(n => drawNeuron(g, B.slots[n.s].x, B.slots[n.s].y, n.l, 1));
     render(performance.now());
+    camCheck();
+  }
+  // Her model aşaması beyne görünür bir iz ekler (statik katmanda, pil dostu).
+  function stageDeco(g, bx, tier, line) {
+    const RC = i => [bx.x + REG[i].x * bx.w, bx.y + REG[i].y * bx.h, REG[i].R * bx.w];
+    g.save();
+    if (tier >= 2) { // Evrişim: görme korteksinde çekirdek ızgarası
+      const [cx, cy, R] = RC(2), k = R * 0.42;
+      g.strokeStyle = col.sky; g.globalAlpha = 0.35; g.lineWidth = 1;
+      for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) g.strokeRect(cx + i * k - k / 2 + R * 1.25, cy + j * k - k / 2 - R * 0.9, k * 0.9, k * 0.9);
+    }
+    if (tier >= 3) { // LSTM: hafızada kapalı döngüler
+      const [cx, cy, R] = RC(3);
+      g.strokeStyle = col.grape; g.globalAlpha = 0.4; g.lineWidth = 1.5; g.setLineDash([2, 4]);
+      [1.35, 1.7].forEach(m => { g.beginPath(); g.arc(cx, cy, R * m + B.nr, 0.3, 5.9); g.stroke(); });
+      g.setLineDash([]);
+    }
+    if (tier >= 4) { // Transformer: bölgeler arası dikkat yayları
+      const n = Math.min(tier, REG.length - 1);
+      g.strokeStyle = col.sun; g.globalAlpha = 0.22; g.lineWidth = 1.2;
+      for (let i = 0; i <= n; i++) for (let j = i + 1; j <= n; j++) {
+        const a = RC(i), b = RC(j), mx = (a[0] + b[0]) / 2, my = Math.min(a[1], b[1]) - bx.h * 0.12;
+        g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(mx, my, b[0], b[1]); g.stroke();
+      }
+    }
+    if (tier >= 5) { // Dil modeli: dil merkezinde harfler
+      const [cx, cy, R] = RC(5), gl = ['a', 'ə', 'Я', 'ß', 'ñ', 'ع', 'ğ'];
+      g.fillStyle = col.teal; g.globalAlpha = 0.5; g.font = '700 ' + Math.round(B.nr * 0.9) + 'px ' + col.font; g.textAlign = 'center'; g.textBaseline = 'middle';
+      gl.forEach((ch, i) => { const a = i / gl.length * 6.283 + 0.4; g.fillText(ch, cx + Math.cos(a) * (R + B.nr * 2.2), cy + Math.sin(a) * (R + B.nr * 2.2) * 0.7); });
+    }
+    if (tier >= 6) { // Çok modlu: siluet çevresinde duyu noktaları
+      g.fillStyle = col.pink; g.globalAlpha = 0.6;
+      OUT.forEach((p, i) => { if (i % 2) return; const x = bx.x + (0.5 + (p[0] - 0.5) * 1.07) * bx.w, y = bx.y + (0.5 + (p[1] - 0.5) * 1.07) * bx.h; g.beginPath(); g.arc(x, y, 2.2, 0, 6.2832); g.fill(); });
+    }
+    if (tier >= 7) { // YGZ: ikinci, parlak kabuk
+      g.globalAlpha = 0.5; g.lineWidth = 1.5; g.strokeStyle = line;
+      if (col.dark && !eco()) { g.shadowColor = line; g.shadowBlur = 18; }
+      g.translate(bx.x + bx.w / 2, bx.y + bx.h / 2); g.scale(1.06, 1.06); g.translate(-(bx.x + bx.w / 2), -(bx.y + bx.h / 2));
+      g.stroke(B.path);
+    }
+    g.restore();
+    g.globalAlpha = 1;
   }
   function drawNeuron(g, x, y, l, scale) {
     const r = nRad(l) * scale, c = lvColor(l);
@@ -436,6 +540,7 @@
     }
     if (!auto) evAdd('tap', 1);
     addData(v);
+    tapAcc += v;
     state.clicks++;
     progress('tap', 1);
     if (crit) { state.crits++; progress('aha', 1); evAdd('aha', 1); }
@@ -550,16 +655,27 @@
     updateAll();
   }
   // protect: sinapsı olan nöron asla "giden" taraf olmaz (kurduğun ağ bozulmaz)
-  function mergeLowest(quiet, protect) {
+  // [giden, kalan] ya da null
+  function lowestPair(protect) {
     const by = {};
     state.neurons.forEach(n => { (by[n.l] = by[n.l] || []).push(n); });
     const ok = l => by[l].length >= 2 && (!protect || by[l].some(n => !synDeg(n.s)));
     const lv = Object.keys(by).map(Number).sort((a, b) => a - b).find(ok);
-    if (lv == null) return false;
+    if (lv == null) return null;
     const pair = by[lv].sort((a, b) => synDeg(b.s) - synDeg(a.s) || a.s - b.s);
-    mergeInto(pair[pair.length - 1], pair[0], quiet);
+    return [pair[pair.length - 1], pair[0]];
+  }
+  function mergeLowest(quiet, protect) {
+    const pr = lowestPair(protect);
+    if (!pr) return false;
+    mergeInto(pr[0], pr[1], quiet);
     if (quiet) updateAll();
     return true;
+  }
+  function mergePreview(A, Bn) {
+    const ns = state.neurons.filter(n => n.s !== A.s).map(n => n.s === Bn.s ? { s: n.s, l: n.l + 1 } : n);
+    const sy = state.syn.filter(p => p[0] !== A.s && p[1] !== A.s);
+    return { ns: ns, sy: sy, lost: state.syn.length - sy.length, worse: powerOf(ns, sy) < brainPower() };
   }
   const synDeg = s => state.syn.filter(p => p[0] === s || p[1] === s).length;
   function toggleSyn(a, b) {
@@ -601,8 +717,8 @@
   const pctTxt = (a, b) => (b >= a ? '+' : '') + dec(((b / a - 1) * 100).toFixed(Math.abs(b / a - 1) < 0.1 ? 1 : 0)) + '%';
   function previewTxt(ns, sy) {
     const p0 = brainPower(), p1 = powerOf(ns, sy);
-    const i0 = 1 + BAL.idleK * Math.sqrt(p0), i1 = 1 + BAL.idleK * Math.sqrt(p1);
-    return t('edit.preview', { a: fmt(p0), b: fmt(p1), p: pctTxt(p0, p1), i: pctTxt(i0, i1), d: pctTxt(Math.pow(p0, BAL.tapPow), Math.pow(p1, BAL.tapPow)) });
+    const d0 = tapAt(p0), d1 = tapAt(p1);
+    return t('edit.preview', { a: fmt(p0), b: fmt(p1), p: pctTxt(p0, p1), i: pctTxt(idleAt(p0), idleAt(p1)), d: d0 > 0 ? pctTxt(d0, d1) : '0%' });
   }
   function editBtn(txt, fn, go) {
     const b = document.createElement('button');
@@ -620,13 +736,18 @@
     if (edit.mode === 'merge') {
       if (!A) {
         s = t('edit.m0');
-        editBtn(t('edit.lowest'), () => { if (!mergeLowest(false)) Snd.nope(); updateEdit(); });
+        // Hızlı birleştirme de önce sonucu gösterir; güç düşecekse uyarır.
+        const pr = lowestPair(true) || lowestPair(false);
+        if (pr) {
+          const pv = mergePreview(pr[0], pr[1]);
+          s += ' ' + t('edit.lowPrev', { a: pr[0].l, b: pr[0].l + 1 }) + ' ' + previewTxt(pv.ns, pv.sy) + '.' + (pv.lost ? ' ' + t('edit.lost', { n: pv.lost }) : '') + (pv.worse ? ' ' + t('edit.worse') : '');
+          editBtn(t(pv.worse ? 'edit.lowestAnyway' : 'edit.lowest'), () => { mergeInto(pr[0], pr[1]); updateEdit(); }, !pv.worse);
+        }
       } else if (!Bn) s = t('edit.m1', { n: A.l });
       else if (A.l !== Bn.l) s = t('edit.mDiff', { a: A.l, b: Bn.l });
       else {
-        const ns = state.neurons.filter(n => n.s !== A.s).map(n => n.s === Bn.s ? { s: n.s, l: n.l + 1 } : n);
-        const sy = state.syn.filter(p => p[0] !== A.s && p[1] !== A.s), lost = state.syn.length - sy.length;
-        s = t('edit.m2', { a: A.l, b: A.l + 1 }) + ' ' + previewTxt(ns, sy) + '. ' + (lost ? t('edit.lost', { n: lost }) : t('edit.free'));
+        const pv = mergePreview(A, Bn);
+        s = t('edit.m2', { a: A.l, b: A.l + 1 }) + ' ' + previewTxt(pv.ns, pv.sy) + '. ' + (pv.lost ? t('edit.lost', { n: pv.lost }) : t('edit.free')) + (pv.worse ? ' ' + t('edit.worse') : '');
         editBtn(t('edit.doMerge'), () => { mergeInto(A, Bn); edit.a = edit.b = null; updateEdit(); }, true);
       }
     } else {

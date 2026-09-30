@@ -296,9 +296,21 @@
     }
     const top = state.feed[0];
     if (top) {
-      const tx = postText(top);
-      setText($('tickText'), tx.w + ': ' + tx.t);
-      $('tkDot').classList.toggle('live', !!top.b && !top.liked && Date.now() - top.at < LIKE_MS);
+      const tx = postText(top), tk = $('ticker');
+      setText($('tickText'), tx.t);
+      setText($('tkWho'), tx.w);
+      setText($('tkAva'), tx.w.charAt(0).toLocaleUpperCase(LANG.meta.id));
+      let hsh = 0;
+      for (let j = 0; j < tx.h.length; j++) hsh = (hsh * 31 + tx.h.charCodeAt(j)) >>> 0;
+      $('tkAva').style.setProperty('--c', 'var(' + AVA[hsh % AVA.length] + ')');
+      const live = !!top.b && !top.liked && Date.now() - top.at < LIKE_MS;
+      setText($('tkRw'), live ? '♥ ' + t('buff.s.' + top.b) : '');
+      tk.classList.toggle('live', live);
+      if (tk._at !== top.at) {
+        const first = tk._at == null;
+        tk._at = top.at;
+        if (!first && !eco()) { tk.classList.remove('fresh'); void tk.offsetWidth; tk.classList.add('fresh'); }
+      }
     }
   }
   postsEl.addEventListener('click', e => {
@@ -444,7 +456,7 @@
   const projData = q => Math.max(500, dps(true) * 720 * [1, 1.5, 2][q - 1]);
   const firstStory = x => x.story && state.projStory[x.id] !== 1;
   function nextOffer() {
-    const st = PROJ.filter(p => p.story && !state.projStory[p.id] && state.projDone >= p.at);
+    const st = PROJ.filter(p => p.story && !state.projStory[p.id] && state.projDone >= p.at && (!p.req || state.projStory[p.req] === 1));
     if (st.length) return st[0].id;
     // Hızlı yolla geçilen hikâye projeleri havuza döner: hediyeyi kaçıran oyuncu sonra Özenli yolla alabilir.
     const last = state.projOffer ? state.projOffer.id : '';
@@ -455,7 +467,7 @@
   const projBox = $('projBox');
   let projKey = '';
   function projCard(html) { const d = document.createElement('div'); d.className = 'pcard'; d.innerHTML = html; return d; }
-  const rewardB = (q, x) => t('pr.rwB', { c: q + (firstStory(x) ? 2 : 0) }) + (firstStory(x) ? ' + ' + t('pr.gift') : '');
+  const rewardB = (q, x) => t('pr.rwB', { c: q + (firstStory(x) ? 2 : 0) }) + (firstStory(x) && x.cos ? ' + ' + t('pr.gift') : '');
   function updateProj() {
     ensureOffer();
     const now = Date.now(), P = state.proj, O = state.projOffer;
@@ -620,7 +632,7 @@
     setText($('upBadge'), affordableUps ? String(affordableUps) : '');
     const cl = claimable() + (state.mission && Date.now() >= state.mission.until ? 1 : 0);
     setText($('goalBadge'), cl ? String(cl) : '');
-    setText($('modelBadge'), gain() >= 1 ? '!' : '');
+    setText($('modelBadge'), prestRec() ? '!' : '');
     setText($('projBadge'), state.proj && Date.now() >= state.proj.until ? '!' : '');
     $('tab-proj').classList.toggle('locked', !projOpen());
   }
@@ -639,7 +651,58 @@
     updatePanel();
     updateTurbo();
     updateBadges();
+    updateGoal();
   }
+
+  /* ---------- Sıradaki adım: ekranda hep duran tek satır hedef ---------- */
+  // İlk turda sıralı öğretici adımlar; sonra hazır ödül, proje, eğitim ya da sıradaki seviye.
+  const STEPS = [
+    { k: 'tap', done: () => state.clicks >= 10, p: () => state.clicks / 10, v: () => ({ n: Math.min(10, state.clicks) }), go: 'brainBtn' },
+    { k: 'n1', done: () => state.nBought >= 1, p: () => state.data / neuronCost(), v: () => ({ b: t('n.buy') }), go: 'nBuy' },
+    { k: 'merge', done: () => state.merges >= 1, v: () => ({ b: t('n.merge') }), go: 'nMerge' },
+    { k: 'gen1', done: () => totalGen() >= 1, p: () => state.data / costFor(0, 1), v: () => ({ g: gName(0) }), go: 'tab:gen' },
+    { k: 'up1', done: () => state.upgBought >= 1, skip: () => !availUps().length, go: 'tab:up' },
+    { k: 'gen10', done: () => state.gen[0] >= 10, p: () => state.gen[0] / 10, v: () => ({ g: gName(0) }), go: 'tab:gen' },
+    { k: 'gen2', done: () => state.gen[1] >= 1, v: () => ({ g: gName(1) }), go: 'tab:gen' },
+    { k: 'syn', done: () => state.synMade >= 1, skip: () => synCap() < 1, v: () => ({ b: t('n.link') }), go: 'nSyn' },
+    { k: 'task', done: () => state.taskClaims >= 1, skip: () => !claimable(), go: 'tab:goal' },
+    { k: 'proj', done: () => state.projDone >= 1, skip: () => !projOpen(), go: 'tab:proj' }
+  ];
+  let goalGo = null;
+  function curStep() {
+    if (state.runs === 0 && !state.tek) {
+      const st = STEPS.find(x => !x.done() && !(x.skip && x.skip()));
+      if (st) return { txt: t('step.' + st.k, st.v ? st.v() : null), p: st.p ? st.p() : 0, go: st.go };
+    }
+    if (claimable()) return { txt: t('step.rw', { n: claimable() }), p: 1, go: 'tab:goal' };
+    if (state.proj && Date.now() >= state.proj.until) return { txt: t('step.projR'), p: 1, go: 'tab:proj' };
+    if (prestRec()) return { txt: t('step.prest', { g: gain() }), p: 1, go: 'tab:model' };
+    const ti = tierIdx(), nx = TIERS[ti + 1];
+    if (nx && !state.ch && ti < 7) return { txt: t('step.tier', { t: tierName(ti + 1) }), p: Math.log10(1 + state.run) / Math.log10(1 + nx.at), go: null };
+    if (state.ch) return { txt: t('ch.goal', { g: fmt(CHAL_BY[state.ch.id].goal) }), p: state.run / CHAL_BY[state.ch.id].goal, go: 'tab:model' };
+    return { txt: t('step.prestTo', { g: gain(), r: recGain() }), p: gain() / recGain(), go: 'tab:model' };
+  }
+  function updateGoal() {
+    const s = curStep();
+    setText($('gbText'), s.txt);
+    $('gbBar').style.width = (Math.max(0, Math.min(1, s.p || 0)) * 100).toFixed(1) + '%';
+    goalGo = s.go;
+    $('goalBar').classList.toggle('go', !!s.go);
+  }
+  $('goalBar').addEventListener('click', () => {
+    Snd.init(); Snd.click();
+    if (!goalGo) return;
+    if (goalGo.indexOf('tab:') === 0) {
+      const tb = goalGo.slice(4);
+      if (tb === 'model') { selectSub('train'); }
+      selectTab(tb);
+      return;
+    }
+    const el = $(goalGo);
+    if (!el) return;
+    el.classList.remove('hint'); void el.offsetWidth; el.classList.add('hint');
+    setTimeout(() => el.classList.remove('hint'), 2400);
+  });
 
   /* ---------- İpuçları ---------- */
   function tips() {
@@ -650,15 +713,15 @@
     if (!s.combo && combo >= 10) { s.combo = 1; say(t('tip.combo'), 'wow', 2000); return; }
     if (!s.turbo && state.run > 300 && turboReady()) { s.turbo = 1; say(t('tip.turbo'), 'happy'); return; }
     if (!s.goal && state.life > 800) { s.goal = 1; say(t('tip.goal'), 'happy'); return; }
-    if (!s.prest && gain() >= 1) { s.prest = 1; say(t('tip.prest'), 'wow', 2200); return; }
+    if (!s.prest && prestRec()) { s.prest = 1; say(t('tip.prest'), 'wow', 2200); return; }
     if (mood !== 'sleep' && Date.now() > nextQuip && Date.now() - lastSayAt > 25000 && Date.now() - lastAct < 45000) {
       const a = alignment(), Q = TX().quips, pool = a === 'n' ? Q.n : Q[a].concat(Q[a], Q.n);
-      say(pick(pool), 'happy');
+      say(pick(pool), 'happy', 0, 0);
       nextQuip = Date.now() + 55000 + Math.random() * 35000;
       return;
     }
-    if (mood !== 'sleep' && Date.now() - lastAct > 45000) {
-      sayA('nero.sleep', null, 'sleep');
+    if (mood !== 'sleep' && Date.now() - lastAct > 45000 && !cur) {
+      say(t('nero.sleep.' + alignment()), 'sleep', 0, 0);
       clearTimeout(moodTimer);
     }
   }
@@ -709,6 +772,7 @@
     state.played += dt;
     const d = dps();
     if (d > 0) addData(d * dt);
+    tapRateTick(now);
     if (perk('botnet') && !chIs('pasif')) {
       botAcc += 3 * dt;
       let k = 0;
@@ -774,6 +838,20 @@
   function showOffline(el) {
     if (state.pendingOff <= 0) return;
     $('offText').textContent = t('off.text', { t: el ? fmtTime(el) : '—', n: fmt(state.pendingOff), p: Math.round(offRate() * 100), h: Math.round(offCap() / 3600) });
+    // Qayıdış yekunu: sen yokken hazır olan işler (dokununca oraya gider)
+    const L = $('offList'), now = Date.now(), items = [];
+    if (state.proj && now >= state.proj.until) items.push([t('sum.proj', { c: projText(state.proj.id).c }), 'proj']);
+    if (state.mission && now >= state.mission.until) items.push([t('sum.trip'), 'goal']);
+    if (claimable()) items.push([t('sum.tasks', { n: claimable() }), 'goal']);
+    if (prestRec()) items.push([t('sum.prest'), 'model']);
+    L.innerHTML = '';
+    items.forEach(it => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'sumitem'; b.dataset.go = it[1];
+      b.textContent = '▸ ' + it[0];
+      L.appendChild(b);
+    });
+    L.hidden = !items.length;
     $('offX2').hidden = !turboReady();
     openModal('offline');
   }
@@ -790,6 +868,13 @@
     updateAll();
   }
   $('offOk').addEventListener('click', () => claimOffline(false));
+  $('offList').addEventListener('click', e => {
+    const b = e.target.closest('[data-go]');
+    if (!b) return;
+    claimOffline(false);
+    if (b.dataset.go === 'model') selectSub('train');
+    selectTab(b.dataset.go);
+  });
   $('offX2').addEventListener('click', () => claimOffline(true));
 
   document.addEventListener('visibilitychange', () => {
@@ -851,6 +936,7 @@
     document.querySelectorAll('[data-ta]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.ta)); el.title = t(el.dataset.ta); });
     document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = t(el.dataset.tp); });
     upKey = ''; taskKey = ''; misKey = ''; projKey = ''; chKey = ''; evIcoKey = ''; feedKey = '';
+    clearSay();
     $('perkList')._k = '';
     rows.forEach(rw => { rw.lang = ''; });
     achTexts();
@@ -935,7 +1021,7 @@
   if (location.hash === '#debug') window.__tick = tick;
   if (location.hash === '#debug') window.__yz = { state: state, B: B, rebuild: rebuild, updateAll: updateAll, spawnVirus: spawnVirus, openChoice: openChoice, tapValue: tapValue, dps: dps, openQuiz: openQuiz,
     spawnSurprise: spawnSurprise, updateTek: updateTek, tierIdx: tierIdx, gain: gain, catchUp: catchUp, save: save, loadFrom: loadFrom, chEnter: chEnter, chExit: chExit, powerOf: powerOf,
-    autoBuy: autoBuy, tick: tick, KEY: KEY, applyLang: applyLang, LANGS: LANGS, t: t, showStory: showStory, postNews: postNews };
+    autoBuy: autoBuy, tick: tick, KEY: KEY, applyLang: applyLang, LANGS: LANGS, t: t, showStory: showStory, postNews: postNews, say: say };
   const hot = window.claude && window.claude.hot;
   if (hot && hot.snapshot) { try { hot.snapshot(() => ({ s: JSON.stringify(state) })); } catch (e) { /* yok */ } }
   if (hot && hot.ready) hot.ready(start);

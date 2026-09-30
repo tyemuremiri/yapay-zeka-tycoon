@@ -22,7 +22,7 @@
     <small class="tiernext" id="tierNext"></small>
   </header>
 
-  <button type="button" class="ticker" id="ticker" data-ta="feed.open"><span class="tk-dot" id="tkDot"></span><span class="tk" id="tickText"></span></button>
+  <button type="button" class="ticker" id="ticker" data-ta="feed.open"><span class="tk-ava" id="tkAva"></span><span class="tk-body"><span class="tk-who"><b id="tkWho"></b><span class="tk-src" data-t="feed.title"></span></span><span class="tk" id="tickText"></span></span><span class="tk-rw" id="tkRw"></span></button>
 
   <section class="stage">
     <div class="brain-wrap" id="brainWrap">
@@ -67,7 +67,7 @@
             <g class="cos c-papyon"><path d="M40 64 28 58v12zM40 64l12-6v12z" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="40" cy="64" r="3" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.8"/></g>
           </svg>
         </button>
-        <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
+        <div class="bubble" id="bubble" role="status" aria-live="polite"><span id="bubbleTxt"></span><span class="more" id="bubbleMore"></span></div>
       </div>
     </div>
     <div class="brainbar">
@@ -79,6 +79,7 @@
   </section>
 
   <section class="side">
+    <button type="button" class="goalbar" id="goalBar"><span class="gb-k" data-t="step.now"></span><span class="gb-t" id="gbText"></span><span class="gb-p" aria-hidden="true"><i id="gbBar"></i></span></button>
     <nav class="tabs" role="tablist">
       <button type="button" class="tab" role="tab" id="tab-gen" data-tab="gen" aria-selected="true" aria-controls="panel-gen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="7"/><rect x="4" y="13" width="16" height="7"/><path d="M8 6.5h.01M8 16.5h.01"/></svg><span data-t="tab.gen"></span></button>
       <button type="button" class="tab" role="tab" id="tab-up" data-tab="up" aria-selected="false" aria-controls="panel-up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20V6M5 12l7-7 7 7"/></svg><span data-t="tab.up"></span><span class="badge" id="upBadge"></span></button>
@@ -93,6 +94,9 @@
           <span class="lbl" data-t="buy.mode"></span>
           <button type="button" data-mode="1" aria-pressed="true">×1</button>
           <button type="button" data-mode="10" aria-pressed="false">×10</button>
+          <button type="button" data-mode="25" aria-pressed="false">×25</button>
+          <button type="button" data-mode="100" aria-pressed="false">×100</button>
+          <button type="button" data-mode="next" aria-pressed="false" data-t="buy.next"></button>
           <button type="button" data-mode="max" aria-pressed="false" data-t="buy.max"></button>
         </div>
         <div class="list" id="genList"></div>
@@ -124,20 +128,24 @@
       </div>
 
       <div class="panel" id="panel-goal" role="tabpanel" aria-labelledby="tab-goal" hidden>
-        <div class="sechead"><h2 data-t="ev.title"></h2><span id="evLeft"></span></div>
-        <div class="event">
-          <div class="eh"><div class="ico" id="evIco" style="--c:var(--pink)"></div><div><b id="evName"></b><small id="evPts"></small></div></div>
-          <p id="evDesc"></p>
-          <div class="track"><i id="evBar"></i></div>
-          <div class="miles" id="evMiles"></div>
-          <button type="button" class="ghost btn" id="evJoin"></button>
-        </div>
-        <div class="sechead"><h2 data-t="mis.title"></h2><span id="misLeft"></span></div>
-        <div class="list" id="misList"></div>
         <div class="sechead"><h2 data-t="task.title"></h2><span id="dayLeft"></span></div>
         <div class="list" id="taskList"></div>
-        <div class="sechead"><h2 data-t="ach.title"></h2><span id="achSum"></span></div>
-        <div class="achs" id="achList"></div>
+        <div class="sechead"><h2 data-t="mis.title"></h2><span id="misLeft"></span></div>
+        <div class="list" id="misList"></div>
+        <details class="fold" id="evFold">
+          <summary class="sechead"><h2 data-t="ev.title"></h2><span id="evLeft"></span></summary>
+          <div class="event">
+            <div class="eh"><div class="ico" id="evIco" style="--c:var(--pink)"></div><div><b id="evName"></b><small id="evPts"></small></div></div>
+            <p id="evDesc"></p>
+            <div class="track"><i id="evBar"></i></div>
+            <div class="miles" id="evMiles"></div>
+            <button type="button" class="ghost btn" id="evJoin"></button>
+          </div>
+        </details>
+        <details class="fold">
+          <summary class="sechead"><h2 data-t="ach.title"></h2><span id="achSum"></span></summary>
+          <div class="achs" id="achList"></div>
+        </details>
       </div>
 
       <div class="panel" id="panel-model" role="tabpanel" aria-labelledby="tab-model" hidden>
@@ -247,6 +255,7 @@
     <span class="lbl" data-t="off.eyebrow"></span>
     <h2 id="offTitle" data-t="off.title"></h2>
     <p id="offText"></p>
+    <div class="sumlist" id="offList"></div>
     <div class="acts">
       <button type="button" class="primary btn" id="offOk" data-t="off.ok"></button>
       <button type="button" class="ghost btn" id="offX2" hidden data-t="off.x2"></button>

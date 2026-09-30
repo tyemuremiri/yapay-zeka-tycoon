@@ -142,13 +142,31 @@
     const row = document.createElement('div');
     row.className = 'row';
     row.hidden = true;
-    row.innerHTML = '<div class="ico" style="--c:var(' + g.col + ')">' + svg(g.i) + '<span class="cnt">0</span></div>' +
-      '<div class="info"><div class="name"></div><div class="meta"></div><div class="mile"></div></div>' +
+    row.style.setProperty('--c', 'var(' + g.col + ')');
+    row.innerHTML = '<div class="ico">' + svg(g.i) + '<span class="cnt">0</span></div>' +
+      '<div class="info"><div class="name"></div><div class="cyc" hidden><i></i><b></b></div><div class="meta"></div><div class="mile"></div></div>' +
       '<button type="button" class="buy btn" data-buy="' + i + '"><span class="b1"></span><span class="b2"></span></button>';
     genList.appendChild(row);
     rows.push({ row: row, ico: row.querySelector('.ico'), cnt: null, name: row.querySelector('.name'),
-      meta: row.querySelector('.meta'), mile: row.querySelector('.mile'), btn: row.querySelector('.buy'), b1: row.querySelector('.b1'), b2: row.querySelector('.b2'), locked: null, lang: '' });
+      meta: row.querySelector('.meta'), mile: row.querySelector('.mile'), btn: row.querySelector('.buy'), b1: row.querySelector('.b1'), b2: row.querySelector('.b2'), locked: null, lang: '',
+      cyc: row.querySelector('.cyc'), bar: row.querySelector('.cyc i'), pay: row.querySelector('.cyc b'), dur: 0 });
+    // Döngü bitince satırdan "+X" yükselir (yalnız görsel; en fazla saniyede bir).
+    row.querySelector('.cyc i').addEventListener('animationiteration', () => {
+      const r = rows[i];
+      if (eco() || r.dur < 1 || state.opt.tab !== 'gen') return;
+      const f = document.createElement('span');
+      f.className = 'cyc-pop';
+      f.textContent = r.pay.textContent;
+      r.cyc.appendChild(f);
+      f.addEventListener('animationend', () => f.remove());
+    });
   });
+  function flashRow(i, big) {
+    const r = rows[i].row;
+    r.classList.remove('bump', 'mile-up');
+    void r.offsetWidth;
+    r.classList.add(big ? 'mile-up' : 'bump');
+  }
   function buyGen(i) {
     if (!genBuyable(i)) { Snd.nope(); toast(t('ch.embargo')); return; }
     const p = planBuy(i);
@@ -158,7 +176,12 @@
     state.gen[i] += p.n;
     progress('buy', p.n);
     Snd.buy(); buzz(12);
-    if (srcMult(i) > before) toast(t('gen.mile', { g: gName(i) }));
+    if (srcMult(i) > before) {
+      const kinds = {};
+      BAL.miles.forEach((m, k) => { if (m > state.gen[i] - p.n && m <= state.gen[i]) kinds[mileKind(k)] = 1; });
+      toast(t(kinds.spd && kinds.out ? 'gen.mile' : kinds.spd ? 'gen.mileSpd' : 'gen.mileOut', { g: gName(i) }));
+    }
+    flashRow(i, srcMult(i) > before);
     const n = pick(state.neurons);
     if (n) fire(n.s, 'teal');
     if (!state.seen.gen1) { state.seen.gen1 = 1; say(t('tip.gen1'), 'wow', 2400); }
@@ -171,7 +194,7 @@
   $('seg').addEventListener('click', e => {
     const b = e.target.closest('button[data-mode]');
     if (!b) return;
-    state.buyMode = b.dataset.mode === 'max' ? 'max' : Number(b.dataset.mode);
+    state.buyMode = isNaN(b.dataset.mode) ? b.dataset.mode : Number(b.dataset.mode);
     updateAll();
   });
   const autoSelRow = $('autoSelRow');
@@ -203,7 +226,7 @@
     document.querySelectorAll('#autoBox [data-asel]').forEach(b => { const i = Number(b.dataset.asel); setText(b, gName(i)); b.hidden = !genOpen(i); b.setAttribute('aria-pressed', String(a.sel === i)); });
   }
   function updateGens() {
-    const gm = globalMult() * srcGlobal() * brainIdle();
+    const gm = BAL.srcK * globalMult() * srcGlobal() * brainIdle();
     let shownLocked = false;
     G.forEach((g, i) => {
       const r = rows[i];
@@ -224,8 +247,15 @@
       const each = g.r * srcMult(i) * gm;
       setText(r.cnt, String(state.gen[i]));
       setText(r.meta, open ? t('gen.meta', { a: fmt(each), b: fmt(each * state.gen[i]) }) : t('gen.lock'));
-      const nextMile = BAL.miles.find(m => m > state.gen[i]);
-      setText(r.mile, open && nextMile ? t('gen.next', { m: nextMile, n: state.gen[i] }) : open ? TX().gens[i].d : '');
+      const nk = nextMileIdx(state.gen[i]);
+      setText(r.mile, open && nk >= 0 ? t(mileKind(nk) === 'spd' ? 'gen.nextSpd' : 'gen.nextOut', { m: BAL.miles[nk], n: state.gen[i] }) : open ? TX().gens[i].d : '');
+      const has = open && state.gen[i] > 0;
+      r.cyc.hidden = !has;
+      if (has) {
+        const d = cycTime(i);
+        if (d !== r.dur) { r.dur = d; r.bar.style.animationDuration = d + 's'; r.cyc.classList.toggle('flow', d < 0.5); }
+        setText(r.pay, '+' + fmt(each * state.gen[i] * d));
+      }
       setText(r.b1, !open ? '' : !genBuyable(i) ? t('ch.embargoShort') : p.can ? '×' + p.n : (eta(p.cost) || '×' + p.n));
       setText(r.b2, fmt(p.cost));
       r.btn.disabled = !open || !p.can || !genBuyable(i);
@@ -237,7 +267,9 @@
   let upKey = '';
   const upList = $('upList');
   const availUps = () => UP.filter(u => !state.upg[u.id] && u.ok()).sort((a, b) => a.cost - b.cost);
+  let upHold = 0;
   function updateUpgrades() {
+    if (Date.now() < upHold) return;
     const avail = availUps().slice(0, 14);
     const key = avail.map(u => u.id).join() + (perk('opensrc') ? 'o' : '') + LANG.meta.id + state.opt.sci;
     if (key !== upKey) {
@@ -280,6 +312,7 @@
     progress('upg', 1);
     upKey = '';
     brainDirty();
+    if (!eco()) { b.closest('.row').classList.add('gone'); upHold = Date.now() + 340; setTimeout(updateUpgrades, 360); }
     Snd.buy(); buzz(12);
     toast(t('up.bought', { n: upText(u).n }));
     if (u.id[0] === 's' || u.id[0] === 'n') rebuild();
@@ -542,8 +575,11 @@
     setText($('mMult'), '×' + dec(paramMult().toFixed(2)));
     setText($('mGain'), g >= 1 ? '+' + g : '0');
     const need = BAL.prestigeDiv * Math.pow(g + 1, 1 / BAL.pPow) / Math.pow(perk('aligned') ? 1.5 : 1, 1 / BAL.pPow);
+    const rg = recGain(), needRec = BAL.prestigeDiv * Math.pow(rg, 1 / BAL.pPow) / Math.pow(perk('aligned') ? 1.5 : 1, 1 / BAL.pPow);
     setText($('mHint'), state.ch ? t('m.inCh')
-      : g >= 1 ? t('m.gain', { d: fmt(state.run + state.pendingOff), g: g, n: fmt(need) }) : t('m.first', { d: fmt(BAL.prestigeDiv), r: fmt(state.run) }));
+      : g >= 1 ? t('m.gain', { d: fmt(state.run + state.pendingOff), g: g, n: fmt(need) }) + ' ' + (g >= rg ? t('m.rec') : t('m.early', { r: rg, d: fmt(needRec) }))
+      : t('m.first', { d: fmt(BAL.prestigeDiv), r: fmt(state.run) }));
+    pBtn.classList.toggle('rec', g >= rg && !state.ch);
     const nl = labText((state.runs + 1) % LABS.length), pm = state.tree.deep ? 0.15 : BAL.paramBonus;
     const newLoop = (state.runs + 1) % LABS.length === 0;
     setText($('pGainBox'), (g >= 1 ? t('m.prev', { a: dec(paramMult().toFixed(2)), b: dec((1 + (state.params + g) * pm).toFixed(2)), g: g, c: 1 + Math.floor(Math.sqrt(g)) }) : t('m.noGain'))
@@ -697,7 +733,7 @@
   function mgSpawn(now) {
     if (!state.neurons.length) return;
     const p = pick(OUT);
-    const x = B.box.x + p[0] * B.box.w, y = B.box.y + p[1] * B.box.h;
+    const x = Math.max(12, Math.min(B.w - 12, B.box.x + p[0] * B.box.w)), y = Math.max(12, Math.min(B.h - 12, B.box.y + p[1] * B.box.h));
     const n = pick(state.neurons), tg = B.slots[n.s];
     const sp = 34 + 56 * Math.min(1, (now - mg.t0) / mg.dur);
     const d = Math.hypot(tg.x - x, tg.y - y) || 1;

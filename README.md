@@ -31,6 +31,19 @@ Son JSON, `src/game.html` içindeki `BAL` denge ayarlarını geçici olarak değ
 Güncel denge (bot ölçümü, v6): aktif oyuncu ilk yeni modele ~40 dk'da, rahat oyuncu ~68 dk'da ulaşır; turlar 20-60 dk arası sürer ve giderek uzar.
 Benchmark meydan okumalarının hedefleri, Tekillik açıldığında (~100 parametre) aktif oyuncu için ~20-25 dk olacak şekilde ölçüldü.
 
+## v8'de neler değişti
+- **Kaynak döngü çubukları:** her kaynakta dolan çubuk ve "+X" (görsel; veri kesintisiz akar, denge ve çevrimdışı değişmez).
+- **Eşikler 10/25/50/100/200/300/400/500:** sırayla "hız ×2" (döngü yarıya iner) ve "veri ×2". Tempo `srcK` ile eski hâlinde tutuldu (aktif bot ilk eğitime ~42 dk).
+- **Satın alma:** ×1, ×10, ×25, ×100, Sonraki eşik, Maks. Alımda satır animasyonu, eşikte parlama; yükseltme alınınca kart kayarak çıkar.
+- **Sıradaki adım satırı:** ilk turda sıralı öğretici hedefler, sonra hazır ödül/proje/eğitim/seviye; dokununca ilgili yere götürür.
+- **Nöro balonu:** dokunana kadar (en fazla 30 sn) kalır; önemli mesajlar sıraya girer, sohbet onları ezmez; dil değişince temizlenir.
+- **Haber kartı:** avatar, ad, iki satır metin, beğeni ödülü rozeti, yeni haberde parlama.
+- **Dönüş özeti:** çevrimdışı penceresinde hazır proje, dönen gezi, görev ödülleri, kârlı eğitim.
+- **Beyin gelişimi:** başta yakın kamera, seviye arttıkça uzaklaşır; her model aşaması beyne görünür iz ekler (evrişim ızgarası, LSTM döngüleri, dikkat yayları, dil harfleri, duyu noktaları, YGZ kabuğu).
+- **Hikâye projelerinin devamı:** üç müşteriye ikişer yeni bölüm (7 dilde).
+- **Düzeltmeler:** geçersiz kayıt içe aktarma artık oyunu silmez ve içe aktarma temiz başlar; küp sınırında parametre 1 eksik çıkmıyor; hızlı birleştirme önce sonucu gösterir ve güç düşecekse uyarır; önizlemedeki dokunuş yüzdesi gerçek hesapla aynı; service worker yalnız sayfa gezintisinde index.html döner, fontları önbelleğe alır; süre tahmini son dokunuş gelirini de sayar; eğitim "mümkün" ve "kârlı" ayrı gösterilir.
+- **Mobil:** dokunma alanları 44–48 px, açıklama yazıları büyütüldü; Hedefler'de önce günlük görevler, etkinlik ve başarımlar katlanır.
+
 ## v7'de neler değişti
 
 - **Tek ekran (uygulama gibi):** telefonda sayfa kaymaz. Üstte veri göstergesi, ortada beyin ve düğmeleri, altta yalnız kendi içinde kayan panel ve sekmeler.

@@ -25,12 +25,12 @@
   const pick = a => a[Math.floor(Math.random() * a.length)];
 
   /* ---------- Denge ayarları ----------
-     Maliyet artışı 1,15; ilk birimin geri ödemesi en fazla ~8 dk; her kaynakta 25/50/100/200/300/400/500'de ×2.
+     Maliyet artışı 1,15; ilk birimin geri ödemesi en fazla ~8 dk; her kaynakta 10/25/50/100/200/300/400/500'de ×2 (srcK bunu dengeler).
      Tempo, sahte saatla oynayan bir botla ölçüldü: aktif oyuncu ilk yeni modele ~40 dk'da, rahat oyuncu ~68 dk'da ulaşır.
      Dokunuş = beyin gücü × dokunuş çarpanı + saniyelik üretimin bir yüzdesi (başta 3-10 sn, ortada 0,3-1 sn üretim). */
   const BAL = {
     growth: 1.15,
-    miles: [25, 50, 100, 200, 300, 400, 500],
+    miles: [10, 25, 50, 100, 200, 300, 400, 500], srcK: 0.55,
     tiers: [0, 500, 1e5, 3e7, 1e10, 1e13, 1e16, 1e19], tierStep: 1000, xTier: 1.2, genF: 1.15, genH: 1.25,
     achB: 0.01, alignF: 1.25, alignH: 1.5, gUp: 2, gUpAt: 25, pPow: 1 / 3, tekDiv: 20, tekMin: 100,
     nBase: 10, nGrowth: 1.14,
@@ -73,8 +73,17 @@
     const s = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 60);
     return h ? t('u.hm', { h: h, m: mi }) : t('u.ms', { m: mi, s: s % 60 });
   }
+  // Süre tahmini pasif üretime son saniyelerdeki dokunuş gelirini de ekler (aktif oynayana gerçekçi süre).
+  let tapAcc = 0, tapRate = 0, tapAt0 = Date.now();
+  function tapRateTick(now) {
+    const dt = (now - tapAt0) / 1000;
+    if (dt < 1) return;
+    tapRate = tapRate * 0.75 + (tapAcc / dt) * 0.25;
+    if (tapRate < 1e-9) tapRate = 0;
+    tapAcc = 0; tapAt0 = now;
+  }
   function eta(cost) {
-    const d = dps();
+    const d = dps() + tapRate;
     if (d <= 0) return '';
     const s = (cost - state.data) / d;
     if (s > 86400) return '';
@@ -105,10 +114,19 @@
 
   /* ---------- Oyun verisi (metinler dil dosyalarında) ---------- */
   const G = [
-    { c: 15, r: 0.1, i: 'tag', col: '--sun' }, { c: 100, r: 1, i: 'web', col: '--sky' }, { c: 1100, r: 8, i: 'sensor', col: '--teal' },
-    { c: 12000, r: 60, i: 'server', col: '--coral' }, { c: 130000, r: 400, i: 'gpu', col: '--grape' }, { c: 1.4e6, r: 3000, i: 'atom', col: '--sky' },
-    { c: 2e7, r: 45000, i: 'neuro', col: '--teal' }, { c: 3.3e8, r: 700000, i: 'loop', col: '--coral' }
+    { c: 15, r: 0.1, t: 1.5, i: 'tag', col: '--sun' }, { c: 100, r: 1, t: 3, i: 'web', col: '--sky' }, { c: 1100, r: 8, t: 5, i: 'sensor', col: '--teal' },
+    { c: 12000, r: 60, t: 8, i: 'server', col: '--coral' }, { c: 130000, r: 400, t: 12, i: 'gpu', col: '--grape' }, { c: 1.4e6, r: 3000, t: 20, i: 'atom', col: '--sky' },
+    { c: 2e7, r: 45000, t: 30, i: 'neuro', col: '--teal' }, { c: 3.3e8, r: 700000, t: 45, i: 'loop', col: '--coral' }
   ];
+  // Eşikler sırayla "hız ×2" (döngü yarıya iner) ve "veri ×2" verir; ikisi de saniyelik üretimi ikiye katlar.
+  // Veri aslında kesintisiz akar; döngü çubuğu yalnız görsel (denge, çevrimdışı ve kayıt etkilenmez).
+  const mileKind = k => k % 2 === 0 ? 'spd' : 'out';
+  function cycTime(i) {
+    let t = G[i].t;
+    for (let k = 0; k < BAL.miles.length && state.gen[i] >= BAL.miles[k]; k++) if (mileKind(k) === 'spd') t /= 2;
+    return t;
+  }
+  function nextMileIdx(n) { for (let k = 0; k < BAL.miles.length; k++) if (BAL.miles[k] > n) return k; return -1; }
   const gName = i => TX().gens[i].n;
   // Seviyeler bu turda toplanan veriye göre açılır; YGZ'den sonra her biri 1000 kat veri ister ve üretime ×1,2 ekler.
   const TIERS = [];
@@ -198,7 +216,12 @@
   // Proje yıldızları [hız, kalite, güven]; metinler dil dosyasında aynı kimlikle.
   const PROJ = [
     { id: 'riza', story: 1, at: 0, cos: 'cay', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'nezahat', story: 1, at: 2, cos: 'onluk', A: [3, 1, 2], B: [1, 3, 3] },
-    { id: 'hastane', story: 1, at: 4, cos: 'stetoskop', A: [3, 2, 1], B: [1, 3, 3] }, { id: 'ozan', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'cemal', A: [3, 1, 1], B: [1, 3, 2] },
+    { id: 'hastane', story: 1, at: 4, cos: 'stetoskop', A: [3, 2, 1], B: [1, 3, 3] },
+    // Hikâyenin devamı: önceki bölüm Özenli yolla bitince açılır.
+    { id: 'riza2', story: 1, at: 6, req: 'riza', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'nezahat2', story: 1, at: 8, req: 'nezahat', A: [3, 1, 1], B: [1, 3, 3] },
+    { id: 'hastane2', story: 1, at: 10, req: 'hastane', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'riza3', story: 1, at: 13, req: 'riza2', A: [3, 1, 1], B: [1, 3, 3] },
+    { id: 'nezahat3', story: 1, at: 16, req: 'nezahat2', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'hastane3', story: 1, at: 19, req: 'hastane2', A: [3, 1, 2], B: [1, 3, 3] },
+    { id: 'ozan', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'cemal', A: [3, 1, 1], B: [1, 3, 2] },
     { id: 'belediye', A: [3, 1, 1], B: [1, 3, 2] }, { id: 'simit', A: [3, 2, 1], B: [1, 3, 2] }, { id: 'kiraci', A: [3, 1, 1], B: [1, 3, 3] },
     { id: 'tavla', A: [3, 1, 1], B: [1, 3, 2] }, { id: 'haluk', A: [3, 1, 1], B: [1, 2, 3] }, { id: 'eczane', A: [3, 1, 2], B: [1, 3, 3] }
   ];
@@ -304,25 +327,35 @@
     let m = 1; ['v0', 'v1', 'v2'].forEach(id => { if (state.upg[id]) m *= 2; }); if (perk('cookies')) m *= 1.5;
     return m * labM('src', 1) * (1 + kv('ekran') * 0.1) * (!base && newsOn('src') ? 2 : 1) * (chIs('kit') ? 0.1 : 1) * (chWon('pasif') ? 1.5 : 1);
   }
-  const brainIdle = () => 1 + BAL.idleK * Math.sqrt(brainPower());
-  function dps(base) {
+  const idleAt = p => 1 + BAL.idleK * Math.sqrt(p);
+  const brainIdle = () => idleAt(brainPower());
+  // *At(p): verilen beyin gücüyle aynı hesap (birleştirme/sinaps önizlemesi gerçek değeri göstersin diye)
+  function dpsAt(p, base) {
     let s = 0;
     for (let i = 0; i < G.length; i++) s += state.gen[i] * G[i].r * srcMult(i);
-    return s * srcGlobal(base) * brainIdle() * globalMult(base);
+    return s * BAL.srcK * srcGlobal(base) * idleAt(p) * globalMult(base);
   }
+  const dps = base => dpsAt(brainPower(), base);
   function clickMult() { let m = 1; ['c0', 'c1', 'c2', 'c3'].forEach(id => { if (state.upg[id]) m *= 3; }); if (perk('faces')) m *= 2; if (evIs('gpu')) m *= 2; return m * labM('tap', 1) * (1 + kv('kahve') * 0.15) * (newsOn('tap') ? 2 : 1); }
-  function tapShare() {
-    let s = Math.min(BAL.shareCap, BAL.shareK * Math.sqrt(brainPower()));
+  const tapShare = () => tapShareAt(brainPower());
+  function tapShareAt(p) {
+    let s = Math.min(BAL.shareCap, BAL.shareK * Math.sqrt(p));
     s += (state.upg.p0 ? 0.01 : 0) + (state.upg.p1 ? 0.02 : 0) + (state.upg.p2 ? 0.03 : 0) + (state.upg.p3 ? 0.04 : 0) + (perk('steal') ? 0.05 : 0);
     return s;
   }
-  const tapValue = base => chIs('pasif') ? 0 : Math.pow(brainPower(), BAL.tapPow) * clickMult() * globalMult(base) + tapShare() * dps(base);
+  const tapAt = (p, base) => chIs('pasif') ? 0 : Math.pow(p, BAL.tapPow) * clickMult() * globalMult(base) + tapShareAt(p) * dpsAt(p, base);
+  const tapValue = base => tapAt(brainPower(), base);
   const comboCap = () => (state.upg.k0 ? 3 : 2) + (evIs('hack') ? 1 : 0) + kv('klavye') * 0.2;
   const critChance = () => (BAL.critChance + (state.upg.a0 ? 0.05 : 0) + (perk('disinfo') ? 0.10 : 0)) * (evIs('hallu') ? 2 : 1) * labM('crit', 1) * (newsOn('crit') ? 3 : 1);
   const critMult = () => (state.upg.a1 ? BAL.critMult * 2 : BAL.critMult) * (state.tree.intu ? 2 : 1);
   function addData(n) { state.data += n; state.run += n; state.life += n; progress('earn', n); }
   // Toplanmamış çevrimdışı veri bu turun parçasıdır: eğitimde önce otomatik toplanır.
-  const gain = () => state.ch ? 0 : Math.floor(Math.pow((state.run + state.pendingOff) / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
+  // Tam küp sınırlarında kayan nokta 4,9999… verebilir: tam sayıya çok yakınsa yuvarla.
+  function floorNear(v) { const r = Math.round(v); return Math.abs(v - r) < 1e-9 * Math.max(1, r) ? r : Math.floor(v); }
+  const gain = () => state.ch ? 0 : floorNear(Math.pow((state.run + state.pendingOff) / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
+  // Tövsiye eşiği: ilk eğitimde 5 parametre, sonra mevcut parametrelerin en az yarısı kadar kazanç (en az 5).
+  const recGain = () => Math.max(5, Math.ceil(state.params * 0.5));
+  const prestRec = () => !state.ch && gain() >= recGain();
   const lossAt = q => 0.35 + 3.8 * Math.exp(-q / 3.2);
   const qNow = () => Math.min(21, Math.log10(1 + state.life));
   function tierIdx() { let idx = 0; for (let i = 0; i < TIERS.length; i++) { if (state.run >= TIERS[i].at) idx = i; else break; } return idx; }
@@ -338,6 +371,11 @@
     return n;
   }
   function planBuy(i) {
+    if (state.buyMode === 'next') {
+      const k = nextMileIdx(state.gen[i]), goal = k >= 0 ? BAL.miles[k] : (Math.floor(state.gen[i] / 100) + 1) * 100;
+      const want = goal - state.gen[i], cost = costFor(i, want);
+      return { n: want, cost: cost, can: cost <= state.data };
+    }
     const n = state.buyMode === 'max' ? maxAff(i) : state.buyMode;
     const show = n > 0 ? n : 1, cost = costFor(i, show);
     return { n: show, cost: cost, can: n > 0 && cost <= state.data };

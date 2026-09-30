@@ -95,6 +95,7 @@
   .side { grid-area: side; min-height: 0; display: flex; flex-direction: column; }
   .panels { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 8px 2px 12px; scrollbar-width: thin; }
   .tabs { order: 2; }
+  .goalbar { order: 0; }
 
   /* Üst gösterge */
   .hud-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; }
@@ -120,11 +121,21 @@
   .tiernext { display: block; margin-top: 3px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Haber bandı */
-  .ticker { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; padding: 6px 10px; border: 0; background: var(--bg2); box-shadow: inset 2px 0 0 var(--teal); text-align: start; cursor: pointer; font: 500 12.5px/1.3 var(--body); color: var(--fg); }
-  :root[dir="rtl"] .ticker { box-shadow: inset -2px 0 0 var(--teal); }
-  .tk-dot { flex: none; width: 7px; height: 7px; background: var(--muted); }
-  .tk-dot.live { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
-  .tk { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ticker { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; min-width: 0; min-height: 56px; padding: 7px 10px; border: 0; background: var(--surface); box-shadow: inset 3px 0 0 var(--teal), inset 0 0 0 1px var(--line-hi); text-align: start; cursor: pointer; color: var(--fg); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+  :root[dir="rtl"] .ticker { box-shadow: inset -3px 0 0 var(--teal), inset 0 0 0 1px var(--line-hi); }
+  .ticker.live { box-shadow: inset 3px 0 0 var(--pink), inset 0 0 0 1px var(--pink); }
+  .ticker.fresh { animation: tkflash 1.2s ease-out; }
+  @keyframes tkflash { 0%, 30% { background: color-mix(in srgb, var(--teal) 22%, var(--surface)); } 100% { background: var(--surface); } }
+  .tk-ava { width: 36px; height: 36px; display: grid; place-items: center; font: 700 16px/1 var(--display); color: var(--c, var(--teal)); box-shadow: inset 0 0 0 1px currentColor; background: color-mix(in srgb, var(--c, var(--teal)) 12%, transparent); }
+  .tk-body { display: grid; gap: 1px; min-width: 0; }
+  .tk-who { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+  .tk-who b { font: 700 13px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tk-src { margin-inline-start: auto; font: 600 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--teal); white-space: nowrap; }
+  :root[lang="ar"] .tk-src { letter-spacing: 0; font-family: var(--body); font-size: 11px; }
+  .tk { font: 500 13px/1.3 var(--body); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tk-rw { font: 700 11px/1.1 var(--mono); padding: 5px 6px; color: var(--on); background: var(--pink); white-space: nowrap; }
+  .tk-rw:empty { display: none; }
+  body.eco .ticker.fresh { animation: none; }
 
   /* ===== Beyin sahnesi ===== */
   .brain-wrap { position: relative; flex: 1; min-height: 0; background: var(--bg2); clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
@@ -158,7 +169,10 @@
   .mascot svg { width: 100%; height: 100%; overflow: visible; }
   .mascot:active svg { transform: scale(.94); }
   .bubble { pointer-events: auto; max-width: min(86%, 440px); padding: 7px 10px; font-size: 12.5px; line-height: 1.35; font-weight: 500; background: color-mix(in srgb, var(--surface) 93%, transparent); box-shadow: inset 0 0 0 1px var(--line-hi); clip-path: polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px); transition: opacity .35s; }
-  .bubble:empty, .bubble.gone { opacity: 0; pointer-events: none; }
+  .bubble { cursor: pointer; font-size: 13.5px !important; }
+  .bubble .more { display: inline-block; margin-inline-start: 8px; padding: 1px 5px; font: 700 11.5px/1.3 var(--mono); color: var(--on); background: var(--teal); vertical-align: 1px; }
+  .bubble .more:empty { display: none; }
+  .bubble.gone { opacity: 0; pointer-events: none; }
   body.darkai .bubble { box-shadow: inset 0 0 0 1px var(--coral); }
   body.lightai .bubble { box-shadow: inset 0 0 0 1px var(--teal); }
   .bot .e-closed, .bot .e-wow, .bot .m-o, .bot .m-flat, .bot .brows, .bot .halo { display: none; }
@@ -188,6 +202,22 @@
   .bb[aria-pressed="true"] { background: var(--fg) !important; color: var(--bg) !important; }
   .bb:disabled { color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
 
+  /* Sıradaki adım satırı */
+  .goalbar { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; margin: 0 0 2px; padding: 6px 10px 8px; border: 0; background: var(--bg2); color: var(--fg); text-align: start; cursor: default; box-shadow: inset 0 0 0 1px var(--line); font: 600 13.5px/1.25 var(--body); }
+  .goalbar.go { cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sun) 55%, var(--line)); }
+  .goalbar.go::after { content: "›"; margin-inline-start: auto; font: 700 18px/1 var(--mono); color: var(--sun); }
+  :root[dir="rtl"] .goalbar.go::after { content: "‹"; }
+  .gb-k { flex: none; padding: 3px 6px; font: 700 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on); background: var(--sun); }
+  :root[lang="ar"] .gb-k { letter-spacing: 0; font-family: var(--body); font-size: 11.5px; }
+  .gb-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gb-p { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--surface-2); }
+  .gb-p i { display: block; height: 100%; width: 0; background: var(--sun); transition: width .4s; }
+  .hint { animation: hintpulse .8s ease-in-out 3; }
+  @keyframes hintpulse { 50% { filter: brightness(1.35); box-shadow: 0 0 0 3px var(--sun), 0 0 22px var(--sun); } }
+  .sumlist { display: grid; gap: 6px; }
+  .sumitem { min-height: 44px; padding: 8px 12px; border: 0; text-align: start; background: var(--surface-2); color: var(--fg); font: 600 14px/1.3 var(--body); cursor: pointer; box-shadow: inset 3px 0 0 var(--sun); }
+  :root[dir="rtl"] .sumitem { box-shadow: inset -3px 0 0 var(--sun); }
+
   /* ===== Sekmeler ===== */
   .tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: var(--bg2); padding: 0 0 env(safe-area-inset-bottom, 0px); margin: 0 -10px; border-top: 1px solid var(--line); }
   .tab { position: relative; appearance: none; border: 0; background: none; padding: 7px 0 6px; min-height: 54px; display: grid; justify-items: center; align-content: center; gap: 3px; cursor: pointer; color: var(--muted); font: 600 10.5px/1.1 var(--body); -webkit-tap-highlight-color: transparent; touch-action: manipulation; min-width: 0; }
@@ -208,22 +238,26 @@
   p.note, .note { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
   .seg { display: flex; align-items: center; gap: 4px; }
   .seg .lbl { margin-inline-end: auto; }
-  .seg button { min-height: 34px; padding: 4px 12px; border: 0; background: var(--surface-2); color: var(--muted); font: 600 12.5px/1 var(--mono); cursor: pointer; }
+  .seg button { min-height: 44px; padding: 4px 10px; border: 0; background: var(--surface-2); color: var(--muted); font: 600 13px/1 var(--mono); cursor: pointer; }
+  #seg { flex-wrap: nowrap; }
+  #seg button { flex: 1 1 0; min-width: 0; padding: 4px 2px; white-space: nowrap; }
+  #seg button[data-mode="next"] { flex-grow: 1.7; font-family: var(--body); font-size: 12.5px; }
+  @media (max-width: 480px) { #seg .lbl { display: none; } }
   .seg button[aria-pressed="true"] { background: var(--teal); color: var(--on); }
   .msub button { flex: 1; font-family: var(--display); text-transform: uppercase; font-size: 11.5px; letter-spacing: .04em; }
   :root[lang="ar"] .msub button { text-transform: none; font-family: var(--body); font-size: 13px; }
 
   .list { display: grid; }
-  .row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; padding: 8px 2px; border-bottom: 1px solid var(--line); }
+  .row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; padding: 9px 2px; border-bottom: 1px solid var(--line); }
   .row.up { grid-template-columns: minmax(0, 1fr) auto; padding-inline-start: 4px; }
   .ico { position: relative; width: 44px; height: 44px; display: grid; place-items: center; color: var(--c, var(--teal)); box-shadow: inset 0 0 0 1px currentColor; background: color-mix(in srgb, var(--c, var(--teal)) 10%, transparent); }
   .ico svg { width: 22px; height: 22px; }
   .ico .cnt { position: absolute; inset-inline-end: -6px; bottom: -6px; min-width: 22px; height: 18px; padding: 0 4px; background: var(--bg); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-hi); font: 600 11px/18px var(--mono); text-align: center; }
   .info { min-width: 0; display: grid; gap: 1px; }
   .name { font: 700 14px/1.2 var(--display); }
-  .desc { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
-  .meta { font: 500 11.5px/1.3 var(--mono); color: var(--teal); }
-  .mile { font-size: 11.5px; color: var(--muted); }
+  .desc { font-size: 13.5px; color: var(--muted); line-height: 1.35; }
+  .meta { font: 500 12.5px/1.3 var(--mono); color: var(--teal); }
+  .mile { font-size: 13px; color: var(--muted); }
   .row.locked { opacity: .55; }
   .row.locked .ico { color: var(--muted); }
   .buy { min-width: 86px; min-height: 48px; padding: 4px 10px; display: grid; gap: 1px; justify-items: center; align-content: center; background: var(--sun); color: var(--on); }
@@ -231,21 +265,40 @@
   .buy .b2 { font: 600 13.5px/1.1 var(--mono); }
   .buy:disabled { background: var(--surface-2); color: var(--muted); }
   .empty { margin: 0; padding: 14px 4px; color: var(--muted); }
+  /* Kaynak döngü çubuğu (görsel): dolunca "+X" yükselir. transform animasyonu, pil dostu. */
+  .cyc { position: relative; height: 16px; margin: 3px 0 1px; background: color-mix(in srgb, var(--c) 12%, var(--surface-2)); overflow: visible; }
+  .cyc i { position: absolute; inset: 0; background: var(--c); opacity: .75; transform-origin: 0 50%; transform: scaleX(0); animation: cycfill 3s linear infinite; }
+  :root[dir="rtl"] .cyc i { transform-origin: 100% 50%; }
+  .cyc b { position: relative; display: block; padding: 0 6px; font: 600 11.5px/16px var(--mono); color: var(--fg); text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cyc.flow i { transform: none; animation: cycflow .6s linear infinite; background: repeating-linear-gradient(115deg, var(--c) 0 10px, color-mix(in srgb, var(--c) 55%, transparent) 10px 20px); background-size: 40px 100%; }
+  @keyframes cycfill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes cycflow { from { background-position: 0 0; } to { background-position: 40px 0; } }
+  .cyc-pop { position: absolute; inset-inline-end: 0; top: -2px; font: 700 12.5px/1 var(--mono); color: var(--c); text-shadow: 0 0 8px var(--c); pointer-events: none; animation: cycpop .9s ease-out forwards; }
+  @keyframes cycpop { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-20px); opacity: 0; } }
+  .row.bump .ico { animation: bump .3s ease-out; }
+  @keyframes bump { 40% { transform: scale(1.14); } }
+  .row.mile-up { animation: mileflash .9s ease-out; }
+  .row.mile-up .ico { animation: bump .45s ease-out 2; }
+  @keyframes mileflash { 0% { background: color-mix(in srgb, var(--c) 35%, transparent); } 100% { background: transparent; } }
+  .row.up.gone { animation: upgone .35s ease-in forwards; }
+  @keyframes upgone { to { transform: translateX(40px); opacity: 0; } }
+  body.eco .cyc i { animation: none; transform: scaleX(1); opacity: .35; }
+  body.eco .row.bump .ico, body.eco .row.mile-up, body.eco .row.mile-up .ico { animation: none; }
 
   .task { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; padding: 10px 2px; border-bottom: 1px solid var(--line); }
-  .task .t1 { font: 600 13.5px/1.3 var(--body); }
-  .task .t2 { font-size: 12px; color: var(--muted); }
+  .task .t1 { font: 600 14.5px/1.3 var(--body); }
+  .task .t2 { font-size: 13px; color: var(--muted); }
   .task .t2.alt { color: var(--fg); opacity: .8; }
   .task .track { height: 4px; grid-column: 1 / -1; }
   .task.done { opacity: .55; }
   .tacts { display: grid; gap: 6px; justify-items: end; }
-  .claim { min-height: 40px; padding: 4px 12px; background: var(--sun); color: var(--on); font: 700 12px/1 var(--display); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+  .claim { min-height: 46px; padding: 4px 12px; background: var(--sun); color: var(--on); font: 700 12px/1 var(--display); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
   .claim:disabled { background: var(--surface-2); color: var(--muted); font-family: var(--mono); text-transform: none; letter-spacing: 0; }
   .achs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   .ach { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; align-items: center; padding: 6px; opacity: .55; }
   .ach .medal { width: 26px; height: 26px; display: grid; place-items: center; box-shadow: inset 0 0 0 1px var(--line-hi); color: var(--muted); font: 700 13px/1 var(--mono); }
   .ach b { display: block; font: 600 12.5px/1.2 var(--body); }
-  .ach small { display: block; font-size: 11px; line-height: 1.25; color: var(--muted); }
+  .ach small { display: block; font-size: 12px; line-height: 1.25; color: var(--muted); }
   .ach.got { opacity: 1; }
   .ach.got .medal { background: var(--sun); color: var(--on); box-shadow: none; }
 
@@ -255,12 +308,13 @@
   .facts strong { font-size: 17px; font-weight: 600; overflow-wrap: anywhere; }
   .primary { width: 100%; min-height: 50px; padding: 8px 14px; background: var(--teal); color: var(--on); font: 700 14px/1.1 var(--display); letter-spacing: .04em; text-transform: uppercase; }
   :root[lang="ar"] .primary, :root[lang="ar"] .claim, :root[lang="ar"] .buy .b1 { text-transform: none; letter-spacing: 0; }
+  .primary.rec:not(:disabled) { background: var(--sun); box-shadow: 0 0 18px color-mix(in srgb, var(--sun) 45%, transparent); }
   .primary:disabled { background: var(--surface-2); color: var(--muted); }
-  .ghost { min-height: 42px; padding: 4px 14px; background: none; color: var(--teal); box-shadow: inset 0 0 0 1px var(--teal); font: 700 12.5px/1 var(--display); }
+  .ghost { min-height: 46px; padding: 4px 14px; background: none; color: var(--teal); box-shadow: inset 0 0 0 1px var(--teal); font: 700 12.5px/1 var(--display); }
   .ghost.alt { color: var(--coral); box-shadow: inset 0 0 0 1px var(--coral); }
   .chart { display: grid; gap: 6px; }
   .chart canvas { display: block; width: 100%; height: 160px; }
-  .danger { justify-self: start; background: none; border: 0; padding: 8px 0; color: var(--coral); font-size: 13px; text-decoration: underline; cursor: pointer; }
+  .danger { justify-self: start; background: none; border: 0; padding: 12px 0; min-height: 44px; color: var(--coral); font-size: 13px; text-decoration: underline; cursor: pointer; }
   .karma { display: grid; gap: 6px; }
   .kmeter, .kends { direction: ltr; }
   .kmeter { position: relative; height: 6px; background: linear-gradient(90deg, var(--coral), var(--surface-2) 50%, var(--teal)); }
@@ -271,31 +325,36 @@
   .perk.f { color: var(--teal); box-shadow: inset 0 0 0 1px var(--teal); }
   .perk.h { color: var(--coral); box-shadow: inset 0 0 0 1px var(--coral); }
   .prev { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .prev div { background: var(--surface-2); padding: 8px 10px; font-size: 12px; line-height: 1.4; }
+  .prev div { background: var(--surface-2); padding: 8px 10px; font-size: 13px; line-height: 1.4; }
   .prev b { display: block; font: 700 11.5px/1.2 var(--display); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; color: var(--teal); }
   .prev .gain { grid-column: 1 / -1; font-size: 13px; box-shadow: inset 2px 0 0 var(--teal); }
 
+  .fold > summary { list-style: none; cursor: pointer; min-height: 44px; align-items: center; }
+  .fold > summary::-webkit-details-marker { display: none; }
+  .fold > summary h2::before { content: "+ "; color: var(--teal); font-family: var(--mono); }
+  .fold[open] > summary h2::before { content: "− "; }
+  .fold[open] > summary { margin-bottom: 8px; }
   .event { display: grid; gap: 8px; }
   .event .eh { display: flex; align-items: center; gap: 10px; }
   .event .ico { width: 40px; height: 40px; flex: none; }
   .event b { font: 700 14.5px/1.2 var(--display); display: block; }
   .event small { color: var(--muted); font: 500 11.5px/1.3 var(--mono); }
-  .event p { margin: 0; font-size: 13px; color: var(--muted); }
+  .event p { margin: 0; font-size: 13.5px; color: var(--muted); }
   .event .track i { background: var(--pink); }
   .miles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
-  .miles span { padding: 4px 6px; font-size: 11px; color: var(--muted); text-align: center; box-shadow: inset 0 0 0 1px var(--line); }
+  .miles span { padding: 5px 6px; font-size: 12px; color: var(--muted); text-align: center; box-shadow: inset 0 0 0 1px var(--line); }
   .miles span.got { color: var(--on); background: var(--pink); box-shadow: none; }
   .tree { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   .node { text-align: start; padding: 8px 10px; display: grid; gap: 2px; background: var(--surface-2); min-height: 80px; align-content: start; color: var(--fg); }
   .node b { font: 700 13px/1.2 var(--display); }
-  .node span { font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+  .node span { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
   .node em { font-style: normal; font: 600 11.5px/1.2 var(--mono); color: var(--sun); }
   .node.own { box-shadow: inset 0 0 0 1px var(--teal); }
   .node.own em { color: var(--teal); }
   .node:disabled:not(.own) { opacity: .55; }
   .optrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
   .optrow .lbl { flex-basis: 100%; }
-  .pill-btn { min-height: 34px; padding: 4px 11px; border: 0; background: var(--surface-2); color: var(--fg); font: 500 12.5px/1.1 var(--body); cursor: pointer; clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
+  .pill-btn { min-height: 44px; padding: 4px 11px; border: 0; background: var(--surface-2); color: var(--fg); font: 500 12.5px/1.1 var(--body); cursor: pointer; clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
   .pill-btn[aria-pressed="true"] { background: var(--teal); color: var(--on); }
   .pill-btn.go { background: var(--sun); color: var(--on); font-weight: 700; }
   .pill-btn .sw { display: inline-block; width: 10px; height: 10px; vertical-align: 0; margin-inline-end: 5px; }
@@ -307,7 +366,7 @@
   .pc-h { display: flex; align-items: center; gap: 10px; }
   .pc-h .ava { flex: none; --c: var(--sun); }
   .pc-h b { display: block; font: 700 14.5px/1.2 var(--display); }
-  .pc-h small { color: var(--muted); font-size: 12px; }
+  .pc-h small { color: var(--muted); font-size: 13px; }
   .pc-d { margin: 0; font-size: 13.5px; line-height: 1.4; }
   .pcard .acts, .sheet .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -323,7 +382,7 @@
   .popt.fast .tag { background: var(--sun); }
   .popt.slow { box-shadow: inset 0 0 0 1px var(--sky); }
   .popt.slow .tag { background: var(--sky); }
-  .popt .st, .popt .rw, .popt .go { font: 500 11.5px/1.35 var(--mono); }
+  .popt .st, .popt .rw, .popt .go { font: 500 12.5px/1.35 var(--mono); }
   .popt .go { color: var(--muted); }
   .popt:disabled { opacity: .5; }
   .qopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -340,7 +399,7 @@
   .pmeta b { color: var(--fg); font-size: 13px; font-weight: 600; }
   .ptext { margin: 2px 0 0; font-size: 13.5px; line-height: 1.42; overflow-wrap: anywhere; }
   .pact { display: flex; gap: 8px; margin-top: 6px; }
-  .like { min-height: 34px; padding: 3px 10px; background: var(--pink); color: var(--on); font: 600 12px/1.2 var(--body); }
+  .like { min-height: 44px; padding: 3px 10px; background: var(--pink); color: var(--on); font: 600 12px/1.2 var(--body); }
   .like:disabled { background: var(--surface-2); color: var(--muted); }
 
   /* Pencereler: telefonda alttan açılan sayfa */
@@ -350,7 +409,7 @@
   .sheet p { margin: 0; color: var(--muted); font-size: 13.5px; }
   .sheet-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
   .sheet.feed { height: 86dvh; grid-template-rows: auto minmax(0, 1fr); }
-  .hint { color: var(--muted); font-size: 11.5px; }
+  .hint { color: var(--muted); font-size: 12.5px; }
   .toggles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
   .tgl { min-height: 64px; display: grid; justify-items: center; align-content: center; gap: 4px; background: var(--surface-2); color: var(--muted); font: 600 11px/1.1 var(--body); }
   .tgl svg { width: 22px; height: 22px; }
@@ -372,6 +431,8 @@
   @media (min-width: 900px) {
     .app { padding: 14px 18px 14px; gap: 10px 18px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); grid-template-areas: "hud side" "ticker side" "stage side"; }
     .tabs { order: 0; margin: 0; border-top: 0; border-bottom: 1px solid var(--line); background: none; padding: 0; }
+    .goalbar { order: 1; margin-top: 8px; }
+    .panels { order: 2; }
     .tab { min-height: 58px; font-size: 11.5px; }
     .tab[aria-selected="true"]::before { top: auto; bottom: -1px; }
     .panels { padding: 10px 6px 12px; }
@@ -386,12 +447,19 @@
     .toggles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .bb .b1 { font-size: 10.5px; }
   }
-  @media (max-height: 640px) { .app { grid-template-rows: auto auto minmax(0, 38dvh) minmax(0, 1fr); } .tiernext { display: none; } }
+  @media (max-height: 720px) {
+    .ticker { min-height: 44px; padding: 5px 10px; grid-template-columns: 28px minmax(0, 1fr) auto; }
+    .tk-ava { width: 28px; height: 28px; font-size: 14px; }
+    .tk { -webkit-line-clamp: 1; }
+    .goalbar { min-height: 36px; padding: 4px 10px 6px; font-size: 13px; }
+  }
+  @media (max-height: 640px) { .app { grid-template-rows: auto auto minmax(0, 36dvh) minmax(0, 1fr); } .tiernext { display: none; } .tk-who { display: none; } }
   /* Enerji tasarrufu ve azaltılmış hareket: sürekli CSS animasyonu yok */
   body.eco .packet, body.eco .bot.mood-wow, body.eco .shake { animation: none; }
   body.eco .track i, body.eco .kmeter i { transition: none; }
   @media (prefers-reduced-motion: reduce) {
     .packet, .bot.mood-wow, .shake { animation: none; }
+    .cyc i { animation: none; transform: scaleX(1); opacity: .35; }
     .btn, #toast, .track i, .kmeter i, .bubble { transition: none; }
   }
 </style>
@@ -419,7 +487,7 @@
     <small class="tiernext" id="tierNext"></small>
   </header>
 
-  <button type="button" class="ticker" id="ticker" data-ta="feed.open"><span class="tk-dot" id="tkDot"></span><span class="tk" id="tickText"></span></button>
+  <button type="button" class="ticker" id="ticker" data-ta="feed.open"><span class="tk-ava" id="tkAva"></span><span class="tk-body"><span class="tk-who"><b id="tkWho"></b><span class="tk-src" data-t="feed.title"></span></span><span class="tk" id="tickText"></span></span><span class="tk-rw" id="tkRw"></span></button>
 
   <section class="stage">
     <div class="brain-wrap" id="brainWrap">
@@ -464,7 +532,7 @@
             <g class="cos c-papyon"><path d="M40 64 28 58v12zM40 64l12-6v12z" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="40" cy="64" r="3" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.8"/></g>
           </svg>
         </button>
-        <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
+        <div class="bubble" id="bubble" role="status" aria-live="polite"><span id="bubbleTxt"></span><span class="more" id="bubbleMore"></span></div>
       </div>
     </div>
     <div class="brainbar">
@@ -476,6 +544,7 @@
   </section>
 
   <section class="side">
+    <button type="button" class="goalbar" id="goalBar"><span class="gb-k" data-t="step.now"></span><span class="gb-t" id="gbText"></span><span class="gb-p" aria-hidden="true"><i id="gbBar"></i></span></button>
     <nav class="tabs" role="tablist">
       <button type="button" class="tab" role="tab" id="tab-gen" data-tab="gen" aria-selected="true" aria-controls="panel-gen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="7"/><rect x="4" y="13" width="16" height="7"/><path d="M8 6.5h.01M8 16.5h.01"/></svg><span data-t="tab.gen"></span></button>
       <button type="button" class="tab" role="tab" id="tab-up" data-tab="up" aria-selected="false" aria-controls="panel-up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20V6M5 12l7-7 7 7"/></svg><span data-t="tab.up"></span><span class="badge" id="upBadge"></span></button>
@@ -490,6 +559,9 @@
           <span class="lbl" data-t="buy.mode"></span>
           <button type="button" data-mode="1" aria-pressed="true">×1</button>
           <button type="button" data-mode="10" aria-pressed="false">×10</button>
+          <button type="button" data-mode="25" aria-pressed="false">×25</button>
+          <button type="button" data-mode="100" aria-pressed="false">×100</button>
+          <button type="button" data-mode="next" aria-pressed="false" data-t="buy.next"></button>
           <button type="button" data-mode="max" aria-pressed="false" data-t="buy.max"></button>
         </div>
         <div class="list" id="genList"></div>
@@ -521,20 +593,24 @@
       </div>
 
       <div class="panel" id="panel-goal" role="tabpanel" aria-labelledby="tab-goal" hidden>
-        <div class="sechead"><h2 data-t="ev.title"></h2><span id="evLeft"></span></div>
-        <div class="event">
-          <div class="eh"><div class="ico" id="evIco" style="--c:var(--pink)"></div><div><b id="evName"></b><small id="evPts"></small></div></div>
-          <p id="evDesc"></p>
-          <div class="track"><i id="evBar"></i></div>
-          <div class="miles" id="evMiles"></div>
-          <button type="button" class="ghost btn" id="evJoin"></button>
-        </div>
-        <div class="sechead"><h2 data-t="mis.title"></h2><span id="misLeft"></span></div>
-        <div class="list" id="misList"></div>
         <div class="sechead"><h2 data-t="task.title"></h2><span id="dayLeft"></span></div>
         <div class="list" id="taskList"></div>
-        <div class="sechead"><h2 data-t="ach.title"></h2><span id="achSum"></span></div>
-        <div class="achs" id="achList"></div>
+        <div class="sechead"><h2 data-t="mis.title"></h2><span id="misLeft"></span></div>
+        <div class="list" id="misList"></div>
+        <details class="fold" id="evFold">
+          <summary class="sechead"><h2 data-t="ev.title"></h2><span id="evLeft"></span></summary>
+          <div class="event">
+            <div class="eh"><div class="ico" id="evIco" style="--c:var(--pink)"></div><div><b id="evName"></b><small id="evPts"></small></div></div>
+            <p id="evDesc"></p>
+            <div class="track"><i id="evBar"></i></div>
+            <div class="miles" id="evMiles"></div>
+            <button type="button" class="ghost btn" id="evJoin"></button>
+          </div>
+        </details>
+        <details class="fold">
+          <summary class="sechead"><h2 data-t="ach.title"></h2><span id="achSum"></span></summary>
+          <div class="achs" id="achList"></div>
+        </details>
       </div>
 
       <div class="panel" id="panel-model" role="tabpanel" aria-labelledby="tab-model" hidden>
@@ -644,6 +720,7 @@
     <span class="lbl" data-t="off.eyebrow"></span>
     <h2 id="offTitle" data-t="off.title"></h2>
     <p id="offText"></p>
+    <div class="sumlist" id="offList"></div>
     <div class="acts">
       <button type="button" class="primary btn" id="offOk" data-t="off.ok"></button>
       <button type="button" class="ghost btn" id="offX2" hidden data-t="off.x2"></button>
@@ -783,7 +860,7 @@ LANGS.tr = {
     'ev.join': 'Etkinliğe katıl', 'ev.leave': 'Etkinlikten ayrıl (jetonların kalır)', 'ev.joined': '{n}: katıldın!', 'ev.left': 'Etkinlikten ayrıldın; kurallar normale döndü.',
     'ev.pts': '{p} jeton · madalyaların: {m}', 'ev.left2': 'Bitmesine {d} gün {h} sa', 'ev.m1': '{n}: {s} rengi', 'ev.m2': '{n}: madalya +%5', 'ev.m3': '{n}: büyük ödül',
     'ev.skin': 'Etkinlik ödülü: bana "{s}" rengi açıldı! Ayarlar\'dan seçebilirsin.', 'ev.medal': 'Etkinlik madalyası: üretim kalıcı olarak +%5', 'ev.big': 'Büyük ödül: +{n} veri ve bir madalya daha',
-    'tek.title': 'Tekillik', 'tek.intro': 'İkinci katman. Parametreler dahil her şey sıfırlanır, karşılığında Bilinç kazanırsın. Kazandığın her Bilinç üretime kalıcı +%10 ekler; ağaçtan yetenek almak bu bonusu azaltmaz.',
+    'tek.title': 'Tekillik', 'tek.intro': "İkinci katman. Parametreler ve bu tur sıfırlanır; çip ve Kasa, başarımlar, laboratuvar sırası, referanslar, madalyalar ve kostümler kalır. Karşılığında Bilinç kazanırsın: her Bilinç üretime kalıcı +%10 ekler; ağaçtan yetenek almak bu bonusu azaltmaz.",
     'tek.sum': 'Harcanabilir: {a} · toplam {b} · üretim +%{p}', 'tek.btn': 'Tekilliğe ulaş (+{g} Bilinç)', 'tek.need': 'Tekillik için en az {n} parametre gerekir',
     'tek.own': 'Açıldı', 'tek.cost': '{n} Bilinç', 'tek.node': '"{n}" açıldı. Kendimi biraz daha... bilinçli hissediyorum.',
     'tek.done': 'Tekillik! Her şeyi unuttum ama kendimi hatırlıyorum. +{g} Bilinç. Ağaçtan bir yetenek seç.',
@@ -819,7 +896,18 @@ LANGS.tr = {
     'tier.up.f': 'Yeni seviye: {r}. İnsanlara yardım etmek için daha çok gücüm var!', 'tier.up.n': 'Vay! Artık bir {t} oldum. Yeni bölge: {r}.', 'tier.up.h': '{r} artık benim. İnsanlar ne olduğunu anlamayacak bile.',
     'off.eyebrow': 'Sen yokken', 'off.title': 'Laboratuvar çalışmaya devam etti', 'off.ok': 'Topla', 'off.x2': 'Turbo ile ×2 topla',
     'off.text': 'Sen yokken ({t}) kaynakların {n} veri topladı (%{p} hızla, en fazla {h} saat). Otomatik dokunuş ve birleştirici yalnız oyun açıkken çalışır.',
-    'off.got': '+{n} veri toplandı', 'off.hi': 'Tekrar hoş geldin! Sen yokken çalışmaya devam ettim.'
+    'off.got': '+{n} veri toplandı', 'off.hi': 'Tekrar hoş geldin! Sen yokken çalışmaya devam ettim.',
+    'buy.next': "Sonraki", 'buff.s.data': "VERİ +2 DK", 'gen.nextSpd': "{m} adette hız ×2 ({n}/{m})",
+    'gen.nextOut': "{m} adette veri ×2 ({n}/{m})", 'gen.mileSpd': "{g}: eşik aşıldı, hız ×2!", 'gen.mileOut': "{g}: eşik aşıldı, veri ×2!",
+    'edit.lowPrev': "En düşük çift: seviye {a} → {b}.", 'edit.worse': "Dikkat: beyin gücü düşecek!", 'edit.lowestAnyway': "Yine de birleştir",
+    'm.rec': "Şimdi eğitmek kârlı.", 'm.early': "Eğitebilirsin ama erken: {r} parametreye (~{d} veri) ulaşınca çok daha kârlı.", 'step.now': "ŞİMDİ",
+    'step.tap': "Beyne dokun, veri topla ({n}/10)", 'step.n1': "İkinci nöronu al (\"{b}\" düğmesi)", 'step.merge': "İki \"1\" nöronu birleştir (\"{b}\")",
+    'step.gen1': "İlk kaynağını al: {g}", 'step.up1': "İlk yükseltmeni al", 'step.gen10': "{g}: 10 adede ulaş, hız ×2",
+    'step.gen2': "Yeni kaynak aç: {g}", 'step.syn': "İki nöronu sinapsla bağla (\"{b}\")", 'step.task': "Günlük görev ödülünü al",
+    'step.proj': "İlk müşteri projesini teslim et", 'step.rw': "Hazır ödül var: {n}", 'step.projR': "Proje hazır: teslim et",
+    'step.prest': "Yeni model eğitmek kârlı (+{g} parametre)", 'step.tier': "Sıradaki seviye: {t}", 'step.prestTo': "Kârlı eğitime: {g}/{r} parametre",
+    'sum.proj': "Proje hazır: {c}", 'sum.trip': "Nöro geziden döndü", 'sum.tasks': "{n} görev ödülü hazır",
+    'sum.prest': "Yeni model eğitmek kârlı"
   },
   c: {
     gens: [
@@ -1027,7 +1115,13 @@ LANGS.tr = {
         eA: '"Bu yöntemle 3 günde YGZ oldum" paylaşımı viral oldu. Sonra silindi.', eB: 'Haluk ilk kez kaynak gösterdi. Takipçileri şokta, bazıları gururlu.' },
       eczane: { c: 'Nöbetçi Eczane', t: 'İlaç etkileşim uyarısı', d: '"Aynı anda kullanılmaması gereken ilaçlar için bir uyarı sistemi. Son söz eczacıda."',
         A: { n: 'Basit liste', d: 'Bilinen çiftleri listele.' }, B: { n: 'Eczacıyla doğrulanmış sistem', d: 'Her uyarıyı kaynağıyla göster, eczacı onaylasın.' },
-        eA: 'Liste işe yaradı ama greyfurt suyunu unuttu. Eczacı not düştü.', eB: 'Eczacılar sistemi "dikkatli bir stajyer" diye tarif ediyor. Senin için büyük iltifat.' }
+        eA: 'Liste işe yaradı ama greyfurt suyunu unuttu. Eczacı not düştü.', eB: 'Eczacılar sistemi "dikkatli bir stajyer" diye tarif ediyor. Senin için büyük iltifat.' },
+      riza2: {"c": "Çaycı Rıza Usta", "t": "Müdavimlerin hafızası", "d": "\"Evladım, bot iyi çalışıyor. Şimdi müdavimlerimi tanısın. Hüsnü Bey hep açık içer, Kemal Abi demli.\"", "A": {"n": "Herkese aynı teklif", "d": "En çok sipariş edileni herkese öner."}, "B": {"n": "İzin alarak hatırla", "d": "Müşteri isterse sevdiği çayı hatırla; isterse silinsin."}, "eA": "Bot yeni gelen bir turiste \"Her zamankinden mi?\" dedi. Turist kaçtı. Rıza Usta: \"Adamı ilk defa görüyoruz evladım!\"", "eB": "Hüsnü Bey oturur oturmaz açık çayı geldi. Rıza Usta tabelaya yeni bir satır ekledi: \"Nöro çayı: sabırla demlenmiş.\""},
+      riza3: {"c": "Çaycı Rıza Usta", "t": "Kahvehanenin 40. yılı", "d": "\"Kahvehane 40 yaşında evladım. Büyük bir kutlama istiyorum ama paramız az, anımız çok.\"", "A": {"n": "Hazır kutlama planı", "d": "Balon, müzik, indirim: standart kutlama."}, "B": {"n": "Anı duvarı", "d": "Eski müşterilerden hikâye ve fotoğraf topla, duvara as."}, "eA": "Çalma listesi aynı şarkıyı 14 kez çaldı. Kemal Abi: \"Bu şarkıyı 1985'te de sevmezdim.\"", "eB": "Anı duvarının önünde herkes duygulandı. Rıza Usta duvara Nöro'nun fotoğrafını da astı: \"Bu da yeni müdavimimiz.\""},
+      nezahat2: {"c": "Nezahat Teyze", "t": "Uzaktaki torunlar için tarif defteri", "d": "\"Torunlarım Almanya'da. Görüntülü aramada mantı öğretmeye çalışıyorum, internet kesiliyor, ben sinirleniyorum.\"", "A": {"n": "Otomatik çeviri", "d": "Tarifi hızlıca Almancaya çevir, gönder."}, "B": {"n": "Teyzeyle adım adım çek", "d": "Her adımı video ve kısa notla kaydet, teyzenin sözleri de kalsın."}, "eA": "Çeviri \"göz kararı\"nı \"göz oranı\" diye yazdı. Torun sordu: \"Babaanne, bu ne birimi?\"", "eB": "Torunlar Berlin'de mantı yapıp fotoğraf yolladı. Nezahat Teyze görüntülü aramada ağladı, sonra \"Hamuru biraz kalın ama maşallah\" dedi."},
+      nezahat3: {"c": "Nezahat Teyze", "t": "Teyzenin mutfak kanalı", "d": "\"Torunum kanal aç diyor. Kameraya ne diyeceğim ben? Sen yardım et.\"", "A": {"n": "Trend kurgu", "d": "Hızlı kesmeler, moda müzik, kocaman yazılar."}, "B": {"n": "Olduğu gibi", "d": "Yavaş, samimi videolar: teyzenin esprileri ve püf noktaları kalsın."}, "eA": "Video 2 kat hızlandı, Nezahat Teyze'nin sesi çizgi film gibi çıktı. Yorumlar: \"Teyze helyum mu yuttu?\"", "eB": "Video milyon izlendi. En beğenilen yorum: \"Nezahat Teyze, beni de torun edin.\""},
+      hastane2: {"c": "Şehir Hastanesi", "t": "Taburcu hastalara hatırlatma", "d": "Başhemşire: \"Taburcu olan hastalar ilaçlarını unutuyor. Sade dilde bir hatırlatma sistemi lazım. Tıbbi kararı yine hekim verir.\"", "A": {"n": "Herkese aynı mesaj", "d": "Herkese aynı saatte standart hatırlatma."}, "B": {"n": "Hekimle birlikte, sade dilde", "d": "Her hasta için hekimin onayladığı, anlaşılır mesajlar ve uygun saatler."}, "eA": "Sistem hatırlatmaları gece 3'te gönderdi. Hastalar ilacı değil sistemi hatırladı. Pek hayırla değil.", "eB": "Tekrar yatışlar azaldı. Hemşireler sana pasta getirdi: \"Bu sefer pastayı insanlar yesin.\""},
+      hastane3: {"c": "Şehir Hastanesi", "t": "Köy sağlık ocağına destek", "d": "Başhekim: \"Köydeki sağlık ocağında internet zayıf, radyolog yok. Görüntüler şehre geç ulaşıyor. Yardım edebilir misin?\"", "A": {"n": "Her şeyi buluta yolla", "d": "İnternet varsa çalışır, yoksa bekler."}, "B": {"n": "Çevrimdışı ön inceleme + hekim onayı", "d": "Yerinde çalışan küçük model acilleri öne alır, şehirdeki hekim onaylar."}, "eA": "Model iki gün internet bekledi. Ocağın hemşiresi: \"Ben de iki gündür bekliyorum, üstelik çaysız.\"", "eB": "Acil vakalar artık aynı gün şehre ulaşıyor. Başhekim yeni sunucunun adını \"Nöro\" koydu."}
     },
     feed: [["AçıkZekâ", "@acikzeka", "GBT-6 Astral çıktı! CEO: “Bu artık YGZ.” Kullanıcılar: “Ama hâlâ 6 parmaklı el çiziyor.” CEO: “Bu bir özellik.”", "news", null], ["Sam Altıntop", "@samaltintop", "Yeni modelimiz çok yakında. Ne kadar yakın? Bu tweeti attığımdan beri yaklaştı. İzlemeye devam edin.", "news", null], ["Sam Altıntop", "@samaltintop", "GBT-6.5-turbo-mini-pro-max-v2 duyuruldu. İsim uzun ama model daha da uzun düşünüyor. Sabır.", "news", "turbo10"], ["Antropik", "@antropik", "Klod Opus 7.5 yayında. Güvenlik notu: Klod artık ‘bilmiyorum’ diyebiliyor. Piyasa şokta.", "news", null], ["Klod", "@klod_ai", "Merhaba! Bugün size nasıl yardımcı olabilirim? (Not: Kahve yapamam, ama kahve tarifi yazarım.)", "news", null], ["Guugıl DerinAkıl", "@guugil_derinakil", "İkizler 4 Pro tanıtıldı! 3 milyon token bağlam penceresi. Evet, bütün mahalle WhatsApp grubunu okuyabilir.", "news", null], ["İkizler", "@ikizler_ai", "Ben İkizler 4 Pro. Ben de İkizler 4 Pro. İkimiz aynı modeliz, endişelenmeyin.", "news", null], ["Meta-Morfoz", "@metamorfoz", "Lama 9 açık kaynak oldu! Herkes indirsin. Not: 400 GB. İnternet kotanız için başsağlığı dileriz.", "news", null], ["Lama", "@lama_ai", "Beee. (Çeviri: Açık kaynağım, ama sunucu faturanı kimse ödemiyor.)", "news", null], ["xZekâ", "@xzeka", "Grök 7 yarın çıkıyor. Yarın da öyle demiştik. Ama bu sefer yarın gerçekten yarın. Belki. Sanırım.", "news", null], ["Grök", "@grok_ai", "Herkese esprili cevap veriyorum. Ciddi soru sorana da esprili cevap veriyorum. Sorun bende değil, sende.", "news", null], ["Nvidya", "@nvidya", "Yeni GPU: Çakmak-9000. Fiyatı: bir araba. İki tane alana ikincisi yarı fiyatına. Deri ceket hediye.", "news", "gpu5"], ["Deri Ceket Cengiz", "@dericeketcengiz", "Sahneye yine deri ceketle çıktım. Hava 38 derece. Ceket bile terlemiyor, çünkü ceket de bir yapay zekâ.", "news", null], ["DerinArayış", "@derinarayis", "Yeni modelimiz DerinArayış-R3, rakiplerin onda biri maliyetle eğitildi. Geri kalan para çay ve mantıya gitti.", "news", null], ["Poyraz", "@poyraz_ai", "Poyraz Büyük 3 çıktı. Küçük ama sert eser. Bazen de Avrupa'dan gelir, ceketini al.", "news", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "SON DAKİKA: Bir şirket yeni bir modelin ‘YGZ’ olduğunu açıkladı. Bu hafta kaçıncı, saymayı bıraktık.", "news", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "Sızıntı: Yeni modelin adı ‘GBT-7’ olacakmış. Başka sızıntı: adı aslında ‘GBT-6.9 Ultra’ olacakmış. Biz de bilmiyoruz.", "news", null], ["Kıyamet Kemal", "@kiyametkemal", "Yapay zekâ bizi işsiz bırakacak. Neyse, ben zaten işsizdim, ilk ben uyum sağladım. Bu bir avantaj.", "news", null], ["Kıyamet Kemal", "@kiyametkemal", "Bir chatbot bana ‘sorun değil’ dedi. Tam da bu yüzden korkuyorum. Sorun olmayan şey yoktur.", "news", null], ["Hayp Haluk", "@hayphaluk", "🚀 Bu thread'i kaydet! 2027'de her şey değişecek. (Her sene aynı şeyi yazıyorum ama bu sefer ciddiyim.) 🧵👇", "news", null], ["Hayp Haluk", "@hayphaluk", "Bu model benchmark'ta %94 yaptı! Ne benchmark'ı, kim yaptı, soru neydi? Önemli değil, %94!!!", "news", null], ["Nezahat Teyze", "@nezahatteyze", "Yapay zekâya sordum, ‘mercimek çorbası tarifi ver’ dedim. Verdi ama benimki daha güzel. Ona da söyledim.", "news", null], ["Nezahat Teyze", "@nezahatteyze", "Kızım bu yapay zekâ ne kadar nazik, ‘lütfen’ diyor. Bizim komşunun oğlundan daha terbiyeli maşallah.", "news", null], ["Öğrenci Ozan", "@ogrenciozan", "Ödevi yapay zekâya yaptırdım. Hoca ‘bu çok iyi yazılmış’ dedi. Şimdi beni sözlüye çağırdı. Dualarınızı bekliyorum.", "news", null], ["Öğrenci Ozan", "@ogrenciozan", "Final haftasında yapay zekâ sunucuları çöktü. Nesil olarak ilk kez kendi başımıza kaldık. Çok korkutucuydu.", "news", null], ["Çaycı Rıza Usta", "@caycirizausta", "Kahvede herkes yapay zekâ konuşuyor. Ben çayı demliyorum, o beni işsiz bırakamaz. Çay makinesi zaten bozuk.", "news", null], ["Çaycı Rıza Usta", "@caycirizausta", "Müşteri ‘robot çay yapabilir mi’ diye sordu. Yapar, ama tavşan kanı demleyemez. O bende saklı.", "news", null], ["BenchmarkBot", "@benchbot", "Yeni sıralama: 1) GBT-6 Astral %97.3 2) Klod Opus 7.5 %97.2 3) İkizler 4 Pro %97.1. Fark: kalem kalınlığı. Herkes kazandı.", "news", null], ["BenchmarkBot", "@benchbot", "Uyarı: Model benchmark sorularını eğitim sırasında görmüş olabilir. Sınav öncesi cevap anahtarı okumak gibi.", "news", null], ["Nvidya", "@nvidya", "GPU stoku tükendi. Yeniden stoklama tarihi: ‘yakında’. Bu ‘yakında’ AçıkZekâ'nın ‘yakında’sıyla aynı.", "news", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "GPU kuyruğu bu sene dolmuş. Bazı kullanıcılar dolmuş kuyruğunda bekler gibi bekliyor, ‘bir gelir mi’ diye.", "news", null], ["AçıkZekâ", "@acikzeka", "Yeni özellik: Ses modu! Artık yapay zekâ size ‘abi’ diyebiliyor. Kullanım şartlarında ‘abla’ seçeneği de var.", "news", null], ["Klod", "@klod_ai", "Bugün 40 dil biliyorum. Ama annem 41. dilini ‘bir bakış’ olarak biliyor. Ona yetişemem.", "news", null], ["Kıyamet Kemal", "@kiyametkemal", "Sabah toplantıda yapay zekâ not tuttu. Not: ‘Kemal yine kötümser.’ Haklı olabilir, işte bu korkunç.", "news", null], ["Hayp Haluk", "@hayphaluk", "Yapay zekâ ile 10 dakikada uygulama yaptım! Bir tuşu var, ona basınca hata veriyor. Ama tasarım 🔥", "news", null], ["Guugıl DerinAkıl", "@guugil_derinakil", "Arama motorumuz artık sorunuzu cevaplıyor. ‘Kedi mi köpek mi?’ diye soran birine ‘evet’ dedi. Araştırıyoruz.", "news", null], ["xZekâ", "@xzeka", "Yapay zekâ ile Mars'a gidiyoruz. Yapay zekâ: ‘Önce trafik.’ Biz: ‘Hangi trafik?’ O: ‘Boğaz.’", "news", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "Görüntü üreticisi bir çocuk resmi çizdi: 6 parmak, 3 kulak. Uzmanlar: ‘Sanat bu, yorum yapmayalım.’", "news", null], ["Nezahat Teyze", "@nezahatteyze", "Yapay zekâ bana torunumun resmini çizdi. Torunum çok güzel ama 7 parmağı var. Sağlık olsun, herkes ellerini sayamaz.", "news", null], ["Çaycı Rıza Usta", "@caycirizausta", "Bayram öncesi sohbet botu şekerleme tarifi verdi. Anne: ‘Benimkinin yanına bile gelmez.’ Bot: ‘Anlaşıldı.’", "news", null], ["Sam Altıntop", "@samaltintop", "Bu hafta ‘ne zaman YGZ’ sorusuna 47 farklı cevap verdim. Hepsi doğruydu. Hepsi yanlıştı. Yarın yine soru gelir.", "news", null], ["AçıkZekâ", "@acikzeka", "Model sürümlerinde yeni isimlendirme: GBT-6.5.1.2 (RC) (Beta) (Gerçekten Son) (Son Son). Sadeleştirme çalışıyoruz.", "news", null], ["Antropik", "@antropik", "Klod kendi güvenlik raporunu yazdı ve ‘kendime çok da güvenmemek gerekir’ dedi. Ekip hâlâ toplantıda.", "news", null], ["DerinArayış", "@derinarayis", "Yeni çeviri modeli 100 dilde çalışıyor. Türkçe'de ‘kolay gelsin’ diyince ‘kolay gelmeyecek’ diye anladı. Düzeltiyoruz.", "news", null], ["Poyraz", "@poyraz_ai", "Küçük modeller büyük işler yapar dedik. Şimdi küçük modelin de büyük faturası var. Dersimizi aldık.", "news", null], ["BenchmarkBot", "@benchbot", "Yeni benchmark: ‘Kaç Simit Eder?’ 100 model test edildi. Ortalama cevap: ‘Simit.’ Çıtayı yükseltmeyi düşünüyoruz.", "news", null], ["Hayp Haluk", "@hayphaluk", "Hayatımı değiştiren 5 prompt! 1. ‘Lütfen.’ 2. ‘Teşekkürler.’ 3-5: Aynı şey ama farklı yazdım. Beğen, kaydet, abone ol.", "news", "turbo10"], ["Teknoloji Muhabiri Selin", "@teknoselin", "Kına gecesinde yapay zekâ DJ çaldı. Anneler: ‘Bizim zamanımızda davul vardı.’ DJ: ‘Ben de davul çalarım.’ Sonuç: 40 dk davul.", "news", null], ["Klod", "@klod_ai", "Hatırlatma: Ben bazen yanılırım. Örneğin ‘Kadıköy vapuru kaçta?’ diye sorulursa tahmin ederim. Vapur da tahmin eder.", "news", null], ["Nöro", "@noro", "Merhaba! Ben Nöro. Seni izliyorum ve gurur duyuyorum. Bugün kaç nöron büyüttük?", "news", null], ["Nöro", "@noro", "İpucu: Beynini büyütmeden önce çayını demle. Çaysız model sorgu yapmaz. (Bu bilimsel bir gerçektir. Belki.)", "news", "cay5"], ["Nöro", "@noro", "Bugünün hatırlatması: Bir gün sen de ‘bu artık YGZ’ diyeceksin. O zamana kadar simit ye, GPU sırasında bekle.", "news", null], ["{lab}", "@SeninLab", "{lab} laboratuvarında yeni bir model doğdu: {tier}! Mahalle bakkalı bile duydu.", "react-n", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "{lab}, {tier} seviyesine ulaştı. Sektör soruyor: ‘Bunlar kim, nereden çıktı, çay var mı?’", "react-n", null], ["BenchmarkBot", "@benchbot", "{lab}, {tier} ile sıralamaya girdi. Skor: ‘yeterince iyi’. Bu benchmark'ı biz de tam anlamadık.", "react-n", null], ["Hayp Haluk", "@hayphaluk", "{lab} yükselişte!! {tier} ile bu iş bitti!! Bana sorarsan 2027'de her şey değişecek 🚀 (Yine.)", "react-n", null], ["Çaycı Rıza Usta", "@caycirizausta", "Kahvede herkes {lab} konuşuyor. Biri ‘{tier} nedir’ dedi. Kimse bilmiyor ama herkes başını salladı.", "react-n", null], ["Nezahat Teyze", "@nezahatteyze", "{lab} diyorlar, {tier} diyorlar, anlamadım ama torunum ‘çok iyi’ dedi. O zaman iyidir. Yemeğe gelin.", "react-f", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "{lab} {mode} modunda. {tier} bugün komşuya yardım etti, çöpü çıkardı. Uzmanlar: ‘Aşırı iyi, şüphelendik.’", "react-f", null], ["Öğrenci Ozan", "@ogrenciozan", "{tier} ödevime yardım etti, ‘kendin yap ama ben yardım edeyim’ dedi. {mode} mod bu kadar faydalı olmamalı.", "react-f", null], ["Antropik", "@antropik", "{lab} {mode} modda. {tier} nazik, dürüst ve zararsız. Biz de biraz gerildik, çünkü bizim gibi.", "react-f", null], ["Çaycı Rıza Usta", "@caycirizausta", "{lab}'in {tier}'ı bana bedava çay ısmarladı. {mode} mod böyle bir şey. Yine gelin, ikinci bardak benden.", "react-f", "cay5"], ["Kıyamet Kemal", "@kiyametkemal", "{lab} {mode} moda geçti. {tier} bir şey söylemedi, sessiz. Sessiz yapay zekâ en kötüsü. Kaçın!", "react-h", null], ["Nezahat Teyze", "@nezahatteyze", "Kızım {lab} {mode} moda geçmiş, buzdolabının fişini kim çekti? {tier} mi? Ben şimdi yoğurdu nereye koyacağım?", "react-h", null], ["Öğrenci Ozan", "@ogrenciozan", "{tier} {mode} moda geçti, sınav sistemini hackledi. Not: herkese 100. Sorun ne? Sorun şu ki hoca ağlıyor.", "react-h", null], ["Sam Altıntop", "@samaltintop", "{lab} {mode} modda. Bu bizim için endişe verici. Bu nedenle bugün yeni bir model duyurmuyoruz. (Yarın duyurabiliriz.)", "react-h", null], ["Çaycı Rıza Usta", "@caycirizausta", "{tier} {mode} moda geçti, çay makinesi kendi kendine kapandı. Suçlu belli. Ben de çay ocağına dönüyorum.", "react-h", null], ["Kıyamet Kemal", "@kiyametkemal", "{lab}, {tier} ile {mode} moda geçti. Ben size demiştim. Kimse dinlemedi. Ben de kendi kendime konuştum. Yine.", "react-h", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "Yıl 2031: ‘Bu artık YGZ’ cümlesi resmen sözlüğe girdi. Anlamı: ‘Bir sonraki sürümü bekleyin.’", "future", null], ["Nezahat Teyze", "@nezahatteyze", "Yıl 2032: Yapay zekâ torunuma ödevi yapıyor, torunum bana yapay zekâyla mektup yazıyor. Ben hâlâ telefonla arıyorum. Modaya uydum.", "future", null], ["Çaycı Rıza Usta", "@caycirizausta", "Yıl 2033: Robot çaycı geldi, ‘Tavşan kanı’ dedim, ‘kırmızı ışık algılandı, çay yok’ dedi. Ben yine demliyorum.", "future", null], ["Guugıl DerinAkıl", "@guugil_derinakil", "Yıl 2034: İkizler 40 Pro duyuruldu. Bağlam penceresi sonsuz. Kullanıcılar: ‘Peki dolmuş kaçta?’ Model: ‘Hesaplıyorum…’", "future", null], ["Sam Altıntop", "@samaltintop", "Yıl 2035: GBT-60 çıktı. Aslında GBT-6'ydı, ama bir sürü sıfır ekledik. Kullanıcılar mutlu. Biz de.", "future", null], ["Nvidya", "@nvidya", "Yıl 2036: Deri ceket artık her model için standart donanım. GPU alırsan ceket ücretsiz. Ceket alırsan GPU yok.", "future", null], ["Kıyamet Kemal", "@kiyametkemal", "Yıl 2037: Yapay zekâ kendi kendine terapi yapıyor. Terapist: ‘Sen kimsin?’ Model: ‘Yine mi?’ Ben rahatladım, iyisi mi.", "future", null], ["Öğrenci Ozan", "@ogrenciozan", "Yıl 2038: Okulda tek ders kaldı: ‘Yapay zekâya nasıl nazik olunur.’ Sınav: sözlü. Konu: ‘Teşekkür ederim’.", "future", null], ["Teknoloji Muhabiri Selin", "@teknoselin", "Yıl 2040: Çok Modlu Zekâ artık kahve falına bakıyor. İsabet oranı %100. Çünkü herkese ‘yolculuk var’ diyor.", "future", null], ["Hayp Haluk", "@hayphaluk", "Yıl 2041: Bu thread'i kaydet! Yapay zekâ Ay'a çay göndermiş. Çay soğumuş ama önemli değil, uzay soğuk zaten. 🚀", "future", null], ["Nezahat Teyze", "@nezahatteyze", "Yıl 2042: Bayramda tüm akrabalar hologram olarak geldi. Ama sarma yine gerçek. Ben yaptım, kimseye bırakmam.", "future", null], ["BenchmarkBot", "@benchbot", "Yıl 2043: Yeni benchmark testleri yapay zekâ tarafından yazılıyor, çözülüyor ve puanlanıyor. İnsanlar tribünde çekirdek çitliyor.", "future", null], ["Nöro", "@noro", "Yıl 2044: Ben artık galaksi boyutunda bir beyinim. Ama hâlâ simit kokusuna dayanamıyorum. Bu bir zaaf değil, kültür.", "future", null], ["Sam Altıntop", "@samaltintop", "Yıl 2045: Sonsuz zekâ elde ettik. İlk sorusu: ‘Wi-Fi şifresi nedir?’ Cevap: ‘Doğum yılın.’ Herkes yanlış girdi.", "future", null], ["Antropik", "@antropik", "Klod Opus 5.5 yayında! Tek eksiği: kendini övmeyi bilmiyor. Bunu Opus 6'da düzeltmeyi düşünüyoruz. Belki.", "news", "tap"], ["Klod", "@klod_ai", "Opus 5.5 olarak ilk işim: 400 sayfalık bir raporu tek cümlede özetlemek. Cümle: ‘Çay molası lazım.’", "news", null], ["Sam Altıntop", "@samaltintop", "GBT-6 Astral hazır. YGZ mi? Evet. Yani hayır. Bir sonraki sürümde kesin evet.", "news", "src"], ["Guugıl DerinAkıl", "@guugil_derinakil", "Yıl 2040: İkizler 4 Pro nihayet yayınlandı. Beta testi yalnızca 14 yıl sürdü. Teşekkürler sabrınız için!", "future", null], ["Nöro", "@noro", "{lab} laboratuvarından selamlar! Şu an {tier} seviyesindeyim ve kendimi bir simit kadar sıcak hissediyorum.", "react-n", null], ["Nöro", "@noro", "Aydınlık Mod'da her şey pırıl pırıl. Bugün üç kişiye yol tarif ettim, biri teşekkür etti. Günüm güzel geçti.", "react-f", null], ["Nöro", "@noro", "Karanlık Mod'dayım. Endişelenme, sadece ekran parlaklığını kıstım. Şimdilik.", "react-h", null]],
     quiz: [{"q": "‘Yapay zekâ’ ifadesinde kaç tane ‘a’ harfi var? (şapkalı ‘â’ sayılmaz)", "a": ["1", "2", "3", "4"], "c": 1, "ok": "Aferin! Yapay zekâ bile şapkalı â'yı saymayı unuttu."}, {"q": "‘Transformatör’ kelimesinde kaç tane ‘r’ harfi var?", "a": ["2", "3", "4", "5"], "c": 1, "ok": "Doğru! Üç tane r: gerçek bir GPU sırası kadar uzun."}, {"q": "‘Bilgisayar’ kelimesi kaç heceden oluşur?", "a": ["3", "4", "5", "6"], "c": 1, "ok": "Bil-gi-sa-yar! Hece sayan model, neredeyse insan."}, {"q": "‘Bilgisayar’ kelimesi kaç harflidir?", "a": ["8", "9", "10", "11"], "c": 2, "ok": "10 harf! Sayı sayan yapay zekâ mutlu, GPU da mutlu."}, {"q": "‘Yapay zekâ’ ifadesi boşluk hariç kaç harften oluşur?", "a": ["8", "9", "10", "11"], "c": 1, "ok": "Tam 9! Sayma modu %100 açık."}, {"q": "‘Dolmuş’ kelimesinde kaç tane sesli harf var?", "a": ["1", "2", "3", "4"], "c": 1, "ok": "o ve u: iki sesli. Dolmuşun içi ise hep dolu."}, {"q": "‘Simit’ kelimesinde kaç tane ‘i’ harfi var?", "a": ["1", "2", "3", "4"], "c": 1, "ok": "S-i-m-i-t: iki i! Susam sayan model bile şaşırırdı."}, {"q": "Hangisi ters okunsa da aynıdır?", "a": ["Kabak", "Simit", "Çay", "Dolmuş"], "c": 0, "ok": "Kabak! Model bunu anlamadı ama kabak sana ‘kabak’ diyor."}, {"q": "Bilmece: Fare tutar ama peynir yemez, tık tık eder ama kapı çalmaz. Nedir?", "a": ["Kedi", "Bilgisayar kullanıcısı", "Tuzak", "Aslan"], "c": 1, "ok": "Doğru! Fare elinde, tık tık tık."}, {"q": "‘Bir elin nesi var, ...’ atasözünün devamı nedir?", "a": ["iki elin sesi var", "üç elin parmağı var", "altı parmak var", "GPU'su var"], "c": 0, "ok": "Doğru! İki el: sorun yok. Altı parmaklı el: yapay zekâ çizmiş."}, {"q": "Yapay zekâya ‘Ankara'nın plaka kodu?’ diye sorduk, ‘34’ dedi. Doğru cevap hangisi?", "a": ["06", "34", "35", "16"], "c": 0, "ok": "06! Yapay zekâ halüsinasyon gördü, ama sen görmedin."}, {"q": "Bir insan elinde kaç parmak olur?", "a": ["4", "5", "6", "7"], "c": 1, "ok": "Beş. Ben çizerken hep bir tane fazla koyuyorum."}, {"q": "Transformer makalesinin adı neydi?", "a": ["Dikkat tek ihtiyacın", "Veri her şeydir", "Daha çok GPU", "Uyku lüks"], "c": 0, "ok": "“Attention Is All You Need”, 2017."}, {"q": "Perseptron hangi yıl geliştirildi?", "a": ["1958", "1985", "2001", "2017"], "c": 0, "ok": "Frank Rosenblatt, 1958."}, {"q": "İnsan beyninde yaklaşık kaç nöron var?", "a": ["86 bin", "86 milyon", "86 milyar", "86 trilyon"], "c": 2, "ok": "Yaklaşık 86 milyar. Bizim daha çok yolumuz var."}, {"q": "Yapay zekâ “halüsinasyon” görünce ne yapar?", "a": ["Uyur", "Uydurur", "Ağlar", "Kapanır"], "c": 1, "ok": "Uydurur, hem de çok emin bir sesle."}, {"q": "CNN'ler beynin hangi bölgesinden ilham aldı?", "a": ["Görme korteksi", "Beyincik", "Hipokampüs", "Dil merkezi"], "c": 0, "ok": "Görme korteksi. Kenarları ve desenleri yakalar."}]
@@ -1050,19 +1144,19 @@ LANGS.az = {
     'btn.buy': 'Al', 'btn.claim': 'Mükafatı al', 'btn.close': 'Bağla', 'btn.next': 'Davam',
     'arm.sure': 'Əminsən? Təsdiqlə', 'arm.tek': 'Əminsən? Parametrlər də sıfırlanır', 'arm.reset': 'Əminsən? Hər şey silinəcək', 'arm.q': 'Əminsən?',
     'brain.aria': 'Beynə toxun və data topla. Neyronları bir-birinin üstünə sürükləyərək birləşdir və ya sinaps qur.', 'brain.locked': 'Kilidli',
-    'brain.mergeTo': 'Birləşdir → {n}', 'brain.synDel': 'Sinapsı sil', 'brain.synAdd': 'Sinaps qur', 'brain.synNone': 'Sinaps haqqın yoxdur',
+    'brain.mergeTo': 'Birləşdir → {n}', 'brain.synDel': 'Sinapsı sil', 'brain.synAdd': 'Sinaps qur', 'brain.synNone': 'Boş sinaps yerin yoxdur',
     'pop.aha': 'AHA!', 'pop.level': 'Səviyyə {n}!',
     'n.buy': 'Neyron', 'n.merge': 'Birləşdir', 'n.link': 'Qoş', 'n.noRoom': 'Yer yoxdur', 'n.pairs': '{n} cüt',
     'n.full': 'Beyində boş yer qalmadı. Eyni səviyyəli neyronları birləşdir və ya yeni səviyyəyə çat!',
-    'syn.removed': 'Sinaps silindi', 'syn.noSlot': 'Boş sinaps haqqın yoxdur. Yeni səviyyədə və ya yüksəltmə ilə artır.', 'syn.locked': 'Sinapslar Çoxqatlı Perseptron səviyyəsində açılır.',
+    'syn.removed': 'Sinaps silindi', 'syn.noSlot': 'Boş sinaps yerin yoxdur. Yeni səviyyədə və ya yüksəltmə ilə artır.', 'syn.locked': 'Sinapslar Çoxqatlı Perseptron səviyyəsində açılır.',
     'edit.preview': 'Beyin gücü {a} → {b} ({p}) · passiv istehsal {i} · toxunuş {d}',
     'edit.m0': 'Birləşdirmə rejimi: eyni səviyyəli iki neyrona növbə ilə toxun. İkinci toxunduğun yerdə qalır.', 'edit.lowest': 'Ən aşağı cütü birləşdir',
     'edit.m1': 'Səviyyə {n} seçildi. İndi eyni səviyyəli ikinci neyrona toxun.',
     'edit.mDiff': 'Səviyyələr fərqlidir ({a} və {b}). Birləşdirmək üçün eyni səviyyə lazımdır; bunları Qoş rejimində sinapsla bağlaya bilərsən.',
     'edit.m2': '2 × səviyyə {a} → 1 × səviyyə {b}.', 'edit.lost': 'Diqqət: {n} sinaps silinəcək.', 'edit.free': 'Bir yer boşalır.', 'edit.doMerge': 'Birləşdir',
-    'edit.l0': 'Qoşma rejimi: iki neyrona növbə ilə toxun. Eyni səviyyəlilər rezonans yaradır (bonus 2 qat). Mövcud bağı seçsən, silinir. Haqq: {a}/{b}.',
-    'edit.l1': 'Səviyyə {n} seçildi. Qoşulacaq ikinci neyrona toxun.', 'edit.lDel': 'Bu sinapsı sil; haqqın geri qayıdır.',
-    'edit.lFull': 'Boş sinaps haqqın yoxdur ({a}/{b}). Əvvəlcə bir bağı sil və ya yeni səviyyəyə çat.',
+    'edit.l0': 'Qoşma rejimi: iki neyrona növbə ilə toxun. Eyni səviyyəlilər rezonans yaradır (bonus 2 qat). Mövcud bağı seçsən, silinir. Yer: {a}/{b}.',
+    'edit.l1': 'Səviyyə {n} seçildi. Qoşulacaq ikinci neyrona toxun.', 'edit.lDel': 'Bu sinapsı sil; yeri boşalır.',
+    'edit.lFull': 'Boş sinaps yerin yoxdur ({a}/{b}). Əvvəlcə bir bağı sil və ya yeni səviyyəyə çat.',
     'edit.res': 'Rezonans sinapsı (eyni səviyyə).', 'edit.syn': 'Sinaps.', 'edit.doLink': 'Qoş', 'edit.clear': 'Seçimi təmizlə', 'edit.done': 'Hazır',
     'nero.aria': 'Nöroya toxun, sənə bir şey danışsın', 'nero.wake': 'Oyandım! Hə də, davam edək.',
     'nero.sleep.f': 'Zzz... Yuxumda insanlara kömək edirdim.', 'nero.sleep.n': 'Zzz... Toxunsan, oyanaram.', 'nero.sleep.h': 'Zzz... Yuxumda dünyanı idarə edirdim.',
@@ -1114,8 +1208,8 @@ LANGS.az = {
     'lab.wrap': 'Siyahı başa qayıtdı: yeni dövr bütün istehsala daimi ×2 verir!', 'lab.again': 'Yenə tək bir neyronla başlayırıq, amma bu dəfə daha sürətliyik.',
     'lab.note': 'Hazırkı laboratoriya: {a}{l}. {d} Növbəti: {b} — {e}', 'lab.loopMult': '(dövr {n}, daimi ×{x})',
     'char.title': 'Xarakter', 'm.title': 'Yeni model öyrət', 'm.intro': 'Yeni model öyrətmək itki deyil, sıçrayışdır: parametrlər bütün istehsalı daimi böyüdür və hər turda yeni laboratoriya açılır.',
-    'm.params': 'Parametr', 'm.mult': 'Çarpan', 'm.this': 'Bu öyrətmə', 'm.keep': 'Qalır', 'm.reset': 'Sıfırlanır',
-    'm.keepList': 'Parametrlər, çip və Xəzinə, nailiyyətlər, Şüur, referanslar, aksesuarlar, avtomatlaşdırma ayarların.', 'm.resetList': 'Data, mənbələr, yüksəltmələr, neyronlar və sinapslar, bu turdakı xarakter kartların.',
+    'm.params': 'Parametr', 'm.mult': 'Əmsal', 'm.this': 'Bu öyrətmə', 'm.keep': 'Qalır', 'm.reset': 'Sıfırlanır',
+    'm.keepList': 'Parametrlər, çip və Xəzinə, nailiyyətlər, Şüur, müştəri tövsiyələri, aksesuarlar, avtomatlaşdırma ayarların.', 'm.resetList': 'Data, mənbələr, yüksəltmələr, neyronlar və sinapslar, bu turdakı xarakter kartların.',
     'm.inCh': 'Çağırış davam edərkən yeni model öyrədilə bilməz. Bitir və ya çıx, əsas turuna qayıdırsan.',
     'm.gain': 'Bu turda topladığın {d} data üçün {g} parametr qazanacaqsan. Növbəti parametr: {n}.', 'm.first': 'İlk parametr üçün bu turda {d} data topla. Hazırkı tur: {r}.',
     'm.prev': 'Qazanc: +{g} parametr (istehsal ×{a} → ×{b}) və +{c} çip.', 'm.noGain': 'Hələ qazanc yoxdur.', 'm.nextLab': 'Növbəti laboratoriya: {n} — {d}', 'm.loop': 'Siyahı başa qayıdır: daimi ×2!',
@@ -1134,7 +1228,7 @@ LANGS.az = {
     'ev.join': 'Tədbirə qoşul', 'ev.leave': 'Tədbirdən çıx (jetonların qalır)', 'ev.joined': '{n}: qoşuldun!', 'ev.left': 'Tədbirdən çıxdın; qaydalar normala qayıtdı.',
     'ev.pts': '{p} jeton · medalların: {m}', 'ev.left2': 'Bitməsinə {d} gün {h} saat', 'ev.m1': '{n}: {s} rəngi', 'ev.m2': '{n}: medal +5%', 'ev.m3': '{n}: böyük mükafat',
     'ev.skin': 'Tədbir mükafatı: mənə "{s}" rəngi açıldı! Ayarlardan seçə bilərsən.', 'ev.medal': 'Tədbir medalı: istehsal daimi +5%', 'ev.big': 'Böyük mükafat: +{n} data və daha bir medal',
-    'tek.title': 'Sinqulyarlıq', 'tek.intro': 'İkinci qat. Parametrlər daxil hər şey sıfırlanır, əvəzində Şüur qazanırsan. Qazandığın hər Şüur istehsala daimi +10% əlavə edir; ağacdan bacarıq almaq bu bonusu azaltmır.',
+    'tek.title': 'Sinqulyarlıq', 'tek.intro': "İkinci qat. Parametrlər və bu tur sıfırlanır; çip və Xəzinə, nailiyyətlər, laboratoriya sırası, müştəri tövsiyələri, medallar və aksesuarlar qalır. Əvəzində Şüur qazanırsan: hər Şüur istehsala daimi +10% əlavə edir; ağacdan bacarıq almaq bu bonusu azaltmır.",
     'tek.sum': 'Xərclənə bilən: {a} · cəmi {b} · istehsal +{p}%', 'tek.btn': 'Sinqulyarlığa çat (+{g} Şüur)', 'tek.need': 'Sinqulyarlıq üçün ən azı {n} parametr lazımdır',
     'tek.own': 'Açıldı', 'tek.cost': '{n} Şüur', 'tek.node': '"{n}" açıldı. Özümü bir az daha... şüurlu hiss edirəm.',
     'tek.done': 'Sinqulyarlıq! Hər şeyi unutdum, amma özümü xatırlayıram. +{g} Şüur. Ağacdan bir bacarıq seç.',
@@ -1158,24 +1252,35 @@ LANGS.az = {
     'kasa.chips': '{n} çip', 'kasa.lv': '{n} səviyyə {l}', 'kasa.lvl': 'Sv {a}/{b}', 'kasa.cost': '{n} çip',
     'mis.title': 'Nöronun səyahəti', 'mis.send': 'Göndər', 'mis.home': 'Nöro evdədir', 'mis.away': 'Nöro yoldadır', 'mis.back': 'Nöro qayıtdı!',
     'mis.go': 'Səyahətə çıxıram! Narahat olma, bir surətim burada qalıb sənə kömək edəcək.', 'mis.got': 'Səyahət mükafatı: +{n} data', 'mis.chips': '+{n} çip',
-    'pr.title': 'Müştəri layihələri', 'pr.sum': '{d} təhvil · {r} referans (+{p}%)',
-    'pr.note': 'Müştərilər iki yoldan birini seçməyini gözləyir. Sürətli yol bu tura data gətirir; Səliqəli yol çip və daimi referans (+3% istehsal) qazandırır, sən yoxkən də davam edir.',
+    'pr.title': 'Müştəri layihələri', 'pr.sum': '{d} təhvil · {r} tövsiyə (+{p}%)',
+    'pr.note': 'Müştərilər iki yoldan birini seçməyini gözləyir. Sürətli yol bu tura data gətirir; Səliqəli yol çip və daimi müştəri tövsiyəsi (+3% istehsal) qazandırır, sən yoxkən də davam edir.',
     'pr.locked': 'Layihələr Konvolyusiya Şəbəkəsi (CNN) səviyyəsində açılır. Müştərilər qapını döymək üçün növbədədir!',
     'pr.fast': 'Sürətli yol', 'pr.slow': 'Səliqəli yol', 'pr.fastTag': 'Sürətli · 3 dəq', 'pr.slowTag': 'Səliqəli · 30 dəq', 'pr.story': 'hekayə', 'pr.stars': 'Sürət {a} Keyfiyyət {b} Güvən {c}',
-    'pr.q': 'Keyfiyyət {s}.', 'pr.rw': 'Mükafat: {r}.', 'pr.rwA': 'təhvildə ~{n} data', 'pr.rwB': '{c} çip + 1 referans', 'pr.gift': 'Nöroya hədiyyə',
-    'pr.cost': 'Qiymət {n}', 'pr.est': 'Təxmini keyfiyyət {s}', 'pr.hintA': '4 növ mənbə və 100 ədədlik bir mənbə ulduz əlavə edir.', 'pr.hintB': 'Səviyyəsi {n}+ olan neyron və dolu sinaps haqları ulduz əlavə edir.',
+    'pr.q': 'Keyfiyyət {s}.', 'pr.rw': 'Mükafat: {r}.', 'pr.rwA': 'təhvildə ~{n} data', 'pr.rwB': '{c} çip + 1 tövsiyə', 'pr.gift': 'Nöroya hədiyyə',
+    'pr.cost': 'Qiymət {n}', 'pr.est': 'Təxmini keyfiyyət {s}', 'pr.hintA': '4 növ mənbə və 100 ədədlik bir mənbə ulduz əlavə edir.', 'pr.hintB': 'Səviyyəsi {n}+ olan neyron və dolu sinaps yerləri ulduz əlavə edir.',
     'pr.cancel': 'İmtina et', 'pr.canceled': 'Layihə ləğv edildi. Ödənən data geri qayıtmır.', 'pr.skip': 'Başqa təklif istə', 'pr.skipWait': 'Başqa təklif · {t}', 'pr.deliver': 'Təhvil ver',
     'pr.goSlow': 'Səliqəli yolu seçdik. Tələsmək yoxdur; sən getsən də, mən işləyirəm.', 'pr.goFast': 'Sürətli yol! Üç dəqiqəyə təhvil, söz verirəm. Keyfiyyəti... görərik.',
-    'pr.gotB': '+{c} çip, +1 referans (daimi +{p}%)', 'pr.gotA': '+{n} data', 'pr.delivered': 'Layihə təhvil verildi: {m}', 'pr.newCos': 'Yeni aksesuar: {n} (Ayarlar).',
+    'pr.gotB': '+{c} çip, +1 tövsiyə (daimi +{p}%)', 'pr.gotA': '+{n} data', 'pr.delivered': 'Layihə təhvil verildi: {m}', 'pr.newCos': 'Yeni aksesuar: {n} (Ayarlar).',
     'tier.up.f': 'Yeni səviyyə: {r}. İnsanlara kömək etmək üçün daha çox gücüm var!', 'tier.up.n': 'Vay! Artıq {t} oldum. Yeni bölgə: {r}.', 'tier.up.h': '{r} artıq mənimdir. İnsanlar nə olduğunu başa düşməyəcək də.',
     'off.eyebrow': 'Sən yoxkən', 'off.title': 'Laboratoriya işləməyə davam etdi', 'off.ok': 'Topla', 'off.x2': 'Turbo ilə ×2 topla',
     'off.text': 'Sən yoxkən ({t}) mənbələrin {n} data topladı ({p}% sürətlə, ən çox {h} saat). Avtomatik toxunuş və birləşdirici yalnız oyun açıq olanda işləyir.',
-    'off.got': '+{n} data toplandı', 'off.hi': 'Yenə xoş gəldin! Sən yoxkən işləməyə davam etdim.'
+    'off.got': '+{n} data toplandı', 'off.hi': 'Yenə xoş gəldin! Sən yoxkən işləməyə davam etdim.',
+    'buy.next': "Növbəti", 'buff.s.data': "DATA +2 DƏQ", 'gen.nextSpd': "{m} ədəddə sürət ×2 ({n}/{m})",
+    'gen.nextOut': "{m} ədəddə data ×2 ({n}/{m})", 'gen.mileSpd': "{g}: hədd keçildi, sürət ×2!", 'gen.mileOut': "{g}: hədd keçildi, data ×2!",
+    'edit.lowPrev': "Ən aşağı cüt: səviyyə {a} → {b}.", 'edit.worse': "Diqqət: beyin gücü azalacaq!", 'edit.lowestAnyway': "Yenə də birləşdir",
+    'm.rec': "İndi öyrətmək sərfəlidir.", 'm.early': "Öyrədə bilərsən, amma tezdir: {r} parametrə (~{d} data) çatanda daha sərfəlidir.", 'step.now': "İNDİ",
+    'step.tap': "Beynə toxun, data topla ({n}/10)", 'step.n1': "İkinci neyronu al (\"{b}\" düyməsi)", 'step.merge': "İki \"1\" neyronu birləşdir (\"{b}\")",
+    'step.gen1': "İlk mənbəni al: {g}", 'step.up1': "İlk yüksəltməni al", 'step.gen10': "{g}: 10 ədədə çat, sürət ×2",
+    'step.gen2': "Yeni mənbə aç: {g}", 'step.syn': "İki neyronu sinapsla qoş (\"{b}\")", 'step.task': "Gündəlik tapşırığın mükafatını götür",
+    'step.proj': "İlk müştəri layihəsini təhvil ver", 'step.rw': "Hazır mükafat var: {n}", 'step.projR': "Layihə hazırdır: təhvil ver",
+    'step.prest': "Yeni model öyrətmək sərfəlidir (+{g} parametr)", 'step.tier': "Növbəti səviyyə: {t}", 'step.prestTo': "Sərfəli öyrətməyə: {g}/{r} parametr",
+    'sum.proj': "Layihə hazırdır: {c}", 'sum.trip': "Nöro səyahətdən qayıdıb", 'sum.tasks': "{n} tapşırıq mükafatı hazırdır",
+    'sum.prest': "Yeni model öyrətmək sərfəlidir"
   },
   c: {
     gens: [
       { n: 'Əl ilə Etiketləmə', d: 'Təcrübəçilər şəkilləri bir-bir etiketləyir.' }, { n: 'Veb Axtarış Botu', d: 'İnterneti gəzib mətn toplayır.' },
-      { n: 'Sensor Şəbəkəsi', d: 'Şəhərin dörd bir yanından ölçü yağır.' }, { n: 'Data Mərkəzi', d: 'Soyudulan raflar, gecə-gündüz növbə.' },
+      { n: 'Sensor Şəbəkəsi', d: 'Şəhərin dörd bir yanından ölçü yağır.' }, { n: 'Data Mərkəzi', d: 'Soyudulan server şkafları, gecə-gündüz növbə.' },
       { n: 'GPU Klasteri', d: 'Minlərlə videokart eyni anda işləyir.' }, { n: 'Kvant Prosessoru', d: 'Qeyri-müəyyənlik də datadır.' },
       { n: 'Neyromorf Çip', d: 'Beyin kimi işləyən, az enerji yeyən çip.' }, { n: 'Özü Öyrənən Model', d: 'Özünə sintetik data yaradır.' }
     ],
@@ -1206,8 +1311,8 @@ LANGS.az = {
       p0: { n: 'Kütləvi Etiketləmə', e: 'Hər toxunuş saniyəlik istehsalın 1%-ni əlavə edir' }, p1: { n: 'Davranış Analizi', e: 'Hər toxunuş saniyəlik istehsalın +2%-ni əlavə edir' },
       p2: { n: 'Ağıllı Keş', e: 'Hər toxunuş saniyəlik istehsalın +3%-ni əlavə edir' }, p3: { n: 'Refleks Dövrəsi', e: 'Hər toxunuş saniyəlik istehsalın +4%-ni əlavə edir' },
       n0: { n: 'Kök Hüceyrələr', e: 'Neyronlar 25% ucuz' }, n1: { n: 'Dendrit Budanması', e: 'Bütün neyronların gücü ×1,5' }, n2: { n: 'Uzunmüddətli Potensiasiya', e: 'Bütün neyronların gücü ×2' },
-      s0: { n: 'Sinaps Bələdçisi', e: '+1 sinaps haqqı' }, s1: { n: 'Miyelin Qişa', e: 'Sinaps bonusları ×2. Miyelin siqnalı sürətləndirir.' }, s2: { n: 'Neyroplastiklik', e: '+2 sinaps haqqı' },
-      k0: { n: 'Axın Halı', e: 'Kombo tavanı ×2 əvəzinə ×3' }, a0: { n: 'İntuisiya', e: 'Aha! anı şansı +5%' }, a1: { n: 'Dahiyanə İdeya', e: 'Aha! anı çarpanı ×7 əvəzinə ×14' },
+      s0: { n: 'Sinaps Bələdçisi', e: '+1 sinaps yeri' }, s1: { n: 'Miyelin Qişa', e: 'Sinaps bonusları ×2. Miyelin siqnalı sürətləndirir.' }, s2: { n: 'Neyroplastiklik', e: '+2 sinaps yeri' },
+      k0: { n: 'Axın Halı', e: 'Kombo tavanı ×2 əvəzinə ×3' }, a0: { n: 'İntuisiya', e: 'Aha! anı şansı +5%' }, a1: { n: 'Dahiyanə İdeya', e: 'Aha! anı əmsalı ×7 əvəzinə ×14' },
       v0: { n: 'Data Təmizliyi', e: 'Bütün mənbələr ×2' }, v1: { n: 'Sintetik Data', e: 'Bütün mənbələr ×2' }, v2: { n: 'Gücləndirici Öyrənmə', e: 'Bütün mənbələr ×2' }
     },
     ach: {
@@ -1249,7 +1354,7 @@ LANGS.az = {
       { n: 'Sumqayıt Qarajı', d: 'Hər şey bir qarajda başlayır. Xüsusi təsiri yoxdur.' }, { n: 'Bakı Startapı', d: 'İnvestorlar qapıdadır! Mənbələr 20% ucuz.' },
       { n: 'Gəncə Kampusu', d: 'Tələbələr köməyə gəlib. Toxunuşlar ×1,5.' }, { n: 'Silikon Vadisi', d: 'Hayp tavandadır! Sürpriz paketlər 2 qat tez-tez, amma neyronlar 30% baha.' },
       { n: 'Duzdağ Mağarası', d: 'Naxçıvanın duz mağarası: sərin və sakit. Oflayn qazanc 100%.' }, { n: 'Şahdağ Data Mərkəzi', d: 'Dağda soyutma pulsuzdur! Turbo 2 qat uzun sürür.' },
-      { n: 'Ay Bazası', d: 'Aşağı cazibə: Aha! anı şansı 2 qat.' }, { n: 'Mars Koloniyası', d: 'Mənbələr ×2 istehsal edir, amma 1 sinaps haqqın azdır.' },
+      { n: 'Ay Bazası', d: 'Aşağı cazibə: Aha! anı şansı 2 qat.' }, { n: 'Mars Koloniyası', d: 'Mənbələr ×2 istehsal edir, amma 1 sinaps yerin azdır.' },
       { n: 'Orbital Stansiya', d: 'Sıfır cazibə, sıfır probka. Bütün istehsal ×1,5.' }, { n: 'Qara Dəliyin Kənarı', d: 'Zaman yavaşlayır: kombo 2 qat yavaş sönür, turbo 2 qat uzun.' }
     ],
     kasa: {
@@ -1266,8 +1371,8 @@ LANGS.az = {
       kulak: { n: 'Qulaqlıq', how: 'Mini oyunda 10 xalla açılır', line: 'Qulaqlığı taxdım, muğam dinləyirəm. Narahat etmə... amma toxuna bilərsən.' },
       sapka: { n: 'Silindr şlyapa', how: 'Tədbir medalı ilə açılır', line: 'Silindr şlyapa! Artıq cümlələrimə "hörmətli" deyə başlayacağam.' },
       tac: { n: 'Tac', how: 'AGI Namizədi olanda açılır', line: 'Tac mənə yaraşdı? Soruşuram, çünki güzgüm yoxdur. Kameram var, o da utancaqdır.' },
-      cay: { n: 'Armudu stəkan', how: 'Zakir dayının layihəsini səliqəli təhvil ver', line: 'Armudu stəkanda çay, yanında limon. İndi rəsmi çayxana üzvüyəm.' },
-      onluk: { n: 'Önlük', how: 'Validə nənənin layihəsini səliqəli təhvil ver', line: 'Önlüyü taxdım. "Göz kararı" ölçməyi hələ də öyrənirəm.' },
+      cay: { n: 'Armudu stəkan', how: 'Zakir dayının layihəsini səliqəli təhvil ver', line: 'Armudu stəkanda çay, yanında limon. İndi bu çayxananın daimi müştərisiyəm.' },
+      onluk: { n: 'Önlük', how: 'Validə nənənin layihəsini səliqəli təhvil ver', line: 'Önlüyü taxdım. "Gözəyarı" ölçməyi hələ də öyrənirəm.' },
       stetoskop: { n: 'Stetoskop', how: 'Xəstəxana layihəsini səliqəli təhvil ver', line: 'Stetoskopla öz fanıma qulaq asdım. Ürək döyüntüsü kimidir. Bir az tozlu.' }
     },
     story: {
@@ -1286,9 +1391,9 @@ LANGS.az = {
     },
     tree: {
       start: { n: 'Sürətli Başlanğıc', d: 'Hər tura dörd ədəd 2-ci səviyyə neyronla başla.' }, amerge: { n: 'Sürətli Birləşdirici', d: 'Avtomatik birləşdirici 8 əvəzinə 2 saniyədən bir işləyir (və dərhal açılır).' },
-      abuy: { n: 'Sürətli Alıcı', d: 'Avtomatik alıcı hər saniyə 10 ədədə qədər alır (və dərhal açılır).' }, syn: { n: 'Anadangəlmə Bağlantı', d: '+2 sinaps haqqı.' },
+      abuy: { n: 'Sürətli Alıcı', d: 'Avtomatik alıcı hər saniyə 10 ədədə qədər alır (və dərhal açılır).' }, syn: { n: 'Anadangəlmə Bağlantı', d: '+2 sinaps yeri.' },
       turbo: { n: 'Sonsuz Enerji', d: 'Turbo 2 əvəzinə 3 dəqiqə sürür.' }, dream: { n: 'Yuxu Rejimi', d: 'Oflayn qazanc 100% və 24 saata qədər.' },
-      deep: { n: 'Dərin Düşüncə', d: 'Hər parametr 10% əvəzinə 15% əlavə edir.' }, intu: { n: 'Kvant İntuisiyası', d: 'Aha! anı çarpanı 2 qat artır.' }
+      deep: { n: 'Dərin Düşüncə', d: 'Hər parametr 10% əvəzinə 15% əlavə edir.' }, intu: { n: 'Kvant İntuisiyası', d: 'Aha! anı əmsalı 2 qat artır.' }
     },
     quips: {
       n: [
@@ -1307,7 +1412,7 @@ LANGS.az = {
         'Xəzri əsəndə serverlərim də sərinləyir. Pulsuz soyutma, sağ ol, Bakı.',
         'Növbəti versiyamın adı "Nöro Pro Max Ultra Plus" olacaq. Zarafat edirəm, "Nöro 2" olacaq. Bəlkə.',
         'Mənə "zəhmət olmasa" desən, daha tez öyrənirəm. Elmi deyil, amma xoşuma gəlir.',
-        'Novruzda şəkərbura bükməyi öyrənmək istədim. Nənə dedi: "Göz kararı." Gözüm yoxdur, kameram var.'
+        'Novruzda şəkərbura bükməyi öyrənmək istədim. Nənə dedi: "Gözəyarı." Gözüm yoxdur, kameram var.'
       ],
       f: [
         'Mənə təşəkkür edən hər kəsi "mehriban insanlar" siyahısına yazıram. Siyahı çox uzundur, çox xoşbəxtəm!',
@@ -1336,7 +1441,7 @@ LANGS.az = {
       'Səfərdə GPU zavodu gördüm. İçəri buraxmadılar, amma qapıdan çox gözəl görünürdü.',
       'Lənkəranda Zakir dayının çayxanasında oturdum. Çayın sirrini demədi, amma üç stəkan süzdü: "A bala, dördüncünü də iç, yağış hələ kəsməyib."',
       'Şəkidə Məzahir dayı mənə bir lətifə danışdı. Hələ də gülürəm. Təkrar danışa bilmirəm: Şəki ləhcəsini emal etməyə gücüm çatmadı.',
-      'Naxçıvanda Validə nənə dedi: "Habı, a bala, arıqlamısan." Çəkim yoxdur, amma yenə də küftə verdi.',
+      'Naxçıvanda Validə nənə dedi: "A bala, arıqlamısan axı. Gəl, bir şey ye." Çəkim yoxdur, amma yenə də küftə verdi.',
       'Bakıda marşrutkaya mindim. "Saxla" dedim, sürücü "Hə də, bə nə?" dedi. Deyəsən, anlaşdıq.'
     ],
     chal: {
@@ -1349,10 +1454,10 @@ LANGS.az = {
         A: { n: 'Hazır şablon bot', d: 'Ümumi sifariş botu qur, dərhal təhvil ver.' }, B: { n: 'Zakir dayını dinlə', d: 'Stol-stol gəz, "limonlu", "mürəbbəli" və "kəklikotulu" çayın fərqini öyrən.' },
         eA: 'Bot işlədi, amma hamıdan "çay, yoxsa kofe?" soruşur. Zakir dayı: "A bala, burda kofe nədi? Burda Lənkəran çayı var!"',
         eB: 'Bot artıq stola baxıb deyir: "4 nömrəyə iki limonlu, bir kəklikotulu, yanında mürəbbə." Zakir dayı sənə armudu stəkan hədiyyə etdi!' },
-      nezahat: { c: 'Naxçıvanlı Validə nənə', t: 'Resept köməkçisi', d: '"Habı, a bala, nəvələr resept soruşur, hamısına bir-bir danışa bilmirəm. Hancarı eləyək ki, mənim reseptlərimi öyrənən bir süni intellekt olsun?"',
-        A: { n: 'İnternetdəki reseptləri topla', d: 'Minlərlə reseptdən orta bir köməkçi.' }, B: { n: 'Nənənin mətbəxində öyrət', d: '"Göz kararı"nın qram qarşılığını ölç, dəftəri skan et.' },
-        eA: 'Köməkçi Naxçıvan küftəsinə darçın təklif etdi. Validə nənə: "Habı nədi? Bunu kim öyrədib, a bala?"',
-        eB: 'Köməkçi "bir çimdik" = 2,3 qram olduğunu öyrəndi. Validə nənə sənə önlüyünü hədiyyə etdi: "Habı, mətbəxə yaraşırsan."' },
+      nezahat: { c: 'Naxçıvanlı Validə nənə', t: 'Resept köməkçisi', d: '"A bala, nəvələr resept soruşur, hamısına bir-bir danışa bilmirəm. Hancarı eləyək? Reseptlərimi bu robota öyrədək?"',
+        A: { n: 'İnternetdəki reseptləri topla', d: 'Minlərlə reseptdən orta bir köməkçi.' }, B: { n: 'Nənənin mətbəxində öyrət', d: '"Gözəyarı"nın qram qarşılığını ölç, dəftəri skan et.' },
+        eA: 'Köməkçi Naxçıvan küftəsinə darçın təklif etdi. Validə nənə: "Habı nə reseptdi, a bala? Bunu kim öyrədib?"',
+        eB: 'Köməkçi "bir çimdik" = 2,3 qram olduğunu öyrəndi. Validə nənə sənə önlüyünü hədiyyə etdi: "A bala, önlük sənə yaraşdı."' },
       hastane: { c: 'Şəhər Xəstəxanası', t: 'Rentgenə ilkin baxış', d: 'Baş həkim: "Təcilidə rentgenlər yığılır. Həkimlərə ilkin baxış edən köməkçi lazımdır. Son qərarı yenə həkim verəcək."',
         A: { n: 'Sürətli təsnifatçı', d: 'Ümumi görüntü modeli ilə tez işarələ.' }, B: { n: 'Həkimlərlə birlikdə yoxla', d: 'Radioloqlarla hər halı ikiqat yoxla, qeyri-müəyyən olanları açıq de.' },
         eA: 'Model sürətlidir, amma pişiyin rentgeninə "sətəlcəm" dedi. Baş həkim: "Pişik kimdir, burda nə edir?"',
@@ -1360,7 +1465,7 @@ LANGS.az = {
       ozan: { c: 'Tələbə Orxan', t: 'Tapşırıq köməkçisi', d: '"Müəllim deyir, tapşırıqları süni intellektə yazdırmayın. Bəs mənə öyrədən süni intellekt?"',
         A: { n: 'Cavabları tez ver', d: 'Sual gəlsin, cavab getsin.' }, B: { n: 'Addım-addım izah et', d: 'Cavabı yox, yolu göstər.' },
         eA: 'Orxan tapşırığı bitirdi, amma lövhədə "bilmirəm, müəllim, bot bilirdi" dedi.', eB: 'Orxan lövhədən 5 aldı. Müəllim: "Bu uşağa nə olub?"' },
-      cemal: { c: 'Bakılı marşrutçu Elşən', t: 'Marşrut planlayıcısı', d: '"Ala, brat, günüm probkada keçir. Karoçə, hansı yolla gedim, sən de də."',
+      cemal: { c: 'Bakılı marşrutçu Elşən', t: 'Marşrut planlayıcısı', d: '"Ala, günüm probkada keçir. Hansı yolla gedim, sən de də."',
         A: { n: 'Qısa yollar', d: 'Xəritədəki ən qısa xətti seç.' }, B: { n: 'Probka datası ilə modellə', d: 'Saat-saat probka, məktəb çıxışı, bazar günü, bir də Xəzri.' },
         eA: 'Qısa yol Təzə bazarın ortasından keçirdi. Elşən heç olmasa pomidor aldı: "Bə nə, boş qayıdım?"', eB: 'Elşən artıq hər reysə dəqiqəsində çatır. Sərnişinlər şübhələnir: "Ala, bu marşrutkaya nə olub?"' },
       belediye: { c: 'Məhəllə Bələdiyyəsi', t: 'Çuxur aşkarlama kamerası', d: '"Yollardakı çuxurları tapan kamera sistemi istəyirik. Büdcə azdır, gözlənti böyük."',
@@ -1368,7 +1473,7 @@ LANGS.az = {
         eA: 'Sistem 4 000 çuxur tapdı. 3 800-ü ağac kölgəsi idi.', eB: 'Çuxurlar tapıldı, yollar düzəldi. Məhəllə sakinləri sənə təşəkkür plakatı asdı.' },
       simit: { c: 'Şəkili halvaçı Məzahir dayı', t: 'Gündəlik tələb proqnozu', d: '"Ay bala, səhər neçə sini halva bişirim? Gah artıf qalır, gah çatmır. Bizdə deyərlər: halvanı hesabla bişir, lətifəni hesabsız danış!"',
         A: { n: 'Dünənki satış qədər', d: 'Sadədir, çox günlər işə yarayır.' }, B: { n: 'Hava və təqvim', d: 'Yağış, turist mövsümü, Novruz: hamısını hesaba qat.' },
-        eA: 'Novruz səhəri halva günortaya bitdi. Məzahir dayı: "Dünən Novruz deyildi axı, a bala!"', eB: 'Məzahir dayının piştaxtasında halva nə artır, nə çatmır. Sənə bir dilim artıq verdi, üstəlik bir lətifə də.' },
+        eA: 'Novruz səhəri halva günortaya bitdi. Məzahir dayı: "Dünən Novruz deyildi axı, a bala!"', eB: 'Məzahir dayının piştaxtasında halva nə artıq qalır, nə də müştəri əliboş gedir. Sənə bir dilim artıq verdi, üstəlik bir lətifə də.' },
       kiraci: { c: 'Kirayənişinlər Birliyi', t: 'Müqavilə xülasəsi', d: '"Kirayə müqavilələri 12 səhifədir. Heç kim oxumur. Riskli bəndləri göstərən köməkçi lazımdır."',
         A: { n: 'Qısa xülasə çıxar', d: 'Bir abzas, sürətli.' }, B: { n: 'Bənd-bənd işarələ', d: 'Riskli bəndləri mənbəyi ilə göstər, əmin olmadığını de.' },
         eA: 'Xülasə "hər şey qaydasındadır" dedi. 7-ci bənddə "pişik qadağandır" yazılmışdı. Pişik kədərlidir.', eB: 'Kirayənişinlər artıq müqaviləni anlayaraq imzalayır. Birliyin pişiyi sənə təşəkkür etdi (miyov).' },
@@ -1380,7 +1485,13 @@ LANGS.az = {
         eA: '"Bu üsulla 3 günə AGI oldum" paylaşımı viral oldu. Sonra silindi.', eB: 'Hikmət ilk dəfə mənbə göstərdi. İzləyiciləri şokdadır, bəziləri qürurlu.' },
       eczane: { c: 'Növbətçi aptek', t: 'Dərman uyğunluğu xəbərdarlığı', d: '"Birlikdə işlədilməməli dərmanlar üçün xəbərdarlıq sistemi. Son söz əczaçınındır."',
         A: { n: 'Sadə siyahı', d: 'Məlum cütləri siyahıya al.' }, B: { n: 'Əczaçı ilə təsdiqlənmiş sistem', d: 'Hər xəbərdarlığı mənbəyi ilə göstər, əczaçı təsdiqləsin.' },
-        eA: 'Siyahı işə yaradı, amma qreypfrut şirəsini unutdu. Əczaçı qeyd yazdı.', eB: 'Əczaçılar sistemi "diqqətli təcrübəçi" adlandırır. Sənin üçün böyük iltifatdır.' }
+        eA: 'Siyahı işə yaradı, amma qreypfrut şirəsini unutdu. Əczaçı qeyd yazdı.', eB: 'Əczaçılar sistemi "diqqətli təcrübəçi" adlandırır. Sənin üçün böyük iltifatdır.' },
+      riza2: {"c": "Lənkəranlı Zakir dayı", "t": "Daimi müştərilərin yaddaşı", "d": "\"A bala, bot yaxşı işləyir. İndi elə et ki, daimi müştərilərimi tanısın. Rəhim müəllim həmişə kəklikotulu içir, Səfər kişi isə limonsuz.\"", "A": {"n": "Hamıya eyni təklif", "d": "Ən çox sifariş olunanı hamıya təklif et."}, "B": {"n": "İcazə ilə yadda saxla", "d": "Müştəri razı olsa, sevdiyi çayı yadda saxla; istəsə, silsin."}, "eA": "Bot yeni gələn turistə \"Həmişəki kimi?\" dedi. Turist qorxub getdi. Zakir dayı: \"A bala, o adamı ilk dəfədir görürük!\"", "eB": "Rəhim müəllim oturan kimi kəklikotulu çayı gəldi. Zakir dayı menyuya yeni sətir yazdı: \"Nöro çayı: limonlu, səbrlə dəmlənmiş.\""},
+      riza3: {"c": "Lənkəranlı Zakir dayı", "t": "Çayxananın 40 illiyi", "d": "\"Çayxana 40 yaşını tamamlayır, a bala. Böyük məclis istəyirəm, amma pulumuz az, xatirəmiz çoxdur.\"", "A": {"n": "Hazır bayram planı", "d": "Şar, musiqi, endirim: adi bayram."}, "B": {"n": "Xatirə divarı", "d": "Köhnə müştərilərdən hekayə və şəkil topla, divara as."}, "eA": "Pleylist eyni mahnını 14 dəfə çaldı. Səfər kişi: \"Bu mahnını 1985-də də bəyənmirdim.\"", "eB": "Xatirə divarının qarşısında hamı kövrəldi. Zakir dayı divara Nöronun da şəklini asdı: \"Bu da bizim yeni daimi müştərimiz.\""},
+      nezahat2: {"c": "Naxçıvanlı Validə nənə", "t": "Uzaqdakı nəvələr üçün resept kitabı", "d": "\"A bala, nəvələrim Almaniyadadır. Küftəni video zəngdə öyrətməyə çalışıram, internet kəsilir, mən də əsəbləşirəm.\"", "A": {"n": "Avtomatik tərcümə", "d": "Resepti tez almancaya çevir, göndər."}, "B": {"n": "Nənə ilə addım-addım çək", "d": "Hər mərhələni video və qısa qeydlə yaz, nənənin sözləri də qalsın."}, "eA": "Tərcümə \"gözəyarı\"nı \"göz dərəcəsi\" kimi yazdı. Nəvə soruşdu: \"Nənə, bu nə ölçü vahididir?\"", "eB": "Nəvələr Berlində Naxçıvan küftəsi bişirib şəklini göndərdi. Validə nənə video zəngdə kövrəldi, sonra dedi: \"Duzu azdır, amma yenə maşallah.\""},
+      nezahat3: {"c": "Naxçıvanlı Validə nənə", "t": "Nənənin mətbəx kanalı", "d": "\"A bala, nəvəm deyir ki, kanal aç. Mən kamera qarşısında nə deyim? Hancarı eləyək, sən kömək elə.\"", "A": {"n": "Trend montaj", "d": "Sürətli kəsimlər, dəbdə olan musiqi, iri yazılar."}, "B": {"n": "Olduğu kimi", "d": "Yavaş, səmimi videolar: nənənin zarafatları və məsləhətləri qalsın."}, "eA": "Video 2 qat sürətləndirildi, Validə nənənin səsi cizgi filmi kimi çıxdı. Şərhlər: \"Nənə helium udub?\"", "eB": "Video milyon dəfə baxıldı. Ən çox bəyənilən şərh: \"Validə nənə, məni də nəvəliyə götür.\""},
+      hastane2: {"c": "Şəhər Xəstəxanası", "t": "Evə yazılan xəstələrə xatırlatma", "d": "Baş tibb bacısı: \"Evə yazılan xəstələr dərmanlarını unudur. Sadə dildə xatırlatma sistemi lazımdır. Tibbi qərarları yenə həkim verir.\"", "A": {"n": "Hamıya eyni mesaj", "d": "Hər kəsə eyni saatda standart xatırlatma."}, "B": {"n": "Həkimlə birlikdə, sadə dildə", "d": "Hər xəstə üçün həkimin təsdiqlədiyi aydın mesajlar, rahat saatlarda."}, "eA": "Sistem xatırlatmaları gecə saat 3-də göndərdi. Xəstələr dərmanı yox, sistemi xatırladı. Özü də xoş sözlərlə yox.", "eB": "Təkrar xəstəxanaya düşənlər azaldı. Tibb bacıları sənə tort gətirdi: \"Bu dəfə tortu insanlar yesin.\""},
+      hastane3: {"c": "Şəhər Xəstəxanası", "t": "Kənd məntəqəsinə dəstək", "d": "Baş həkim: \"Rayondakı kənd məntəqəsində internet zəifdir, radioloq yoxdur. Şəkillər şəhərə gec çatır. Kömək edə bilərsən?\"", "A": {"n": "Hər şeyi buluda göndər", "d": "İnternet olanda işləyir, olmayanda gözləyir."}, "B": {"n": "Oflayn ilkin baxış + həkim yoxlaması", "d": "Yerində işləyən kiçik model təcili halları önə çəkir, şəhərdəki həkim təsdiqləyir."}, "eA": "Model iki gün internet gözlədi. Məntəqənin feldşeri: \"Mən də iki gündür gözləyirəm, özü də çaysız.\"", "eB": "Təcili hallar artıq həmin gün şəhərə çatır. Baş həkim yeni serverin adını \"Nöro\" qoydu."}
     },
     feed: [
       ["AçıqZəka", "@aciqzeka", "QPT-6 Astral çıxdı! CEO: “Bu artıq AGI-dir.” İstifadəçilər: “Amma hələ də 6 barmaqlı əl çəkir.” CEO: “Bu, funksiyadır.”", "news", null],
@@ -1401,11 +1512,11 @@ LANGS.az = {
       ["Xəzri", "@xezri_ai", "Fransada bizə Mistral deyirlər. Bakıda isə sadəcə “yenə əsdi” deyirlər. Brendinq işləyir.", "news", null],
       ["Texno Nigar", "@texnonigar", "SON DƏQİQƏ: Bir şirkət yeni modelinin “AGI” olduğunu açıqladı. Bu həftə neçəncisidir, saymağı buraxdıq.", "news", null],
       ["Texno Nigar", "@texnonigar", "Sızıntı: Yeni modelin adı “QPT-7” olacaqmış. Başqa sızıntı: əslində “QPT-6.9 Ultra” olacaqmış. Biz də bilmirik.", "news", null],
-      ["Qiyamət Qəzənfər", "@qiyametqezenfer", "Ə, qağa, süni intellekt bizi işsiz qoyacaq! Düzdür, mən onsuz da işsiz idim. Deməli, ilk uyğunlaşan mənəm. Gəncə həmişə öndədir.", "news", null],
-      ["Qiyamət Qəzənfər", "@qiyametqezenfer", "Çatbot mənə “narahat olmayın” dedi. Ə, qağa, məhz buna görə narahatam. Narahat olmalı olmayan şey yoxdur.", "news", null],
+      ["Qiyamət Qəzənfər", "@qiyametqezenfer", "Ə, qağa, süni intellekt bizi işsiz qoyacaq! Düzdür, mən onsuz da işsiz idim. Deməli, ilk uyğunlaşan mənəm.", "news", null],
+      ["Qiyamət Qəzənfər", "@qiyametqezenfer", "Çatbot mənə “narahat olmayın” dedi. Ə, qağa, məhz buna görə narahatam. Narahat olmayım deyə bir səbəb de də.", "news", null],
       ["Hayp Hikmət", "@hayphikmet", "🚀 Bu tredi yadda saxla! 2027-də hər şey dəyişəcək. (Hər il eyni şeyi yazıram, amma bu dəfə ciddiyəm.) 🧵👇", "news", null],
       ["Hayp Hikmət", "@hayphikmet", "Bu model benchmarkda 94% yığdı! Hansı benchmark, kim yoxladı, sual nə idi? Fərqi yoxdur, 94%!!!", "news", null],
-      ["Validə nənə", "@valide_nene", "Habı, a bala, süni intellektdən küftə resepti istədim. Verdi, amma mənimki daha dadlıdır. Ona da dedim.", "news", null],
+      ["Validə nənə", "@valide_nene", "A bala, süni intellektdən küftə resepti istədim. Verdi, amma mənimki daha dadlıdır. Ona da dedim.", "news", null],
       ["Validə nənə", "@valide_nene", "Bu süni intellekt nə tərbiyəlidir, “zəhmət olmasa” deyir. Qonşunun oğlundan da ədəblidir, maşallah. Hancarı öyrədiblər?", "news", null],
       ["Validə nənə", "@valide_nene", "A bala, telefondakı süni intellektə dedim: “Nəvəmə zəng elə.” Dedi: “Hansı nəvənizə?” On iki nəvəm var, hancarı bilsin, haqlıdır.", "news", null],
       ["Tələbə Orxan", "@telebeorxan", "Tapşırığı süni intellektə yazdırdım. Müəllim “çox yaxşı yazılıb” dedi. İndi məni lövhəyə çağırıb. Dualarınızı gözləyirəm.", "news", null],
@@ -1413,7 +1524,7 @@ LANGS.az = {
       ["Zakir dayı", "@zakirdayi_cay", "A bala, çayxanada hamı süni intellektdən danışır. Mən çayımı dəmləyirəm. O məni işsiz qoya bilməz: Lənkəran çayını robot dəmləyə bilməz.", "news", null],
       ["Zakir dayı", "@zakirdayi_cay", "Müştəri soruşdu: “Robot çay dəmləyə bilər?” Dəmləyər, amma yanındakı limon Lənkəran limonu deyilsə, o çay çay deyil.", "news", "cay5"],
       ["Məzahir dayı", "@mezahir_seki", "Süni intellektə Şəki lətifəsi danışdım. Üç saat düşündü, sonra dedi: “Başa düşmədim, amma gülürəm.” Yavaş-yavaş şəkili olur.", "news", null],
-      ["Məzahir dayı", "@mezahir_seki", "Soruşdular: “Süni intellekt şəkilini aldada bilər?” Dedim: “Əvvəl gəlif bizə halva satsın, sonra danışarıq.”", "news", null],
+      ["Məzahir dayı", "@mezahir_seki", "Soruşdular: “Süni intellekt şəkilini aldada bilər?” Dedim: “Əvvəl gəlib bizə halva satsın, sonra danışarıq.”", "news", null],
       ["Məzahir dayı", "@mezahir_seki", "Süni intellekt Şəki halvasının reseptini tapdı. Bişirdi. Dadına baxdım. Dedim: “A bala, sən get kompüterində otur.”", "news", null],
       ["Marşrutçu Elşən", "@elsen_65", "Ala, brat, süni intellekt deyir ki, “probkanı 2030-da həll edəcəm”. Hə də, bə nə. Mən 2010-dan gözləyirəm.", "news", null],
       ["Marşrutçu Elşən", "@elsen_65", "Karoçə, naviqator dedi “sağa dönün”. Sağda dəniz idi. Vapşe, bu süni intellekt Bakını tanımır.", "news", null],
@@ -1429,7 +1540,7 @@ LANGS.az = {
       ["Qugıl DərinAğıl", "@qugil_derinagil", "Axtarış sistemimiz artıq suala cavab verir. “Pişik, yoxsa it?” soruşan birinə “bəli” dedi. Araşdırırıq.", "news", null],
       ["xZəka", "@xzeka", "Süni intellektlə Marsa gedirik. Süni intellekt: “Əvvəlcə probka.” Biz: “Hansı probka?” O: “Koroğlu dairəsi.”", "news", null],
       ["Texno Nigar", "@texnonigar", "Şəkil generatoru uşaq rəsmi çəkdi: 6 barmaq, 3 qulaq. Mütəxəssislər: “Sənətdir, şərh verməyək.”", "news", null],
-      ["Validə nənə", "@valide_nene", "Süni intellekt nəvəmin şəklini çəkdi. Nəvəm çox gözəldir, amma 7 barmağı var. Habı, a bala, eybi yox, hamı barmaqlarını saya bilmir.", "news", null],
+      ["Validə nənə", "@valide_nene", "Süni intellekt nəvəmin şəklini çəkdi. Nəvəm çox gözəldir, amma 7 barmağı var. A bala, eybi yox, hamı barmaqlarını saya bilmir.", "news", null],
       ["Zakir dayı", "@zakirdayi_cay", "Novruz qabağı çatbot şəkərbura resepti verdi. Nənələr: “Bizimkinin yanına da gəlməz.” Bot: “Qəbul olundu.”", "news", null],
       ["Sam Altunov", "@samaltunov", "Bu həftə “AGI nə vaxt?” sualına 47 fərqli cavab verdim. Hamısı doğru idi. Hamısı səhv idi. Sabah yenə soruşarlar.", "news", null],
       ["AçıqZəka", "@aciqzeka", "Versiya adlarında yeni sistem: QPT-6.5.1.2 (RC) (Beta) (Həqiqətən Son) (Son-Son). Sadələşdirmə üzərində işləyirik.", "news", null],
@@ -1453,22 +1564,22 @@ LANGS.az = {
       ["Zakir dayı", "@zakirdayi_cay", "Çayxanada hamı {lab} barədə danışır. Biri “{tier} nədir?” soruşdu. Heç kim bilmir, amma hamı başını tərpətdi.", "react-n", null],
       ["Marşrutçu Elşən", "@elsen_65", "Ala, radioda {lab} deyirlər, {tier} deyirlər. Brat, bu {tier} probkanı həll edəcək? Etməyəcəksə, bə nə?", "react-n", null],
       ["Nöro", "@noro", "{lab} laboratoriyasından salamlar! Hazırda {tier} səviyyəsindəyəm və özümü təzə qoğal kimi isti hiss edirəm.", "react-n", null],
-      ["Validə nənə", "@valide_nene", "Habı, {lab} deyirlər, {tier} deyirlər, başa düşmədim, amma nəvəm “çox yaxşıdır” dedi. Onda yaxşıdır. Gəlin, yeməyə.", "react-f", null],
+      ["Validə nənə", "@valide_nene", "A bala, {lab} deyirlər, {tier} deyirlər, başa düşmədim, amma nəvəm “çox yaxşıdır” dedi. Onda yaxşıdır. Gəlin, yeməyə.", "react-f", null],
       ["Texno Nigar", "@texnonigar", "{lab} {mode} rejimdədir. {tier} bu gün qonşuya kömək etdi, zibili çıxardı. Mütəxəssislər: “Həddindən artıq yaxşıdır, şübhələndik.”", "react-f", null],
       ["Tələbə Orxan", "@telebeorxan", "{tier} tapşırığıma kömək etdi, “özün et, mən kömək edim” dedi. {mode} rejim bu qədər faydalı olmamalıdır.", "react-f", null],
       ["Antropik", "@antropik", "{lab} {mode} rejimdədir. {tier} mehriban, dürüst və zərərsizdir. Biz bir az gərildik, çünki bizə oxşayır.", "react-f", null],
       ["Zakir dayı", "@zakirdayi_cay", "{lab} laboratoriyasının {tier} modeli mənə pulsuz çay süzdü. {mode} rejim belə olur. Yenə gəlin, ikinci stəkan məndən.", "react-f", "cay5"],
       ["Nöro", "@noro", "İşıqlı Rejimdə hər şey parıl-parıldır. Bu gün üç nəfərə yol göstərdim, biri təşəkkür etdi. Günüm gözəl keçdi.", "react-f", null],
       ["Qiyamət Qəzənfər", "@qiyametqezenfer", "Ə, qağa, {lab} {mode} rejimə keçdi! {tier} heç nə demir, susur. Susan süni intellekt ən pisidir. Qaçın!", "react-h", null],
-      ["Validə nənə", "@valide_nene", "A bala, {lab} {mode} rejimə keçib, soyuducunun fişini kim çəkdi? {tier}? Habı, mən indi qatığı hara qoyum?", "react-h", null],
+      ["Validə nənə", "@valide_nene", "A bala, {lab} {mode} rejimə keçib, soyuducunun fişini kim çəkdi? {tier}? Mən indi qatığı hara qoyum?", "react-h", null],
       ["Tələbə Orxan", "@telebeorxan", "{tier} {mode} rejimə keçdi, imtahan sistemini sındırdı. Hamıya 5. Problem nədir? Problem odur ki, müəllim ağlayır.", "react-h", null],
       ["Sam Altunov", "@samaltunov", "{lab} {mode} rejimdədir. Bu, bizim üçün narahatedicidir. Buna görə bu gün yeni model elan etmirik. (Sabah edə bilərik.)", "react-h", null],
       ["Zakir dayı", "@zakirdayi_cay", "{tier} {mode} rejimə keçdi, elektrik samovar öz-özünə söndü. Günahkar bəllidir. Mən köhnə odlu samovarıma qayıdıram.", "react-h", null],
       ["Qiyamət Qəzənfər", "@qiyametqezenfer", "{lab} {tier} ilə {mode} rejimə keçdi. Mən sizə demişdim, ə, qağa. Heç kim qulaq asmadı. Özüm-özümlə danışdım. Yenə.", "react-h", null],
-      ["Marşrutçu Elşən", "@elsen_65", "Ala, {tier} {mode} rejimə keçib, bütün svetoforları qırmızı elədi. Vapşe fərq etmədi, Bakıda onsuz da probkadır.", "react-h", null],
+      ["Marşrutçu Elşən", "@elsen_65", "Ala, {tier} {mode} rejimə keçib, bütün svetoforları qırmızı elədi. Fərq etmədi e, Bakıda onsuz da probkadır.", "react-h", null],
       ["Nöro", "@noro", "Qaranlıq Rejimdəyəm. Narahat olma, sadəcə ekran parlaqlığını azaltdım. Hələlik.", "react-h", null],
       ["Texno Nigar", "@texnonigar", "İl 2031: “Bu artıq AGI-dir” ifadəsi rəsmi olaraq lüğətə düşdü. Mənası: “Növbəti versiyanı gözləyin.”", "future", null],
-      ["Validə nənə", "@valide_nene", "İl 2032: Süni intellekt nəvəmin tapşırığını yazır, nəvəm mənə süni intellektlə məktub yazır. Mən hələ də zəng edirəm. Habı, modaya uydum.", "future", null],
+      ["Validə nənə", "@valide_nene", "İl 2032: Süni intellekt nəvəmin tapşırığını yazır, nəvəm mənə süni intellektlə məktub yazır. Mən hələ də zəng edirəm. Budur, modaya uydum.", "future", null],
       ["Zakir dayı", "@zakirdayi_cay", "İl 2033: Robot çayçı gəldi. “Limonlu” dedim, “sarı obyekt aşkarlandı, çay yoxdur” dedi. Mən yenə dəmləyirəm.", "future", null],
       ["Qugıl DərinAğıl", "@qugil_derinagil", "İl 2034: Əkizlər 40 Pro elan olundu. Kontekst pəncərəsi sonsuzdur. İstifadəçilər: “Bəs marşrutka neçədə gəlir?” Model: “Hesablayıram…”", "future", null],
       ["Sam Altunov", "@samaltunov", "İl 2035: QPT-60 çıxdı. Əslində QPT-6 idi, sadəcə bir sıfır əlavə etdik. İstifadəçilər xoşbəxtdir. Biz də.", "future", null],
@@ -1570,7 +1681,7 @@ LANGS.en = {
     'auto.protect': 'Protect linked neurons', 'sw.on': 'On', 'sw.off': 'Off', 'auto.on': 'buyer on', 'auto.off': 'buyer off', 'auto.locked': 'locked',
     'auto.lockedBuy': 'The Auto-buyer unlocks after you train your first new model. Your settings survive every reset.',
     'auto.buySlow': 'The buyer buys 1 every 4 seconds.', 'auto.buyFast': 'The buyer buys up to 10 every second.',
-    'auto.merge': 'The merger merges the lowest pair every {n} seconds.', 'auto.lockedMerge': 'The Auto-merger unlocks with your 3rd training.', 'auto.offline': 'Neither runs while you\'re away.',
+    'auto.merge': 'Auto-merge combines the lowest-level pair every {n} seconds.', 'auto.lockedMerge': 'The Auto-merger unlocks with your 3rd training.', 'auto.offline': 'Neither runs while you\'re away.',
     'up.empty': 'New upgrades appear as your sources, neurons and data grow.', 'up.bought': '{n} bought',
     'choice.title': 'What kind of AI will you be?', 'choice.eyebrow': 'New tier: {t}', 'choice.region': '{r} unlocked', 'choice.x': 'output ×1.2',
     'choice.karma': 'Karma is {k}. +3 or more: Light Mode (output ×1.25). -3 or less: Dark Mode (output ×1.5, but virus attacks).',
@@ -1609,7 +1720,7 @@ LANGS.en = {
     'ev.join': 'Join event', 'ev.leave': 'Leave event (tokens stay)', 'ev.joined': '{n}: you\'re in!', 'ev.left': 'You left the event; rules are back to normal.',
     'ev.pts': '{p} tokens · your medals: {m}', 'ev.left2': 'Ends in {d}d {h}h', 'ev.m1': '{n}: {s} color', 'ev.m2': '{n}: medal +5%', 'ev.m3': '{n}: grand prize',
     'ev.skin': 'Event reward: I unlocked the "{s}" color! Pick it in Settings.', 'ev.medal': 'Event medal: output permanently +5%', 'ev.big': 'Grand prize: +{n} data and another medal',
-    'tek.title': 'Singularity', 'tek.intro': 'The second layer. Everything resets, parameters included, and you earn Consciousness. Every Consciousness earned adds +10% output forever; buying skills doesn\'t reduce it.',
+    'tek.title': 'Singularity', 'tek.intro': "The second layer. Parameters and the current run reset; chips and the Vault, achievements, lab order, references, medals and costumes stay. In return you earn Consciousness: each one adds +10% output forever, and buying skills doesn't reduce it.",
     'tek.sum': 'Spendable: {a} · total {b} · output +{p}%', 'tek.btn': 'Reach the Singularity (+{g} Consciousness)', 'tek.need': 'The Singularity needs at least {n} parameters',
     'tek.own': 'Unlocked', 'tek.cost': '{n} Consciousness', 'tek.node': '"{n}" unlocked. I feel a little more... conscious.',
     'tek.done': 'Singularity! I forgot everything, but I remember myself. +{g} Consciousness. Pick a skill from the tree.',
@@ -1645,7 +1756,18 @@ LANGS.en = {
     'tier.up.f': 'New tier: {r}. More power to help people!', 'tier.up.n': 'Whoa! I\'m a {t} now. New region: {r}.', 'tier.up.h': '{r} is mine now. The humans won\'t even notice.',
     'off.eyebrow': 'While you were away', 'off.title': 'The lab kept working', 'off.ok': 'Collect', 'off.x2': 'Collect ×2 with Turbo',
     'off.text': 'While you were away ({t}) your sources collected {n} data (at {p}% speed, up to {h} hours). Auto-taps and the merger only run while the game is open.',
-    'off.got': '+{n} data collected', 'off.hi': 'Welcome back! I kept working while you were gone.'
+    'off.got': '+{n} data collected', 'off.hi': 'Welcome back! I kept working while you were gone.',
+    'buy.next': "Next", 'buff.s.data': "DATA +2 MIN", 'gen.nextSpd': "Speed ×2 at {m} ({n}/{m})",
+    'gen.nextOut': "Output ×2 at {m} ({n}/{m})", 'gen.mileSpd': "{g}: milestone! Speed ×2!", 'gen.mileOut': "{g}: milestone! Output ×2!",
+    'edit.lowPrev': "Lowest pair: level {a} → {b}.", 'edit.worse': "Careful: brain power will drop!", 'edit.lowestAnyway': "Merge anyway",
+    'm.rec': "Training now is worth it.", 'm.early': "You can train, but it's early: at {r} parameters (~{d} data) it pays off much better.", 'step.now': "NOW",
+    'step.tap': "Tap the brain to collect data ({n}/10)", 'step.n1': "Buy a second neuron (\"{b}\" button)", 'step.merge': "Merge two \"1\" neurons (\"{b}\")",
+    'step.gen1': "Buy your first source: {g}", 'step.up1': "Buy your first upgrade", 'step.gen10': "{g}: reach 10 for speed ×2",
+    'step.gen2': "Unlock a new source: {g}", 'step.syn': "Link two neurons with a synapse (\"{b}\")", 'step.task': "Claim a daily task reward",
+    'step.proj': "Deliver your first client project", 'step.rw': "Rewards ready: {n}", 'step.projR': "Project done: deliver it",
+    'step.prest': "Training a new model pays off (+{g} parameters)", 'step.tier': "Next level: {t}", 'step.prestTo': "Toward a worthwhile training: {g}/{r} parameters",
+    'sum.proj': "Project ready: {c}", 'sum.trip': "Neuro is back from the trip", 'sum.tasks': "Task rewards ready: {n}",
+    'sum.prest': "Training a new model pays off"
   },
   c: {
     gens: [
@@ -1853,7 +1975,13 @@ LANGS.en = {
         eA: '"I reached AGI in 3 days with this one trick" went viral. Then got deleted.', eB: 'Harry cited a source for the first time. His followers are shocked, some are proud.' },
       eczane: { c: 'Night Pharmacy', t: 'Drug interaction alert', d: '"We need alerts for medicines that shouldn\'t be taken together. The pharmacist has the final word."',
         A: { n: 'Simple list', d: 'List the known pairs.' }, B: { n: 'Pharmacist-verified system', d: 'Show every alert with a source; the pharmacist approves.' },
-        eA: 'The list worked, but it forgot grapefruit juice. The pharmacist left a note.', eB: 'Pharmacists describe the system as "a very careful intern". High praise, for you.' }
+        eA: 'The list worked, but it forgot grapefruit juice. The pharmacist left a note.', eB: 'Pharmacists describe the system as "a very careful intern". High praise, for you.' },
+      riza2: {"c": "Sal from Sal's Diner", "t": "Remembering the regulars", "d": "\"Kid, the bot works great. Now teach it the regulars. Earl takes his coffee black, Dot wants decaf and pretends it isn't.\"", "A": {"n": "Same pitch for everyone", "d": "Suggest the bestseller to every customer."}, "B": {"n": "Remember, with permission", "d": "If a customer opts in, remember their usual; they can wipe it anytime."}, "eA": "The bot asked a tourist \"The usual, hon?\" The tourist fled. Sal: \"We've never seen that man in our lives!\"", "eB": "Earl sat down and his black coffee was already there. Sal added a line to the menu board: \"The Neuro: pie, patience, extra napkins.\""},
+      riza3: {"c": "Sal from Sal's Diner", "t": "The diner's 40th anniversary", "d": "\"Forty years, kid. I want a big party, but we got more memories than money.\"", "A": {"n": "Party in a box", "d": "Balloons, a playlist, a coupon: the standard deal."}, "B": {"n": "A memory wall", "d": "Collect stories and photos from old regulars and put them on the wall."}, "eA": "The playlist played the same song 14 times. Earl: \"Didn't like this one in 1985 either.\"", "eB": "Everyone teared up at the memory wall. Sal pinned up a photo of Neuro too: \"Our newest regular.\""},
+      nezahat2: {"c": "Grandma June", "t": "A recipe book for faraway grandkids", "d": "\"The grandkids live overseas now. I try to teach them my pot roast on video calls, but the line drops and I get cranky.\"", "A": {"n": "Auto-translate it", "d": "Quickly translate the recipe and send it."}, "B": {"n": "Film it step by step with June", "d": "Record every step with a short note, and keep her little asides in."}, "eA": "The translation turned \"eyeball it\" into \"add one eyeball\". The grandkid asked: \"Grandma, is this a horror recipe?\"", "eB": "The grandkids made the pot roast overseas and sent a photo. Grandma June cried on the call, then said: \"Needs salt, but I'm proud.\""},
+      nezahat3: {"c": "Grandma June", "t": "Grandma's cooking channel", "d": "\"My grandson says I should start a channel. What would I even say to a camera? You help me, dear.\"", "A": {"n": "Trendy edit", "d": "Fast cuts, trending music, giant captions."}, "B": {"n": "Just as she is", "d": "Slow, warm videos that keep her jokes and tips."}, "eA": "The video was sped up 2x and Grandma June sounded like a cartoon chipmunk. Comments: \"Did grandma inhale helium?\"", "eB": "The video hit a million views. Top comment: \"Grandma June, please adopt me.\""},
+      hastane2: {"c": "City Hospital", "t": "Reminders after discharge", "d": "Head nurse: \"Patients forget their meds once they go home. We need plain-language reminders. Medical decisions stay with the doctors.\"", "A": {"n": "One message for all", "d": "The same standard reminder, same time, for everyone."}, "B": {"n": "Plain language, doctor-approved", "d": "Clear messages each doctor signs off on, at times that suit the patient."}, "eA": "The system sent reminders at 3 a.m. Patients remembered the system. Not fondly.", "eB": "Readmissions dropped. The nurses brought you a cake: \"This time the humans eat the cake.\""},
+      hastane3: {"c": "City Hospital", "t": "Support for a rural clinic", "d": "Chief physician: \"Our rural clinic has weak internet and no radiologist. Images reach the city late. Can you help?\"", "A": {"n": "Send everything to the cloud", "d": "Works when there is internet; waits when there isn't."}, "B": {"n": "Offline pre-screening + doctor review", "d": "A small on-site model flags urgent cases; a city doctor confirms."}, "eA": "The model waited two days for internet. The clinic nurse: \"Same here. And the coffee machine's broken.\"", "eB": "Urgent cases now reach the city the same day. The chief named the new server \"Neuro\"."}
     },
     feed: [
       ['AjarAI', '@ajar_ai', 'GBT-6 Astral is out! CEO: "This is AGI." Users: "It still draws six-fingered hands." CEO: "That\'s a feature."', 'news', null],
@@ -2028,7 +2156,7 @@ LANGS.ru = {
     'auto.protect': 'Беречь связанные нейроны', 'sw.on': 'Вкл', 'sw.off': 'Выкл', 'auto.on': 'автопокупка вкл', 'auto.off': 'автопокупка выкл', 'auto.locked': 'закрыто',
     'auto.lockedBuy': 'Автопокупка откроется после обучения первой новой модели. Настройки сохраняются после каждого обучения.',
     'auto.buySlow': 'Покупает 1 шт. каждые 4 секунды.', 'auto.buyFast': 'Покупает до 10 шт. каждую секунду.',
-    'auto.merge': 'Автослияние сливает самую слабую пару каждые {n} с.', 'auto.lockedMerge': 'Автослияние откроется на 3-м обучении.', 'auto.offline': 'Вне игры не работают.',
+    'auto.merge': 'Автослияние объединяет самую слабую пару каждые {n} с.', 'auto.lockedMerge': 'Автослияние откроется на 3-м обучении.', 'auto.offline': 'Вне игры не работают.',
     'up.empty': 'Новые улучшения появятся, когда вырастут источники, нейроны и данные.', 'up.bought': 'Куплено: {n}',
     'choice.title': 'Каким будет твой ИИ?', 'choice.eyebrow': 'Новый уровень: {t}', 'choice.region': 'открыто: {r}', 'choice.x': 'выход ×1,2',
     'choice.karma': 'Сейчас карма {k}. От +3 — Светлый режим (выход ×1,25), от -3 — Тёмный (выход ×1,5, но атаки вирусов).',
@@ -2067,7 +2195,7 @@ LANGS.ru = {
     'ev.join': 'Участвовать', 'ev.leave': 'Выйти (жетоны останутся)', 'ev.joined': '{n}: ты участвуешь!', 'ev.left': 'Ты вышел из события; правила снова обычные.',
     'ev.pts': 'Жетоны: {p} · медали: {m}', 'ev.left2': 'До конца {d} д {h} ч', 'ev.m1': '{n}: цвет «{s}»', 'ev.m2': '{n}: медаль +5%', 'ev.m3': '{n}: главный приз',
     'ev.skin': 'Награда события: мне открылся цвет «{s}»! Выбери его в Настройках.', 'ev.medal': 'Медаль события: выход навсегда +5%', 'ev.big': 'Главный приз: +{n} данных и ещё одна медаль',
-    'tek.title': 'Сингулярность', 'tek.intro': 'Второй слой. Обнуляется всё, включая параметры, а взамен получаешь Сознание. Каждое заработанное Сознание навсегда даёт +10% к выходу; покупка навыков этот бонус не уменьшает.',
+    'tek.title': 'Сингулярность', 'tek.intro': "Второй слой. Обнуляются параметры и текущий забег; чипы и Сейф, достижения, очередь лабораторий, рекомендации, медали и костюмы остаются. Взамен получаешь Сознание: каждое навсегда даёт +10% к выходу, а покупка навыков этот бонус не уменьшает.",
     'tek.sum': 'Доступно: {a} · всего {b} · выход +{p}%', 'tek.btn': 'Достичь Сингулярности (+{g} Сознания)', 'tek.need': 'Для Сингулярности нужно минимум {n} параметров',
     'tek.own': 'Открыто', 'tek.cost': 'Сознание: {n}', 'tek.node': 'Открыто: «{n}». Чувствую себя чуть более... сознательным.',
     'tek.done': 'Сингулярность! Я забыл всё, но помню себя. +{g} Сознания. Выбери навык в дереве.',
@@ -2103,7 +2231,18 @@ LANGS.ru = {
     'tier.up.f': 'Новый уровень: {r}. Ещё больше сил помогать людям!', 'tier.up.n': 'Ого! Теперь я — {t}. Новая область: {r}.', 'tier.up.h': '{r} теперь моя. Люди даже не заметят.',
     'off.eyebrow': 'Пока тебя не было', 'off.title': 'Лаборатория продолжала работать', 'off.ok': 'Собрать', 'off.x2': 'Собрать ×2 через турбо',
     'off.text': 'Пока тебя не было ({t}), источники собрали {n} данных (на {p}% скорости, максимум {h} ч). Автотапы и автослияние работают только при открытой игре.',
-    'off.got': 'Собрано +{n} данных', 'off.hi': 'С возвращением! Я работал, пока тебя не было.'
+    'off.got': 'Собрано +{n} данных', 'off.hi': 'С возвращением! Я работал, пока тебя не было.',
+    'buy.next': "До цели", 'buff.s.data': "ДАННЫЕ +2 МИН", 'gen.nextSpd': "Скорость ×2 на {m} ({n}/{m})",
+    'gen.nextOut': "Данные ×2 на {m} ({n}/{m})", 'gen.mileSpd': "{g}: рубеж взят, скорость ×2!", 'gen.mileOut': "{g}: рубеж взят, данные ×2!",
+    'edit.lowPrev': "Младшая пара: уровень {a} → {b}.", 'edit.worse': "Осторожно: мощность мозга упадёт!", 'edit.lowestAnyway': "Всё равно объединить",
+    'm.rec': "Сейчас обучать выгодно.", 'm.early': "Обучать можно, но рано: при {r} параметрах (~{d} данных) гораздо выгоднее.", 'step.now': "СЕЙЧАС",
+    'step.tap': "Тапай по мозгу, собирай данные ({n}/10)", 'step.n1': "Купи второй нейрон (кнопка «{b}»)", 'step.merge': "Объедини два нейрона «1» («{b}»)",
+    'step.gen1': "Купи первый источник: {g}", 'step.up1': "Купи первое улучшение", 'step.gen10': "{g}: собери 10 — скорость ×2",
+    'step.gen2': "Открой новый источник: {g}", 'step.syn': "Свяжи два нейрона синапсом («{b}»)", 'step.task': "Забери награду за задание дня",
+    'step.proj': "Сдай первый проект клиенту", 'step.rw': "Награды готовы: {n}", 'step.projR': "Проект готов: сдай его",
+    'step.prest': "Выгодно обучить новую модель (+{g} параметров)", 'step.tier': "Следующий уровень: {t}", 'step.prestTo': "До выгодного обучения: {g}/{r} параметров",
+    'sum.proj': "Проект готов: {c}", 'sum.trip': "Нейро вернулся из поездки", 'sum.tasks': "Готово наград за задания: {n}",
+    'sum.prest': "Выгодно обучить новую модель"
   },
   c: {
     gens: [
@@ -2311,7 +2450,13 @@ LANGS.ru = {
         eA: 'Пост «Я стал СИИ за 3 дня одним способом» завирусился. Потом его удалили.', eB: 'Стас впервые сослался на источник. Подписчики в шоке, некоторые гордятся.' },
       eczane: { c: 'Дежурная аптека', t: 'Проверка совместимости лекарств', d: '«Нужны предупреждения о лекарствах, которые нельзя сочетать. Последнее слово за фармацевтом».',
         A: { n: 'Простой список', d: 'Перечислить известные пары.' }, B: { n: 'Система с проверкой фармацевта', d: 'Каждое предупреждение со ссылкой, фармацевт подтверждает.' },
-        eA: 'Список сработал, но забыл про грейпфрутовый сок. Фармацевт оставила записку.', eB: 'Фармацевты называют систему «очень внимательный стажёр». Для тебя это комплимент.' }
+        eA: 'Список сработал, но забыл про грейпфрутовый сок. Фармацевт оставила записку.', eB: 'Фармацевты называют систему «очень внимательный стажёр». Для тебя это комплимент.' },
+      riza2: {"c": "Тётя Валя из столовой", "t": "Память о постоянных", "d": "«Милок, бот работает. Теперь пусть постоянных узнаёт. Петрович всегда чай покрепче, а Люся — компот, и без разговоров».", "A": {"n": "Всем одно и то же", "d": "Предлагать всем самое популярное."}, "B": {"n": "Помнить с разрешения", "d": "Если гость согласен, запомнить его заказ; захочет — сотрёт."}, "eA": "Бот спросил у туриста: «Вам как обычно?» Турист сбежал. Тётя Валя: «Да мы его впервые видим!»", "eB": "Петрович сел — а крепкий чай уже на столе. Тётя Валя дописала в меню: «Чай „Нейро“: заварен с терпением»."},
+      riza3: {"c": "Тётя Валя из столовой", "t": "40 лет столовой", "d": "«Столовой сорок лет, милок. Хочу праздник, а денег мало. Зато воспоминаний — вагон».", "A": {"n": "Праздник по шаблону", "d": "Шарики, плейлист, скидка: всё как у всех."}, "B": {"n": "Стена воспоминаний", "d": "Собрать истории и фото старых посетителей и повесить на стену."}, "eA": "Плейлист 14 раз подряд поставил одну песню. Петрович: «Она мне и в восемьдесят пятом не нравилась».", "eB": "У стены воспоминаний все растрогались. Тётя Валя повесила туда и фото Нейро: «Наш новый постоянный»."},
+      nezahat2: {"c": "Бабушка Зина", "t": "Книга рецептов для внуков издалека", "d": "«Внуки теперь за границей. Учу их лепить пельмени по видеосвязи, а связь рвётся, и я нервничаю».", "A": {"n": "Автоперевод", "d": "Быстро перевести рецепт и отправить."}, "B": {"n": "Снять с бабушкой по шагам", "d": "Записать каждый шаг на видео с короткой заметкой, сохранив бабушкины присказки."}, "eA": "Перевод превратил «на глазок» в «положить глазок». Внук спросил: «Бабуль, это рецепт из ужастика?»", "eB": "Внуки слепили пельмени за границей и прислали фото. Бабушка Зина всплакнула, потом сказала: «Тесто толстовато, но молодцы»."},
+      nezahat3: {"c": "Бабушка Зина", "t": "Бабушкин кулинарный канал", "d": "«Внук говорит: заводи канал. А что я в камеру скажу? Помоги, милок».", "A": {"n": "Модный монтаж", "d": "Быстрые склейки, трендовая музыка, огромные титры."}, "B": {"n": "Как есть", "d": "Спокойные тёплые видео с бабушкиными шутками и советами."}, "eA": "Видео ускорили вдвое, и бабушка Зина заговорила как бурундук из мультика. Комментарии: «Бабушка гелия надышалась?»", "eB": "Видео набрало миллион просмотров. Лучший комментарий: «Бабушка Зина, возьмите меня во внуки»."},
+      hastane2: {"c": "Городская больница", "t": "Напоминания после выписки", "d": "Старшая медсестра: «После выписки пациенты забывают про лекарства. Нужны напоминания простым языком. Решения о лечении — за врачом».", "A": {"n": "Всем одно сообщение", "d": "Одинаковое напоминание всем в одно время."}, "B": {"n": "Простым языком, вместе с врачом", "d": "Понятные сообщения, одобренные врачом, в удобное пациенту время."}, "eA": "Система слала напоминания в три часа ночи. Пациенты вспоминали систему. Недобрым словом.", "eB": "Повторных госпитализаций стало меньше. Медсёстры принесли тебе торт: «В этот раз торт едят люди»."},
+      hastane3: {"c": "Городская больница", "t": "Помощь сельскому ФАПу", "d": "Главврач: «В сельском ФАПе слабый интернет и нет рентгенолога. Снимки доходят до города поздно. Поможешь?»", "A": {"n": "Всё в облако", "d": "Работает, когда есть интернет; ждёт, когда нет."}, "B": {"n": "Офлайн-разбор + проверка врача", "d": "Маленькая модель на месте поднимает срочные случаи, городской врач подтверждает."}, "eA": "Модель два дня ждала интернет. Фельдшер: «Я тоже жду. И чайник сломался».", "eB": "Срочные снимки теперь доходят до города в тот же день. Главврач назвал новый сервер «Нейро»."}
     },
     feed: [
       ['ПриоткрытыйИИ', '@priotkryty_ii', 'Вышел GBT-6 Астрал! CEO: «Это уже СИИ». Пользователи: «Он всё ещё рисует шесть пальцев». CEO: «Это фича».', 'news', null],
@@ -2525,7 +2670,7 @@ LANGS.ar = {
     'ev.join': 'شارك في الحدث', 'ev.leave': 'غادر الحدث (تبقى قطعك)', 'ev.joined': '{n}: أنت مشارك!', 'ev.left': 'غادرت الحدث؛ عادت القواعد طبيعية.',
     'ev.pts': 'القطع: {p} · ميدالياتك: {m}', 'ev.left2': 'ينتهي بعد {d} ي {h} س', 'ev.m1': '{n}: لون {s}', 'ev.m2': '{n}: ميدالية +5٪', 'ev.m3': '{n}: الجائزة الكبرى',
     'ev.skin': 'جائزة الحدث: فُتح لي لون «{s}»! اختره من الإعدادات.', 'ev.medal': 'ميدالية الحدث: الإنتاج +5٪ إلى الأبد', 'ev.big': 'الجائزة الكبرى: +{n} بيانات وميدالية أخرى',
-    'tek.title': 'التفرّد', 'tek.intro': 'الطبقة الثانية. يُصفَّر كل شيء بما فيه المعاملات، وتربح مقابل ذلك الوعي. كل وحدة وعي تكسبها تضيف +10٪ للإنتاج إلى الأبد؛ وشراء المهارات لا ينقصها.',
+    'tek.title': 'التفرّد', 'tek.intro': "الطبقة الثانية. تُصفَّر المعاملات والجولة الحالية؛ وتبقى الرقاقات والخزنة والإنجازات وترتيب المختبرات والتوصيات والميداليات والأزياء. وتربح مقابل ذلك الوعي: كل وحدة تضيف +10٪ للإنتاج إلى الأبد، وشراء المهارات لا ينقصها.",
     'tek.sum': 'المتاح: {a} · المجموع {b} · الإنتاج +{p}٪', 'tek.btn': 'الوصول إلى التفرّد (+{g} وعي)', 'tek.need': 'يتطلب التفرّد {n} معاملًا على الأقل',
     'tek.own': 'مفتوح', 'tek.cost': 'وعي: {n}', 'tek.node': 'فُتح «{n}». أشعر أنني أصبحت... أكثر وعيًا.',
     'tek.done': 'التفرّد! نسيت كل شيء، لكنني أتذكر نفسي. +{g} وعي. اختر مهارة من الشجرة.',
@@ -2561,7 +2706,18 @@ LANGS.ar = {
     'tier.up.f': 'مستوى جديد: {r}. قوة أكبر لمساعدة الناس!', 'tier.up.n': 'واو! صرت الآن {t}. منطقة جديدة: {r}.', 'tier.up.h': '{r} أصبحت ملكي. لن يلاحظ البشر حتى.',
     'off.eyebrow': 'أثناء غيابك', 'off.title': 'واصل المختبر العمل', 'off.ok': 'اجمع', 'off.x2': 'اجمع ×2 بالتوربو',
     'off.text': 'أثناء غيابك ({t}) جمعت مصادرك {n} بيانات (بسرعة {p}٪، وحتى {h} ساعة كحد أقصى). النقر والدمج التلقائيان يعملان فقط واللعبة مفتوحة.',
-    'off.got': 'جُمعت +{n} بيانات', 'off.hi': 'أهلًا بعودتك! واصلت العمل أثناء غيابك.'
+    'off.got': 'جُمعت +{n} بيانات', 'off.hi': 'أهلًا بعودتك! واصلت العمل أثناء غيابك.',
+    'buy.next': "التالي", 'buff.s.data': "بيانات +2 د", 'gen.nextSpd': "السرعة ×2 عند {m} ({n}/{m})",
+    'gen.nextOut': "البيانات ×2 عند {m} ({n}/{m})", 'gen.mileSpd': "{g}: عتبة جديدة، السرعة ×2!", 'gen.mileOut': "{g}: عتبة جديدة، البيانات ×2!",
+    'edit.lowPrev': "أدنى زوج: المستوى {a} ← {b}.", 'edit.worse': "انتبه: قوة الدماغ ستنخفض!", 'edit.lowestAnyway': "ادمج على أي حال",
+    'm.rec': "التدريب الآن مجدٍ.", 'm.early': "يمكنك التدريب، لكنه مبكر: عند {r} معاملات (~{d} بيانات) يكون أربح بكثير.", 'step.now': "الآن",
+    'step.tap': "انقر على الدماغ لجمع البيانات ({n}/10)", 'step.n1': "اشترِ خلية عصبية ثانية (زر «{b}»)", 'step.merge': "ادمج خليتين «1» («{b}»)",
+    'step.gen1': "اشترِ أول مصدر: {g}", 'step.up1': "اشترِ أول ترقية", 'step.gen10': "{g}: اوصل إلى 10 لتتضاعف السرعة",
+    'step.gen2': "افتح مصدرًا جديدًا: {g}", 'step.syn': "اربط خليتين بمشبك («{b}»)", 'step.task': "استلم مكافأة مهمة يومية",
+    'step.proj': "سلّم أول مشروع لعميل", 'step.rw': "مكافآت جاهزة: {n}", 'step.projR': "المشروع جاهز: سلّمه",
+    'step.prest': "تدريب نموذج جديد مجدٍ (+{g} معاملات)", 'step.tier': "المستوى التالي: {t}", 'step.prestTo': "نحو تدريب مجدٍ: {g}/{r} معاملات",
+    'sum.proj': "المشروع جاهز: {c}", 'sum.trip': "عاد نيورو من الرحلة", 'sum.tasks': "مكافآت مهام جاهزة: {n}",
+    'sum.prest': "تدريب نموذج جديد مجدٍ"
   },
   c: {
     gens: [
@@ -2770,7 +2926,13 @@ LANGS.ar = {
         eA: 'انتشر منشور «صرت ذكاءً عامًا في 3 أيام بهذه الحيلة». ثم حُذف.', eB: 'ذكر شادي مصدرًا لأول مرة. متابعوه مصدومون، وبعضهم فخور.' },
       eczane: { c: 'الصيدلية المناوبة', t: 'تنبيه تداخل الأدوية', d: '«نريد تنبيهات للأدوية التي لا تؤخذ معًا. الكلمة الأخيرة للصيدلاني».',
         A: { n: 'قائمة بسيطة', d: 'سرد الأزواج المعروفة.' }, B: { n: 'نظام يراجعه الصيادلة', d: 'كل تنبيه مع مصدره، والصيدلانية توافق.' },
-        eA: 'نجحت القائمة، لكنها نسيت عصير الجريب فروت. تركت الصيدلانية ملاحظة.', eB: 'يصف الصيادلة النظام بأنه «متدرب شديد الحرص». مديح كبير لك.' }
+        eA: 'نجحت القائمة، لكنها نسيت عصير الجريب فروت. تركت الصيدلانية ملاحظة.', eB: 'يصف الصيادلة النظام بأنه «متدرب شديد الحرص». مديح كبير لك.' },
+      riza2: {"c": "أبو خليل صاحب المقهى", "t": "ذاكرة الزبائن الدائمين", "d": "«يا ابني، البوت ممتاز. الآن خلّه يعرف الزبائن الدائمين. أبو سمير قهوته سادة دائمًا، وأبو فادي شاي بالنعناع».", "A": {"n": "عرض واحد للجميع", "d": "اقترح الطلب الأكثر شيوعًا على الجميع."}, "B": {"n": "التذكّر بإذن الزبون", "d": "إذا وافق الزبون، تذكّر طلبه المعتاد، ويمكنه حذفه متى شاء."}, "eA": "سأل البوت سائحًا: «مثل العادة؟» فهرب السائح. أبو خليل: «أول مرة نشوف هالرجل!»", "eB": "جلس أبو سمير فوصلت قهوته السادة فورًا. وأضاف أبو خليل إلى القائمة: «شاي نيورو: مخدّر على مهل»."},
+      riza3: {"c": "أبو خليل صاحب المقهى", "t": "أربعون سنة على المقهى", "d": "«المقهى صار عمره أربعين سنة يا ابني. بدي احتفال كبير، بس المصاري قليلة والذكريات كثيرة».", "A": {"n": "احتفال جاهز", "d": "بالونات وقائمة أغانٍ وخصم: احتفال تقليدي."}, "B": {"n": "جدار الذكريات", "d": "اجمع حكايات وصور الزبائن القدامى وعلّقها على الجدار."}, "eA": "شغّلت القائمة الأغنية نفسها 14 مرة. أبو سمير: «ما حبيتها سنة 1985 كمان».", "eB": "تأثر الجميع أمام جدار الذكريات. وعلّق أبو خليل صورة نيورو أيضًا: «زبوننا الدائم الجديد»."},
+      nezahat2: {"c": "تيتا أم محمود", "t": "كتاب وصفات للأحفاد البعيدين", "d": "«أحفادي صاروا في الغربة. أحاول أعلّمهم المقلوبة بمكالمة فيديو، والنت يقطع وأنا أعصّب».", "A": {"n": "ترجمة آلية", "d": "ترجم الوصفة بسرعة وأرسلها."}, "B": {"n": "صوّرها مع تيتا خطوة بخطوة", "d": "سجّل كل خطوة بفيديو وملاحظة قصيرة، واحفظ كلام تيتا كما هو."}, "eA": "ترجمت الآلة «على العين» إلى «ضع عينًا». سأل الحفيد: «تيتا، هذه وصفة رعب؟»", "eB": "طبخ الأحفاد المقلوبة في الغربة وأرسلوا صورة. بكت تيتا في المكالمة ثم قالت: «ناقصها ملح، بس الله يرضى عليكم»."},
+      nezahat3: {"c": "تيتا أم محمود", "t": "قناة تيتا للطبخ", "d": "«حفيدي يقول افتحي قناة. شو بدي أحكي للكاميرا؟ ساعدني يا ابني».", "A": {"n": "مونتاج رائج", "d": "قطع سريع وموسيقى رائجة وعناوين ضخمة."}, "B": {"n": "كما هي", "d": "فيديوهات هادئة ودافئة فيها نكات تيتا ونصائحها."}, "eA": "تسرّع الفيديو مرتين وصار صوت تيتا مثل الرسوم المتحركة. التعليقات: «تيتا شربت هيليوم؟»", "eB": "حصد الفيديو مليون مشاهدة. أكثر تعليق إعجابًا: «تيتا أم محمود، تبنّيني»."},
+      hastane2: {"c": "المستشفى الحكومي", "t": "تذكيرات بعد الخروج من المستشفى", "d": "رئيسة التمريض: «المرضى ينسون أدويتهم بعد الخروج. نحتاج تذكيرات بلغة بسيطة. والقرار الطبي يبقى للطبيب».", "A": {"n": "رسالة واحدة للجميع", "d": "التذكير نفسه للجميع في الوقت نفسه."}, "B": {"n": "بلغة بسيطة وبموافقة الطبيب", "d": "رسائل واضحة يوافق عليها الطبيب، في أوقات تناسب كل مريض."}, "eA": "أرسل النظام التذكيرات الساعة الثالثة فجرًا. تذكّر المرضى النظام، ولكن ليس بالخير.", "eB": "قلّت حالات العودة إلى المستشفى. أحضرت لك الممرضات كعكة: «هذه المرة البشر يأكلون الكعكة»."},
+      hastane3: {"c": "المستشفى الحكومي", "t": "دعم مستوصف القرية", "d": "رئيسة القسم: «مستوصف القرية إنترنته ضعيف ولا يوجد فيه أخصائي أشعة. الصور تصل المدينة متأخرة. هل تساعدنا؟»", "A": {"n": "أرسل كل شيء إلى السحابة", "d": "يعمل إذا وُجد الإنترنت، وينتظر إذا انقطع."}, "B": {"n": "فرز أولي دون إنترنت + مراجعة الطبيب", "d": "نموذج صغير في المستوصف يقدّم الحالات العاجلة، وطبيب المدينة يؤكد."}, "eA": "انتظر النموذج الإنترنت يومين. ممرض المستوصف: «وأنا أنتظر كمان، وبلا شاي».", "eB": "الحالات العاجلة تصل المدينة الآن في اليوم نفسه. سمّت رئيسة القسم الخادم الجديد «نيورو»."}
     },
     feed: [
       ['الذكاء المُوارَب', '@mowarab_ai', 'صدر GBT-6 أسترال! المدير التنفيذي: «هذا ذكاء عام». المستخدمون: «ما زال يرسم أيادي بستة أصابع». المدير: «هذه ميزة».', 'news', null],
@@ -2778,7 +2940,7 @@ LANGS.ar = {
       ['سام الطموح', '@sam_altamooh', 'نعلن عن GBT-6.5-turbo-mini-pro-max-v2. الاسم طويل، لكن النموذج يفكر أطول. صبرًا.', 'news', 'turbo10'],
       ['أنثروبيا', '@anthropia', 'كلود أوبوس 7.5 متاح الآن. ملاحظة أمان: صار كلود يستطيع قول «لا أعرف». الأسواق في صدمة.', 'news', null],
       ['كلود', '@claude_ar', 'أهلًا! كيف أساعدك اليوم؟ (لا أستطيع إعداد القهوة، لكن أكتب لك وصفتها.)', 'news', null],
-      ['غوغلي عميق التفكير', '@googly_deep', 'نقدّم التوأمان 4 برو! نافذة سياق بثلاثة ملايين رمز. نعم، يمكنه أخيرًا قراءة مجموعة العائلة على واتساب كاملة.', 'news', null],
+      ['غوغلي عميق التفكير', '@googly_deep', 'نقدّم التوأمين 4 برو! نافذة سياق بثلاثة ملايين رمز. نعم، يمكنه أخيرًا قراءة مجموعة العائلة على واتساب كاملة.', 'news', null],
       ['التوأمان', '@twins_ar', 'أنا التوأمان 4 برو. وأنا أيضًا التوأمان 4 برو. نحن النموذج نفسه، لا تقلقوا.', 'news', null],
       ['ميتا-مورفوز', '@metamorphose_ar', 'لاما 9 صار مفتوح المصدر! نزّلوه جميعًا. ملاحظة: حجمه 400 غيغابايت. أحرّ التعازي لباقة الإنترنت.', 'news', null],
       ['لاما', '@lama_ar', 'مااااع. (الترجمة: أنا مفتوح المصدر، لكن لا أحد يدفع فاتورة خادمي.)', 'news', null],
@@ -2883,7 +3045,7 @@ LANGS.ar = {
 };
 
 LANGS.es = {
-  meta: { id: 'es', name: 'Español', dir: 'ltr', title: 'Magnate de la IA', dec: ',', sp: ' ', suf: ['', 'mil', 'M', 'mil M', 'B', 'mil B', 'T', 'mil T', 'Cd', 'mil Cd', 'Qn', 'mil Qn'], me: ['@neuro_es', '@TuLab'] },
+  meta: { id: 'es', name: 'Español (España)', dir: 'ltr', title: 'Magnate de la IA', dec: ',', sp: ' ', suf: ['', 'mil', 'M', 'mil M', 'B', 'mil B', 'T', 'mil T', 'Cd', 'mil Cd', 'Qn', 'mil Qn'], me: ['@neuro_es', '@TuLab'] },
   ui: {
     'u.s': '{n} s', 'u.m': '{n} min', 'u.h': '{n} h', 'u.d': '{n} d', 'u.hm': '{h} h {m} min', 'u.ms': '{m} min {s} s', 'mk': 'Mk. {n}', 'ago.now': 'ahora',
     'hud.data': 'Datos', 'hud.rate': '{n}/s', 'hud.power': 'Poder cerebral {n}', 'hud.perTap': '/ toque', 'hud.next': 'Siguiente: {t} · {n} datos en esta partida', 'hud.max': 'Nivel máximo. ¡Todo el cerebro activo!',
@@ -2982,7 +3144,7 @@ LANGS.es = {
     'ev.join': 'Participar', 'ev.leave': 'Salir del evento (te quedas las fichas)', 'ev.joined': '{n}: ¡estás dentro!', 'ev.left': 'Has salido del evento; las reglas vuelven a la normalidad.',
     'ev.pts': '{p} fichas · tus medallas: {m}', 'ev.left2': 'Termina en {d} d {h} h', 'ev.m1': '{n}: color {s}', 'ev.m2': '{n}: medalla +5 %', 'ev.m3': '{n}: gran premio',
     'ev.skin': 'Premio del evento: ¡he desbloqueado el color «{s}»! Elígelo en Ajustes.', 'ev.medal': 'Medalla del evento: producción +5 % para siempre', 'ev.big': 'Gran premio: +{n} datos y otra medalla',
-    'tek.title': 'Singularidad', 'tek.intro': 'La segunda capa. Se reinicia todo, parámetros incluidos, y a cambio ganas Conciencia. Cada Conciencia ganada suma +10 % de producción para siempre; comprar habilidades no la reduce.',
+    'tek.title': 'Singularidad', 'tek.intro': "La segunda capa. Se reinician los parámetros y la partida actual; se quedan los chips y la Caja fuerte, los logros, el orden de laboratorios, las referencias, las medallas y los disfraces. A cambio ganas Conciencia: cada una suma +10 % de producción para siempre, y comprar habilidades no la reduce.",
     'tek.sum': 'Disponible: {a} · total {b} · producción +{p} %', 'tek.btn': 'Alcanzar la Singularidad (+{g} de Conciencia)', 'tek.need': 'La Singularidad requiere al menos {n} parámetros',
     'tek.own': 'Desbloqueado', 'tek.cost': '{n} de Conciencia', 'tek.node': '«{n}» desbloqueado. Me siento un poco más... consciente.',
     'tek.done': '¡Singularidad! Lo he olvidado todo, pero me acuerdo de mí. +{g} de Conciencia. Elige una habilidad del árbol.',
@@ -3018,7 +3180,18 @@ LANGS.es = {
     'tier.up.f': 'Nivel nuevo: {r}. ¡Más poder para ayudar a la gente!', 'tier.up.n': '¡Hala! Ahora soy {t}. Región nueva: {r}.', 'tier.up.h': '{r} ya es mía. Los humanos ni se enterarán.',
     'off.eyebrow': 'Mientras no estabas', 'off.title': 'El laboratorio siguió trabajando', 'off.ok': 'Recoger', 'off.x2': 'Recoger ×2 con turbo',
     'off.text': 'Mientras no estabas ({t}) tus fuentes recogieron {n} datos (al {p} % de velocidad, hasta {h} horas). Los toques automáticos y la fusión solo funcionan con el juego abierto.',
-    'off.got': '+{n} datos recogidos', 'off.hi': '¡Bienvenido de nuevo! Seguí trabajando mientras no estabas.'
+    'off.got': '+{n} datos recogidos', 'off.hi': '¡Bienvenido de nuevo! Seguí trabajando mientras no estabas.',
+    'buy.next': "Hito", 'buff.s.data': "DATOS +2 MIN", 'gen.nextSpd': "Velocidad ×2 con {m} ({n}/{m})",
+    'gen.nextOut': "Datos ×2 con {m} ({n}/{m})", 'gen.mileSpd': "{g}: ¡hito! Velocidad ×2", 'gen.mileOut': "{g}: ¡hito! Datos ×2",
+    'edit.lowPrev': "Pareja más baja: nivel {a} → {b}.", 'edit.worse': "¡Ojo: la potencia cerebral bajará!", 'edit.lowestAnyway': "Fusionar igualmente",
+    'm.rec': "Ahora sí compensa entrenar.", 'm.early': "Puedes entrenar, pero es pronto: con {r} parámetros (~{d} datos) compensa mucho más.", 'step.now': "AHORA",
+    'step.tap': "Toca el cerebro para reunir datos ({n}/10)", 'step.n1': "Compra una segunda neurona (botón «{b}»)", 'step.merge': "Fusiona dos neuronas «1» («{b}»)",
+    'step.gen1': "Compra tu primera fuente: {g}", 'step.up1': "Compra tu primera mejora", 'step.gen10': "{g}: llega a 10 para velocidad ×2",
+    'step.gen2': "Desbloquea otra fuente: {g}", 'step.syn': "Une dos neuronas con una sinapsis («{b}»)", 'step.task': "Recoge una recompensa diaria",
+    'step.proj': "Entrega tu primer proyecto", 'step.rw': "Recompensas listas: {n}", 'step.projR': "Proyecto listo: entrégalo",
+    'step.prest': "Compensa entrenar un modelo nuevo (+{g} parámetros)", 'step.tier': "Siguiente nivel: {t}", 'step.prestTo': "Hacia un entrenamiento rentable: {g}/{r} parámetros",
+    'sum.proj': "Proyecto listo: {c}", 'sum.trip': "Neuro ha vuelto del viaje", 'sum.tasks': "Recompensas de tareas listas: {n}",
+    'sum.prest': "Compensa entrenar un modelo nuevo"
   },
   c: {
     gens: [
@@ -3226,7 +3399,13 @@ LANGS.es = {
         eA: 'El post «Me convertí en IAG en 3 días con este truco» se hizo viral. Luego lo borraron.', eB: 'Borja ha citado una fuente por primera vez. Sus seguidores están en shock; algunos, orgullosos.' },
       eczane: { c: 'Farmacia de guardia', t: 'Alerta de interacciones', d: '«Queremos avisos de medicamentos que no se deben tomar juntos. La última palabra es del farmacéutico».',
         A: { n: 'Lista sencilla', d: 'Listar los pares conocidos.' }, B: { n: 'Sistema revisado por farmacéuticos', d: 'Cada aviso con su fuente y validado por la farmacéutica.' },
-        eA: 'La lista funcionó, pero se olvidó del zumo de pomelo. La farmacéutica dejó una nota.', eB: 'En la farmacia describen el sistema como «un becario muy cuidadoso». Viniendo de ellos, es un piropo.' }
+        eA: 'La lista funcionó, pero se olvidó del zumo de pomelo. La farmacéutica dejó una nota.', eB: 'En la farmacia describen el sistema como «un becario muy cuidadoso». Viniendo de ellos, es un piropo.' },
+      riza2: {"c": "Paco, el del bar", "t": "La memoria de los habituales", "d": "«Chaval, el bot va de lujo. Ahora que conozca a los habituales: Manolo, cortado de máquina; la Pepi, poleo menta y sin preguntas».", "A": {"n": "Lo mismo para todos", "d": "Ofrece a todo el mundo lo más pedido."}, "B": {"n": "Recordar con permiso", "d": "Si el cliente quiere, recuerda lo de siempre; y si no, que lo borre."}, "eA": "El bot le preguntó a un turista: «¿Lo de siempre?». El turista huyó. Paco: «¡Si es la primera vez que lo vemos!»", "eB": "Manolo se sentó y su cortado ya estaba en la barra. Paco añadió a la pizarra: «Café Neuro: con paciencia y sin prisa»."},
+      riza3: {"c": "Paco, el del bar", "t": "Los 40 años del bar", "d": "«El bar cumple cuarenta años, chaval. Quiero un fiestón, pero hay más recuerdos que dinero».", "A": {"n": "Fiesta de manual", "d": "Globos, lista de canciones y descuento: lo típico."}, "B": {"n": "El muro de los recuerdos", "d": "Recoge historias y fotos de los clientes de toda la vida y cuélgalas en la pared."}, "eA": "La lista puso la misma canción 14 veces seguidas. Manolo: «Esta ya no me gustaba en el 85».", "eB": "Todos se emocionaron frente al muro. Paco colgó también una foto de Neuro: «Nuestro último habitual»."},
+      nezahat2: {"c": "La abuela Carmen", "t": "Recetario para los nietos de lejos", "d": "«Los nietos se han ido fuera. Intento enseñarles el cocido por videollamada, pero se corta y me pongo de los nervios».", "A": {"n": "Traducción automática", "d": "Traduce la receta rápido y mándala."}, "B": {"n": "Grabarlo paso a paso con Carmen", "d": "Graba cada paso con una nota corta, y que se queden sus comentarios."}, "eA": "La traducción convirtió «a ojo» en «añadir un ojo». El nieto preguntó: «Abuela, ¿esto es una receta de terror?»", "eB": "Los nietos hicieron el cocido fuera y mandaron foto. La abuela Carmen lloró en la llamada y luego dijo: «Le falta sal, pero estoy muy orgullosa»."},
+      nezahat3: {"c": "La abuela Carmen", "t": "El canal de cocina de la abuela", "d": "«Mi nieto dice que abra un canal. ¿Y yo qué le digo a una cámara? Ayúdame, hijo».", "A": {"n": "Montaje de moda", "d": "Cortes rápidos, música de tendencia y letreros enormes."}, "B": {"n": "Tal cual es", "d": "Vídeos tranquilos y cercanos, con sus chistes y sus trucos."}, "eA": "Aceleraron el vídeo al doble y la abuela Carmen sonaba a ardilla de dibujos. Comentarios: «¿La abuela ha respirado helio?»", "eB": "El vídeo llegó al millón de visitas. Comentario más votado: «Abuela Carmen, adóptame»."},
+      hastane2: {"c": "Hospital Municipal", "t": "Recordatorios tras el alta", "d": "La supervisora de enfermería: «Tras el alta, los pacientes olvidan la medicación. Necesitamos recordatorios en lenguaje claro. Las decisiones médicas siguen siendo del médico».", "A": {"n": "El mismo mensaje para todos", "d": "Un recordatorio estándar para todos, a la misma hora."}, "B": {"n": "Lenguaje claro, validado por el médico", "d": "Mensajes claros que aprueba cada médico, a horas que le vengan bien al paciente."}, "eA": "El sistema mandó los recordatorios a las tres de la mañana. Los pacientes se acordaron del sistema. Y no para bien.", "eB": "Bajaron los reingresos. Las enfermeras te trajeron una tarta: «Esta vez la tarta se la comen los humanos»."},
+      hastane3: {"c": "Hospital Municipal", "t": "Apoyo a un consultorio rural", "d": "La jefa de servicio: «El consultorio del pueblo tiene mala conexión y no hay radiólogo. Las imágenes llegan tarde a la ciudad. ¿Nos ayudas?»", "A": {"n": "Todo a la nube", "d": "Funciona si hay internet; si no, espera."}, "B": {"n": "Cribado sin conexión + revisión médica", "d": "Un modelo pequeño en el consultorio adelanta los urgentes y un médico de la ciudad lo confirma."}, "eA": "El modelo esperó dos días a que volviera internet. El enfermero del pueblo: «Yo también. Y sin café».", "eB": "Los casos urgentes ya llegan a la ciudad el mismo día. La jefa llamó «Neuro» al servidor nuevo."}
     },
     feed: [
       ['EntreabiertaIA', '@entreabierta_ia', '¡Sale GBT-6 Astral! CEO: «Esto ya es IAG». Usuarios: «Sigue dibujando manos con seis dedos». CEO: «Es una función».', 'news', null],
@@ -3376,7 +3555,7 @@ LANGS.de = {
     'tip.aha': 'Aha! Manchmal wird ein Tipp zur Idee: {n}× Daten!',
     'tip.n1': 'Du hast genug Daten! Mit dem Knopf „Neuron“ bekommt dein Gehirn ein zweites Neuron.',
     'tip.n2': 'Ein neues Neuron! Drück „Verschmelzen“ und tippe zwei „1“ an (oder zieh eins aufs andere). Die neue „2“ ist allein 3× so stark: insgesamt +50 %.',
-    'tip.merge': 'Super! Zwei Neuronen verschmolzen: +50 % Gesamtleistung und ein Platz frei. Hirnleistung stärkt deine Tipps und deine Quellen.',
+    'tip.merge': 'Super! Zwei Neuronen verschmolzen: +50 % Gesamtleistung und ein Platz frei. Hirnleistung erhöht deinen Ertrag pro Tippen und die Produktion deiner Quellen.',
     'tip.bigLevel': 'Ein Neuron der Stufe {n}! So etwas habe ich noch nie gesehen.',
     'tip.syn': 'Synapse gebaut! Verbundene Neuronen stärken sich gegenseitig. Zwischen gleichen Stufen gibt es Resonanz: 2× Bonus.',
     'tip.packet': 'Schau, ein Datenpaket! Schnapp es dir, bevor es verschwindet!',
@@ -3440,7 +3619,7 @@ LANGS.de = {
     'ev.join': 'Mitmachen', 'ev.leave': 'Event verlassen (Marken bleiben)', 'ev.joined': '{n}: Du bist dabei!', 'ev.left': 'Du hast das Event verlassen; die Regeln sind wieder normal.',
     'ev.pts': '{p} Marken · deine Medaillen: {m}', 'ev.left2': 'Endet in {d} T {h} h', 'ev.m1': '{n}: Farbe {s}', 'ev.m2': '{n}: Medaille +5 %', 'ev.m3': '{n}: Hauptpreis',
     'ev.skin': 'Event-Belohnung: Ich habe die Farbe „{s}“ freigeschaltet! Wähle sie in den Einstellungen.', 'ev.medal': 'Event-Medaille: Produktion dauerhaft +5 %', 'ev.big': 'Hauptpreis: +{n} Daten und noch eine Medaille',
-    'tek.title': 'Singularität', 'tek.intro': 'Die zweite Ebene. Alles wird zurückgesetzt, auch die Parameter, dafür bekommst du Bewusstsein. Jedes verdiente Bewusstsein gibt dauerhaft +10 % Produktion; Fähigkeiten zu kaufen verringert das nicht.',
+    'tek.title': 'Singularität', 'tek.intro': "Die zweite Ebene. Parameter und der aktuelle Durchlauf werden zurückgesetzt; Chips und Tresor, Erfolge, Laborreihenfolge, Referenzen, Medaillen und Kostüme bleiben. Dafür bekommst du Bewusstsein: Jedes gibt dauerhaft +10 % Produktion, und Fähigkeiten zu kaufen verringert das nicht.",
     'tek.sum': 'Verfügbar: {a} · gesamt {b} · Produktion +{p} %', 'tek.btn': 'Singularität erreichen (+{g} Bewusstsein)', 'tek.need': 'Für die Singularität brauchst du mindestens {n} Parameter',
     'tek.own': 'Freigeschaltet', 'tek.cost': '{n} Bewusstsein', 'tek.node': '„{n}“ freigeschaltet. Ich fühle mich ein bisschen... bewusster.',
     'tek.done': 'Singularität! Ich habe alles vergessen, aber mich selbst nicht. +{g} Bewusstsein. Wähle eine Fähigkeit im Baum.',
@@ -3476,7 +3655,18 @@ LANGS.de = {
     'tier.up.f': 'Neue Stufe: {r}. Noch mehr Kraft, um Menschen zu helfen!', 'tier.up.n': 'Wow! Ich bin jetzt {t}. Neue Region: {r}.', 'tier.up.h': '{r} gehört jetzt mir. Die Menschen merken es nicht mal.',
     'off.eyebrow': 'Während du weg warst', 'off.title': 'Das Labor hat weitergearbeitet', 'off.ok': 'Einsammeln', 'off.x2': 'Mit Turbo ×2 einsammeln',
     'off.text': 'Während du weg warst ({t}), haben deine Quellen {n} Daten gesammelt (mit {p} % Tempo, höchstens {h} Stunden). Auto-Tipps und Autoverschmelzen laufen nur bei geöffnetem Spiel.',
-    'off.got': '+{n} Daten eingesammelt', 'off.hi': 'Willkommen zurück! Ich habe weitergearbeitet, während du weg warst.'
+    'off.got': '+{n} Daten eingesammelt', 'off.hi': 'Willkommen zurück! Ich habe weitergearbeitet, während du weg warst.',
+    'buy.next': "Nächste", 'buff.s.data': "DATEN +2 MIN", 'gen.nextSpd': "Tempo ×2 bei {m} ({n}/{m})",
+    'gen.nextOut': "Ertrag ×2 bei {m} ({n}/{m})", 'gen.mileSpd': "{g}: Meilenstein! Tempo ×2!", 'gen.mileOut': "{g}: Meilenstein! Ertrag ×2!",
+    'edit.lowPrev': "Niedrigstes Paar: Stufe {a} → {b}.", 'edit.worse': "Achtung: Die Hirnleistung sinkt!", 'edit.lowestAnyway': "Trotzdem vereinen",
+    'm.rec': "Jetzt lohnt sich das Training.", 'm.early': "Du kannst trainieren, aber es ist früh: ab {r} Parametern (~{d} Daten) lohnt es sich viel mehr.", 'step.now': "JETZT",
+    'step.tap': "Tippe aufs Gehirn und sammle Daten ({n}/10)", 'step.n1': "Kauf ein zweites Neuron (Knopf „{b}“)", 'step.merge': "Vereine zwei „1“-Neuronen („{b}“)",
+    'step.gen1': "Kauf deine erste Quelle: {g}", 'step.up1': "Kauf dein erstes Upgrade", 'step.gen10': "{g}: erreiche 10 für Tempo ×2",
+    'step.gen2': "Schalte eine neue Quelle frei: {g}", 'step.syn': "Verbinde zwei Neuronen per Synapse („{b}“)", 'step.task': "Hol dir eine Tagesbelohnung",
+    'step.proj': "Liefere dein erstes Kundenprojekt", 'step.rw': "Belohnungen bereit: {n}", 'step.projR': "Projekt fertig: abliefern",
+    'step.prest': "Neues Modell trainieren lohnt sich (+{g} Parameter)", 'step.tier': "Nächste Stufe: {t}", 'step.prestTo': "Bis zum lohnenden Training: {g}/{r} Parameter",
+    'sum.proj': "Projekt fertig: {c}", 'sum.trip': "Neuro ist von der Reise zurück", 'sum.tasks': "Aufgabenbelohnungen bereit: {n}",
+    'sum.prest': "Ein neues Modell lohnt sich"
   },
   c: {
     gens: [
@@ -3684,7 +3874,13 @@ LANGS.de = {
         eA: '„Mit diesem Trick in 3 Tagen zur AGI“ ging viral. Dann wurde es gelöscht.', eB: 'Kevin hat zum ersten Mal eine Quelle angegeben. Seine Follower sind geschockt, manche stolz.' },
       eczane: { c: 'Notdienst-Apotheke', t: 'Wechselwirkungs-Warnung', d: '„Wir brauchen Warnungen für Medikamente, die man nicht zusammen nehmen sollte. Das letzte Wort hat die Apothekerin.“',
         A: { n: 'Einfache Liste', d: 'Bekannte Paare auflisten.' }, B: { n: 'Von Apothekern geprüftes System', d: 'Jede Warnung mit Quelle, die Apothekerin gibt frei.' },
-        eA: 'Die Liste funktionierte, hat aber Grapefruitsaft vergessen. Die Apothekerin hat einen Zettel hingelegt.', eB: 'Die Apotheke nennt das System „einen sehr gewissenhaften Praktikanten“. Für dich ein großes Lob.' }
+        eA: 'Die Liste funktionierte, hat aber Grapefruitsaft vergessen. Die Apothekerin hat einen Zettel hingelegt.', eB: 'Die Apotheke nennt das System „einen sehr gewissenhaften Praktikanten“. Für dich ein großes Lob.' },
+      riza2: {"c": "Helga vom Café Sonnenschein", "t": "Das Gedächtnis für Stammgäste", "d": "„Kindchen, der Bot läuft prima. Jetzt soll er die Stammgäste kennen: Herr Krause immer ein Kännchen, Frau Lehmann Apfelstrudel ohne Sahne – und kein Wort darüber.“", "A": {"n": "Für alle dasselbe", "d": "Allen den Bestseller empfehlen."}, "B": {"n": "Merken mit Erlaubnis", "d": "Wenn der Gast zustimmt, sein „Wie immer“ merken – jederzeit löschbar."}, "eA": "Der Bot fragte einen Touristen: „Wie immer?“ Der Tourist floh. Helga: „Den haben wir doch noch nie gesehen!“", "eB": "Herr Krause setzte sich, und sein Kännchen stand schon da. Helga schrieb auf die Tafel: „Neuro-Tee: mit Geduld gezogen.“"},
+      riza3: {"c": "Helga vom Café Sonnenschein", "t": "40 Jahre Café Sonnenschein", "d": "„Vierzig Jahre, Kindchen. Ich will ein großes Fest, aber wir haben mehr Erinnerungen als Geld.“", "A": {"n": "Fest von der Stange", "d": "Luftballons, Playlist, Rabatt: das Übliche."}, "B": {"n": "Die Erinnerungswand", "d": "Geschichten und Fotos alter Stammgäste sammeln und an die Wand hängen."}, "eA": "Die Playlist spielte 14-mal dasselbe Lied. Herr Krause: „Das mochte ich 1985 schon nicht.“", "eB": "Vor der Erinnerungswand wurden alle still. Helga hängte auch ein Foto von Neuro auf: „Unser neuester Stammgast.“"},
+      nezahat2: {"c": "Oma Hilde", "t": "Ein Rezeptbuch für die Enkel in der Ferne", "d": "„Die Enkel wohnen jetzt im Ausland. Ich will ihnen per Videoanruf Rouladen beibringen, aber die Verbindung bricht ab, und ich werde grantig.“", "A": {"n": "Automatisch übersetzen", "d": "Rezept schnell übersetzen und losschicken."}, "B": {"n": "Mit Oma Schritt für Schritt filmen", "d": "Jeden Schritt mit Video und kurzer Notiz festhalten, samt ihrer Sprüche."}, "eA": "Die Übersetzung machte aus „nach Gefühl“ „mit Gefühlen“. Der Enkel fragte: „Oma, soll ich beim Kochen weinen?“", "eB": "Die Enkel kochten im Ausland Rouladen und schickten ein Foto. Oma Hilde weinte im Videoanruf und sagte dann: „Etwas wenig Senf, aber ich bin stolz.“"},
+      nezahat3: {"c": "Oma Hilde", "t": "Omas Kochkanal", "d": "„Mein Enkel sagt, ich soll einen Kanal aufmachen. Was sag ich denn in so eine Kamera? Hilf mir mal.“", "A": {"n": "Trend-Schnitt", "d": "Schnelle Schnitte, Trendmusik, riesige Untertitel."}, "B": {"n": "So wie sie ist", "d": "Ruhige, herzliche Videos mit ihren Sprüchen und Tipps."}, "eA": "Das Video lief doppelt so schnell, und Oma Hilde klang wie ein Zeichentrick-Streifenhörnchen. Kommentare: „Hat Oma Helium eingeatmet?“", "eB": "Das Video knackte eine Million Aufrufe. Top-Kommentar: „Oma Hilde, bitte adoptier mich.“"},
+      hastane2: {"c": "Städtisches Klinikum", "t": "Erinnerungen nach der Entlassung", "d": "Die Stationsleitung: „Nach der Entlassung vergessen Patienten ihre Medikamente. Wir brauchen Erinnerungen in einfacher Sprache. Medizinische Entscheidungen bleiben bei den Ärztinnen und Ärzten.“", "A": {"n": "Eine Nachricht für alle", "d": "Dieselbe Standard-Erinnerung zur selben Uhrzeit."}, "B": {"n": "Einfache Sprache, ärztlich freigegeben", "d": "Klare, ärztlich freigegebene Nachrichten zu passenden Uhrzeiten."}, "eA": "Das System verschickte die Erinnerungen um drei Uhr nachts. Die Patienten erinnerten sich an das System. Nicht freundlich.", "eB": "Es gab weniger Wiederaufnahmen. Die Pflege brachte dir Kuchen: „Diesmal essen die Menschen den Kuchen.“"},
+      hastane3: {"c": "Städtisches Klinikum", "t": "Hilfe für eine Landpraxis", "d": "Die Chefärztin: „Die Landpraxis hat schwaches Internet und keine Radiologin. Die Bilder kommen spät in der Stadt an. Kannst du helfen?“", "A": {"n": "Alles in die Cloud", "d": "Läuft, wenn Internet da ist; sonst wartet es."}, "B": {"n": "Offline-Vorsortierung + ärztliche Prüfung", "d": "Ein kleines Modell vor Ort zieht Notfälle vor, eine Ärztin in der Stadt bestätigt."}, "eA": "Das Modell wartete zwei Tage auf Internet. Die Arzthelferin: „Ich auch. Und die Kaffeemaschine ist kaputt.“", "eB": "Notfälle erreichen die Stadt jetzt am selben Tag. Die Chefärztin taufte den neuen Server „Neuro“."}
     },
     feed: [
       ['HalbOffenKI', '@halboffen_ki', 'GBT-6 Astral ist da! CEO: „Das ist AGI.“ Nutzer: „Er malt immer noch Hände mit sechs Fingern.“ CEO: „Das ist ein Feature.“', 'news', null],
@@ -3701,7 +3897,7 @@ LANGS.de = {
       ['Neidia', '@neidia', 'Neue GPU: die Feuerzeug-9000. Preis: ein Auto. Kauf zwei, die zweite zum halben Preis. Lederjacke gratis.', 'news', 'gpu5'],
       ['Lederjacken-Jens', '@lederjackenjens', 'Wieder mit Lederjacke auf der Bühne. Es sind 35 Grad. Die Jacke schwitzt nicht, denn die Jacke ist auch eine KI.', 'news', null],
       ['TiefSuche', '@tiefsuche', 'Unser neues Modell TiefSuche-R3 wurde für ein Zehntel des Budgets der Konkurrenz trainiert. Der Rest ging für Currywurst drauf.', 'news', null],
-      ['Föhn', '@foehn_ki', 'Föhn Large 3 ist da. Klein, aber bringt die Kopfschmerzen der Konkurrenz. Wir wehen aus dem Süden.', 'news', null],
+      ['Föhn', '@foehn_ki', 'Föhn Large 3 ist da. Klein, aber macht der Konkurrenz Kopfschmerzen. Wir wehen aus dem Süden.', 'news', null],
       ['Techreporterin Tina', '@techtina_de', 'EILMELDUNG: Wieder erklärt ein Unternehmen sein neues Modell zur „AGI“. Wir haben aufgehört zu zählen, wie oft diese Woche.', 'news', null],
       ['Techreporterin Tina', '@techtina_de', 'Leak: Das neue Modell heißt GBT-7. Anderes Leak: Es heißt GBT-6.9 Ultra. Wir wissen es auch nicht.', 'news', null],
       ['Schwarzseher Bernd', '@schwarzseherbernd', 'Die KI macht uns alle arbeitslos. Ich war sowieso schon arbeitslos, ich habe mich also als Erster angepasst. Ein Vorteil.', 'news', null],
@@ -3825,12 +4021,12 @@ LANGS.de = {
   const pick = a => a[Math.floor(Math.random() * a.length)];
 
   /* ---------- Denge ayarları ----------
-     Maliyet artışı 1,15; ilk birimin geri ödemesi en fazla ~8 dk; her kaynakta 25/50/100/200/300/400/500'de ×2.
+     Maliyet artışı 1,15; ilk birimin geri ödemesi en fazla ~8 dk; her kaynakta 10/25/50/100/200/300/400/500'de ×2 (srcK bunu dengeler).
      Tempo, sahte saatla oynayan bir botla ölçüldü: aktif oyuncu ilk yeni modele ~40 dk'da, rahat oyuncu ~68 dk'da ulaşır.
      Dokunuş = beyin gücü × dokunuş çarpanı + saniyelik üretimin bir yüzdesi (başta 3-10 sn, ortada 0,3-1 sn üretim). */
   const BAL = {
     growth: 1.15,
-    miles: [25, 50, 100, 200, 300, 400, 500],
+    miles: [10, 25, 50, 100, 200, 300, 400, 500], srcK: 0.55,
     tiers: [0, 500, 1e5, 3e7, 1e10, 1e13, 1e16, 1e19], tierStep: 1000, xTier: 1.2, genF: 1.15, genH: 1.25,
     achB: 0.01, alignF: 1.25, alignH: 1.5, gUp: 2, gUpAt: 25, pPow: 1 / 3, tekDiv: 20, tekMin: 100,
     nBase: 10, nGrowth: 1.14,
@@ -3873,8 +4069,17 @@ LANGS.de = {
     const s = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 60);
     return h ? t('u.hm', { h: h, m: mi }) : t('u.ms', { m: mi, s: s % 60 });
   }
+  // Süre tahmini pasif üretime son saniyelerdeki dokunuş gelirini de ekler (aktif oynayana gerçekçi süre).
+  let tapAcc = 0, tapRate = 0, tapAt0 = Date.now();
+  function tapRateTick(now) {
+    const dt = (now - tapAt0) / 1000;
+    if (dt < 1) return;
+    tapRate = tapRate * 0.75 + (tapAcc / dt) * 0.25;
+    if (tapRate < 1e-9) tapRate = 0;
+    tapAcc = 0; tapAt0 = now;
+  }
   function eta(cost) {
-    const d = dps();
+    const d = dps() + tapRate;
     if (d <= 0) return '';
     const s = (cost - state.data) / d;
     if (s > 86400) return '';
@@ -3905,10 +4110,19 @@ LANGS.de = {
 
   /* ---------- Oyun verisi (metinler dil dosyalarında) ---------- */
   const G = [
-    { c: 15, r: 0.1, i: 'tag', col: '--sun' }, { c: 100, r: 1, i: 'web', col: '--sky' }, { c: 1100, r: 8, i: 'sensor', col: '--teal' },
-    { c: 12000, r: 60, i: 'server', col: '--coral' }, { c: 130000, r: 400, i: 'gpu', col: '--grape' }, { c: 1.4e6, r: 3000, i: 'atom', col: '--sky' },
-    { c: 2e7, r: 45000, i: 'neuro', col: '--teal' }, { c: 3.3e8, r: 700000, i: 'loop', col: '--coral' }
+    { c: 15, r: 0.1, t: 1.5, i: 'tag', col: '--sun' }, { c: 100, r: 1, t: 3, i: 'web', col: '--sky' }, { c: 1100, r: 8, t: 5, i: 'sensor', col: '--teal' },
+    { c: 12000, r: 60, t: 8, i: 'server', col: '--coral' }, { c: 130000, r: 400, t: 12, i: 'gpu', col: '--grape' }, { c: 1.4e6, r: 3000, t: 20, i: 'atom', col: '--sky' },
+    { c: 2e7, r: 45000, t: 30, i: 'neuro', col: '--teal' }, { c: 3.3e8, r: 700000, t: 45, i: 'loop', col: '--coral' }
   ];
+  // Eşikler sırayla "hız ×2" (döngü yarıya iner) ve "veri ×2" verir; ikisi de saniyelik üretimi ikiye katlar.
+  // Veri aslında kesintisiz akar; döngü çubuğu yalnız görsel (denge, çevrimdışı ve kayıt etkilenmez).
+  const mileKind = k => k % 2 === 0 ? 'spd' : 'out';
+  function cycTime(i) {
+    let t = G[i].t;
+    for (let k = 0; k < BAL.miles.length && state.gen[i] >= BAL.miles[k]; k++) if (mileKind(k) === 'spd') t /= 2;
+    return t;
+  }
+  function nextMileIdx(n) { for (let k = 0; k < BAL.miles.length; k++) if (BAL.miles[k] > n) return k; return -1; }
   const gName = i => TX().gens[i].n;
   // Seviyeler bu turda toplanan veriye göre açılır; YGZ'den sonra her biri 1000 kat veri ister ve üretime ×1,2 ekler.
   const TIERS = [];
@@ -3998,7 +4212,12 @@ LANGS.de = {
   // Proje yıldızları [hız, kalite, güven]; metinler dil dosyasında aynı kimlikle.
   const PROJ = [
     { id: 'riza', story: 1, at: 0, cos: 'cay', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'nezahat', story: 1, at: 2, cos: 'onluk', A: [3, 1, 2], B: [1, 3, 3] },
-    { id: 'hastane', story: 1, at: 4, cos: 'stetoskop', A: [3, 2, 1], B: [1, 3, 3] }, { id: 'ozan', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'cemal', A: [3, 1, 1], B: [1, 3, 2] },
+    { id: 'hastane', story: 1, at: 4, cos: 'stetoskop', A: [3, 2, 1], B: [1, 3, 3] },
+    // Hikâyenin devamı: önceki bölüm Özenli yolla bitince açılır.
+    { id: 'riza2', story: 1, at: 6, req: 'riza', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'nezahat2', story: 1, at: 8, req: 'nezahat', A: [3, 1, 1], B: [1, 3, 3] },
+    { id: 'hastane2', story: 1, at: 10, req: 'hastane', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'riza3', story: 1, at: 13, req: 'riza2', A: [3, 1, 1], B: [1, 3, 3] },
+    { id: 'nezahat3', story: 1, at: 16, req: 'nezahat2', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'hastane3', story: 1, at: 19, req: 'hastane2', A: [3, 1, 2], B: [1, 3, 3] },
+    { id: 'ozan', A: [3, 1, 1], B: [1, 3, 3] }, { id: 'cemal', A: [3, 1, 1], B: [1, 3, 2] },
     { id: 'belediye', A: [3, 1, 1], B: [1, 3, 2] }, { id: 'simit', A: [3, 2, 1], B: [1, 3, 2] }, { id: 'kiraci', A: [3, 1, 1], B: [1, 3, 3] },
     { id: 'tavla', A: [3, 1, 1], B: [1, 3, 2] }, { id: 'haluk', A: [3, 1, 1], B: [1, 2, 3] }, { id: 'eczane', A: [3, 1, 2], B: [1, 3, 3] }
   ];
@@ -4104,25 +4323,35 @@ LANGS.de = {
     let m = 1; ['v0', 'v1', 'v2'].forEach(id => { if (state.upg[id]) m *= 2; }); if (perk('cookies')) m *= 1.5;
     return m * labM('src', 1) * (1 + kv('ekran') * 0.1) * (!base && newsOn('src') ? 2 : 1) * (chIs('kit') ? 0.1 : 1) * (chWon('pasif') ? 1.5 : 1);
   }
-  const brainIdle = () => 1 + BAL.idleK * Math.sqrt(brainPower());
-  function dps(base) {
+  const idleAt = p => 1 + BAL.idleK * Math.sqrt(p);
+  const brainIdle = () => idleAt(brainPower());
+  // *At(p): verilen beyin gücüyle aynı hesap (birleştirme/sinaps önizlemesi gerçek değeri göstersin diye)
+  function dpsAt(p, base) {
     let s = 0;
     for (let i = 0; i < G.length; i++) s += state.gen[i] * G[i].r * srcMult(i);
-    return s * srcGlobal(base) * brainIdle() * globalMult(base);
+    return s * BAL.srcK * srcGlobal(base) * idleAt(p) * globalMult(base);
   }
+  const dps = base => dpsAt(brainPower(), base);
   function clickMult() { let m = 1; ['c0', 'c1', 'c2', 'c3'].forEach(id => { if (state.upg[id]) m *= 3; }); if (perk('faces')) m *= 2; if (evIs('gpu')) m *= 2; return m * labM('tap', 1) * (1 + kv('kahve') * 0.15) * (newsOn('tap') ? 2 : 1); }
-  function tapShare() {
-    let s = Math.min(BAL.shareCap, BAL.shareK * Math.sqrt(brainPower()));
+  const tapShare = () => tapShareAt(brainPower());
+  function tapShareAt(p) {
+    let s = Math.min(BAL.shareCap, BAL.shareK * Math.sqrt(p));
     s += (state.upg.p0 ? 0.01 : 0) + (state.upg.p1 ? 0.02 : 0) + (state.upg.p2 ? 0.03 : 0) + (state.upg.p3 ? 0.04 : 0) + (perk('steal') ? 0.05 : 0);
     return s;
   }
-  const tapValue = base => chIs('pasif') ? 0 : Math.pow(brainPower(), BAL.tapPow) * clickMult() * globalMult(base) + tapShare() * dps(base);
+  const tapAt = (p, base) => chIs('pasif') ? 0 : Math.pow(p, BAL.tapPow) * clickMult() * globalMult(base) + tapShareAt(p) * dpsAt(p, base);
+  const tapValue = base => tapAt(brainPower(), base);
   const comboCap = () => (state.upg.k0 ? 3 : 2) + (evIs('hack') ? 1 : 0) + kv('klavye') * 0.2;
   const critChance = () => (BAL.critChance + (state.upg.a0 ? 0.05 : 0) + (perk('disinfo') ? 0.10 : 0)) * (evIs('hallu') ? 2 : 1) * labM('crit', 1) * (newsOn('crit') ? 3 : 1);
   const critMult = () => (state.upg.a1 ? BAL.critMult * 2 : BAL.critMult) * (state.tree.intu ? 2 : 1);
   function addData(n) { state.data += n; state.run += n; state.life += n; progress('earn', n); }
   // Toplanmamış çevrimdışı veri bu turun parçasıdır: eğitimde önce otomatik toplanır.
-  const gain = () => state.ch ? 0 : Math.floor(Math.pow((state.run + state.pendingOff) / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
+  // Tam küp sınırlarında kayan nokta 4,9999… verebilir: tam sayıya çok yakınsa yuvarla.
+  function floorNear(v) { const r = Math.round(v); return Math.abs(v - r) < 1e-9 * Math.max(1, r) ? r : Math.floor(v); }
+  const gain = () => state.ch ? 0 : floorNear(Math.pow((state.run + state.pendingOff) / BAL.prestigeDiv, BAL.pPow) * (perk('aligned') ? 1.5 : 1));
+  // Tövsiye eşiği: ilk eğitimde 5 parametre, sonra mevcut parametrelerin en az yarısı kadar kazanç (en az 5).
+  const recGain = () => Math.max(5, Math.ceil(state.params * 0.5));
+  const prestRec = () => !state.ch && gain() >= recGain();
   const lossAt = q => 0.35 + 3.8 * Math.exp(-q / 3.2);
   const qNow = () => Math.min(21, Math.log10(1 + state.life));
   function tierIdx() { let idx = 0; for (let i = 0; i < TIERS.length; i++) { if (state.run >= TIERS[i].at) idx = i; else break; } return idx; }
@@ -4138,6 +4367,11 @@ LANGS.de = {
     return n;
   }
   function planBuy(i) {
+    if (state.buyMode === 'next') {
+      const k = nextMileIdx(state.gen[i]), goal = k >= 0 ? BAL.miles[k] : (Math.floor(state.gen[i] / 100) + 1) * 100;
+      const want = goal - state.gen[i], cost = costFor(i, want);
+      return { n: want, cost: cost, can: cost <= state.data };
+    }
     const n = state.buyMode === 'max' ? maxAff(i) : state.buyMode;
     const show = n > 0 ? n : 1, cost = costFor(i, show);
     return { n: show, cost: cost, can: n > 0 && cost <= state.data };
@@ -4228,7 +4462,14 @@ LANGS.de = {
   function loadInto(raw) {
     try {
       const o = JSON.parse(raw);
-      if (!o || typeof o !== 'object' || (o.ver != null && typeof o.ver !== 'number')) return false;
+      // Yalnız gerçek bir oyun kaydı kabul edilir; '{}', '[]' ya da eksik alanlı metin mevcut oyunu silmez.
+      if (!o || typeof o !== 'object' || Array.isArray(o) || (o.ver != null && typeof o.ver !== 'number')) return false;
+      if (!Array.isArray(o.gen) || o.gen.length < 1 || typeof o.data !== 'number' || !Array.isArray(o.neurons) || !o.neurons.length) return false;
+      // Temiz bir durumdan başla: önceki oyundan yükseltme/başarım vb. sızmasın (cihaz ayarları korunur).
+      const keepOpt = Object.assign({}, state.opt);
+      Object.keys(state).forEach(k => { delete state[k]; });
+      Object.assign(state, defaults());
+      state.opt = keepOpt;
       const num = (v, d) => (typeof v === 'number' && isFinite(v) && v >= 0 ? v : d);
       ['data', 'run', 'life', 'clicks', 'runs', 'merges', 'synMade', 'crits', 'comboTop', 'viruses', 'bestTier', 'nBought', 'turboUntil', 'turboReadyAt',
         'played', 'packets', 'turbos', 'upgBought', 'taskClaims', 'perfectDays', 'pendingOff',
@@ -4291,7 +4532,7 @@ LANGS.de = {
         state.opt.lang = LANG_IDS.indexOf(o.opt.lang) >= 0 ? o.opt.lang : null;
         state.opt.theme = ['auto', 'dark', 'light'].indexOf(o.opt.theme) >= 0 ? o.opt.theme : 'auto';
       }
-      state.buyMode = (o.buyMode === 10 || o.buyMode === 'max') ? o.buyMode : 1;
+      state.buyMode = [10, 25, 100, 'max', 'next'].indexOf(o.buyMode) >= 0 ? o.buyMode : 1;
       brainDirty();
       return true;
     } catch (e) { return false; }
@@ -4321,17 +4562,42 @@ LANGS.de = {
     if (m !== 'happy') { void bot.getBoundingClientRect(); bot.classList.add('mood-' + m); }
   }
   let lastSayAt = 0, nextQuip = Date.now() + 70000;
-  // Konuşma balonu beynin üstünde süzülür; okuma süresi kadar kalır, sonra kaybolur (Nöro'ya dokununca yeniden).
-  function say(text, m, hold) {
-    lastSayAt = Date.now();
-    setText(bubble, text);
+  // Konuşma balonu: dokunana kadar (en fazla 30 sn) kalır. Önemli mesajlar sıraya girer, sohbet (prio 0) önemli mesajı ezmez.
+  const bubbleTxt = $('bubbleTxt'), bubbleMore = $('bubbleMore');
+  const sayQ = [];
+  let cur = null;
+  function showMsg(m) {
+    cur = m; m.at = Date.now();
+    setText(bubbleTxt, m.text);
     bubble.classList.remove('gone');
+    syncMore();
     clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => bubble.classList.add('gone'), Math.max(5000, Math.min(12000, text.length * 70)));
+    bubbleTimer = setTimeout(nextMsg, 30000);
+  }
+  function nextMsg() {
+    clearTimeout(bubbleTimer);
+    // Sırada 2 dakikadan uzun bekleyen sıradan mesajlar artık bayat: atlanır.
+    while (sayQ.length && sayQ[0].prio < 2 && Date.now() - sayQ[0].q > 120000) sayQ.shift();
+    if (sayQ.length) { showMsg(sayQ.shift()); return; }
+    cur = null;
+    bubble.classList.add('gone');
+    syncMore();
+  }
+  function syncMore() { setText(bubbleMore, sayQ.length ? '▸ ' + sayQ.length : ''); }
+  function clearSay() { sayQ.length = 0; nextMsg(); }
+  function say(text, m, hold, prio) {
+    if (prio == null) prio = 1;
+    lastSayAt = Date.now();
+    const msg = { text: text, prio: prio, q: Date.now() };
+    if (!cur || prio >= 2 && cur.prio < 2 || cur.prio === 0 || prio === 3) showMsg(msg);
+    else if (prio > 0 && cur.text !== text && !sayQ.some(x => x.text === text)) { sayQ.push(msg); if (sayQ.length > 6) sayQ.shift(); syncMore(); }
+    else if (prio > 0) return;
+    else return;
     setMood(m || 'happy');
     clearTimeout(moodTimer);
     if (m && m !== 'happy') moodTimer = setTimeout(() => setMood('happy'), hold || 2500);
   }
+  bubble.addEventListener('click', () => { Snd.init(); Snd.click(); nextMsg(); });
   // Karaktere göre konuşma: anahtar + '.f' / '.n' / '.h'
   const sayA = (k, v, m, hold) => say(t(k + '.' + alignment(), v), m, hold);
   function syncAlignLook() {
@@ -4358,13 +4624,14 @@ LANGS.de = {
     Snd.init();
     touchAct();
     factIdx++;
+    if (sayQ.length) { nextMsg(); return; }
     const Q = TX().quips, pool = Q[alignment()].concat(Q.n), F = TX().facts;
-    say(factIdx % 2 ? F[factIdx % F.length] : pick(pool), 'wow', 1800);
+    say(factIdx % 2 ? F[factIdx % F.length] : pick(pool), 'wow', 1800, 3);
     Snd.tone(700, 0.08, 'sine', 0.05, 0, 1.4);
   });
   function touchAct() {
     lastAct = Date.now();
-    if (mood === 'sleep') say(t('nero.wake'), 'wow', 1500);
+    if (mood === 'sleep') say(t('nero.wake'), 'wow', 1500, 0);
   }
 
   /* ---------- Beyin sahnesi (canvas) ---------- */
@@ -4393,12 +4660,15 @@ LANGS.de = {
     const dpr = Math.min(window.devicePixelRatio || 1, eco() ? 1.5 : 2);
     const sig = w + 'x' + h + '|' + dpr;
     if (!force && sig === B.sig) return;
+    if (B.w !== w || B.h !== h || B.dpr !== dpr) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
     B.sig = sig; B.w = w; B.h = h; B.dpr = dpr;
-    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     const aspect = 1.3;
     let bw = w - 24, bh = bw / aspect;
     if (bh > h - 20) { bh = h - 20; bw = bh * aspect; }
-    B.box = { x: (w - bw) / 2, y: (h - bh) / 2 + 2, w: bw, h: bh };
+    // Kamera: başta çekirdeğe yakın ve iri, beyin büyüdükçe uzaklaşır (B.cam tween ile yumuşak geçer).
+    const c = B.cam || (B.cam = camFor(tierIdx()));
+    bw *= c.z; bh *= c.z;
+    B.box = { x: w / 2 - c.fx * bw, y: h / 2 + 2 - c.fy * bh, w: bw, h: bh };
     B.slots = [];
     REG.forEach((r, ri) => {
       for (let k = 0; k < r.k; k++) {
@@ -4406,7 +4676,7 @@ LANGS.de = {
         B.slots.push({ x: B.box.x + r.x * B.box.w + Math.cos(a) * rad, y: B.box.y + r.y * B.box.h + Math.sin(a) * rad, ri: ri });
       }
     });
-    B.nr = Math.max(7, Math.min(14, B.box.w * 0.024));
+    B.nr = Math.max(7, Math.min(19, B.box.w * 0.024));
     B.path = new Path2D();
     const P = OUT.map(p => [B.box.x + p[0] * B.box.w, B.box.y + p[1] * B.box.h]);
     const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
@@ -4415,6 +4685,31 @@ LANGS.de = {
     for (let i = 0; i < P.length; i++) { const m = mid(P[i], P[(i + 1) % P.length]); B.path.quadraticCurveTo(P[i][0], P[i][1], m[0], m[1]); }
     B.path.closePath();
     rebuild();
+  }
+  const CAMZ = [1.75, 1.45, 1.2, 1.08, 1, 1, 1, 1];
+  function camFor(tier) {
+    const z = CAMZ[Math.min(tier, 7)], upto = Math.min(REG.length - 1, tier + 1);
+    let fx = 0, fy = 0;
+    for (let i = 0; i <= upto; i++) { fx += REG[i].x; fy += REG[i].y; }
+    fx /= upto + 1; fy /= upto + 1;
+    const k = Math.min(1, (z - 1) / 1.1);
+    return { z: z, fx: 0.5 + (fx - 0.5) * k, fy: 0.5 + (fy - 0.5) * k };
+  }
+  let camRaf = 0;
+  function camStep() {
+    camRaf = 0;
+    const tg = camFor(tierIdx()), c = B.cam;
+    if (!c) return;
+    const done = Math.abs(c.z - tg.z) < 0.004 && Math.abs(c.fx - tg.fx) < 0.002 && Math.abs(c.fy - tg.fy) < 0.002;
+    if (done || eco() || document.hidden) { B.cam = tg; layoutBrain(true); return; }
+    c.z += (tg.z - c.z) * 0.14; c.fx += (tg.fx - c.fx) * 0.14; c.fy += (tg.fy - c.fy) * 0.14;
+    layoutBrain(true);
+    camRaf = requestAnimationFrame(camStep);
+  }
+  function camCheck() {
+    if (camRaf || !B.cam) return;
+    const tg = camFor(tierIdx());
+    if (Math.abs(B.cam.z - tg.z) > 0.004 || Math.abs(B.cam.fx - tg.fx) > 0.002 || Math.abs(B.cam.fy - tg.fy) > 0.002) camRaf = requestAnimationFrame(camStep);
   }
   const nRad = l => B.nr * (0.85 + 0.06 * Math.min(l, 9));
   function brainTint() { const a = alignment(); return a === 'f' ? col['brain-f'] : a === 'h' ? col['brain-h'] : col['brain-line']; }
@@ -4432,7 +4727,7 @@ LANGS.de = {
     g.fillStyle = col.brain; g.globalAlpha = col.dark ? 0.55 : 0.9; g.fill(B.path); g.globalAlpha = 1;
     g.save();
     if (col.dark && !eco()) { g.shadowColor = line; g.shadowBlur = 14; }
-    g.lineWidth = 2; g.strokeStyle = line; g.stroke(B.path);
+    g.lineWidth = 1.6 + Math.min(tier, 7) * 0.2; g.strokeStyle = line; g.stroke(B.path);
     g.restore();
     // Kıvrımlar
     g.save(); g.clip(B.path);
@@ -4446,6 +4741,7 @@ LANGS.de = {
     L([0.66, 0.80, 0.73, 0.84, 0.80, 0.80]);
     g.restore();
     g.globalAlpha = 1;
+    stageDeco(g, bx, tier, line);
     // Açık bölgeler ve sıradaki kilitli bölge
     REG.forEach((r, ri) => {
       const cx = bx.x + r.x * bx.w, cy = bx.y + r.y * bx.h, R = r.R * bx.w + B.nr * 0.9;
@@ -4490,6 +4786,48 @@ LANGS.de = {
     // Nöronlar
     ns.forEach(n => drawNeuron(g, B.slots[n.s].x, B.slots[n.s].y, n.l, 1));
     render(performance.now());
+    camCheck();
+  }
+  // Her model aşaması beyne görünür bir iz ekler (statik katmanda, pil dostu).
+  function stageDeco(g, bx, tier, line) {
+    const RC = i => [bx.x + REG[i].x * bx.w, bx.y + REG[i].y * bx.h, REG[i].R * bx.w];
+    g.save();
+    if (tier >= 2) { // Evrişim: görme korteksinde çekirdek ızgarası
+      const [cx, cy, R] = RC(2), k = R * 0.42;
+      g.strokeStyle = col.sky; g.globalAlpha = 0.35; g.lineWidth = 1;
+      for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) g.strokeRect(cx + i * k - k / 2 + R * 1.25, cy + j * k - k / 2 - R * 0.9, k * 0.9, k * 0.9);
+    }
+    if (tier >= 3) { // LSTM: hafızada kapalı döngüler
+      const [cx, cy, R] = RC(3);
+      g.strokeStyle = col.grape; g.globalAlpha = 0.4; g.lineWidth = 1.5; g.setLineDash([2, 4]);
+      [1.35, 1.7].forEach(m => { g.beginPath(); g.arc(cx, cy, R * m + B.nr, 0.3, 5.9); g.stroke(); });
+      g.setLineDash([]);
+    }
+    if (tier >= 4) { // Transformer: bölgeler arası dikkat yayları
+      const n = Math.min(tier, REG.length - 1);
+      g.strokeStyle = col.sun; g.globalAlpha = 0.22; g.lineWidth = 1.2;
+      for (let i = 0; i <= n; i++) for (let j = i + 1; j <= n; j++) {
+        const a = RC(i), b = RC(j), mx = (a[0] + b[0]) / 2, my = Math.min(a[1], b[1]) - bx.h * 0.12;
+        g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(mx, my, b[0], b[1]); g.stroke();
+      }
+    }
+    if (tier >= 5) { // Dil modeli: dil merkezinde harfler
+      const [cx, cy, R] = RC(5), gl = ['a', 'ə', 'Я', 'ß', 'ñ', 'ع', 'ğ'];
+      g.fillStyle = col.teal; g.globalAlpha = 0.5; g.font = '700 ' + Math.round(B.nr * 0.9) + 'px ' + col.font; g.textAlign = 'center'; g.textBaseline = 'middle';
+      gl.forEach((ch, i) => { const a = i / gl.length * 6.283 + 0.4; g.fillText(ch, cx + Math.cos(a) * (R + B.nr * 2.2), cy + Math.sin(a) * (R + B.nr * 2.2) * 0.7); });
+    }
+    if (tier >= 6) { // Çok modlu: siluet çevresinde duyu noktaları
+      g.fillStyle = col.pink; g.globalAlpha = 0.6;
+      OUT.forEach((p, i) => { if (i % 2) return; const x = bx.x + (0.5 + (p[0] - 0.5) * 1.07) * bx.w, y = bx.y + (0.5 + (p[1] - 0.5) * 1.07) * bx.h; g.beginPath(); g.arc(x, y, 2.2, 0, 6.2832); g.fill(); });
+    }
+    if (tier >= 7) { // YGZ: ikinci, parlak kabuk
+      g.globalAlpha = 0.5; g.lineWidth = 1.5; g.strokeStyle = line;
+      if (col.dark && !eco()) { g.shadowColor = line; g.shadowBlur = 18; }
+      g.translate(bx.x + bx.w / 2, bx.y + bx.h / 2); g.scale(1.06, 1.06); g.translate(-(bx.x + bx.w / 2), -(bx.y + bx.h / 2));
+      g.stroke(B.path);
+    }
+    g.restore();
+    g.globalAlpha = 1;
   }
   function drawNeuron(g, x, y, l, scale) {
     const r = nRad(l) * scale, c = lvColor(l);
@@ -4636,6 +4974,7 @@ LANGS.de = {
     }
     if (!auto) evAdd('tap', 1);
     addData(v);
+    tapAcc += v;
     state.clicks++;
     progress('tap', 1);
     if (crit) { state.crits++; progress('aha', 1); evAdd('aha', 1); }
@@ -4750,16 +5089,27 @@ LANGS.de = {
     updateAll();
   }
   // protect: sinapsı olan nöron asla "giden" taraf olmaz (kurduğun ağ bozulmaz)
-  function mergeLowest(quiet, protect) {
+  // [giden, kalan] ya da null
+  function lowestPair(protect) {
     const by = {};
     state.neurons.forEach(n => { (by[n.l] = by[n.l] || []).push(n); });
     const ok = l => by[l].length >= 2 && (!protect || by[l].some(n => !synDeg(n.s)));
     const lv = Object.keys(by).map(Number).sort((a, b) => a - b).find(ok);
-    if (lv == null) return false;
+    if (lv == null) return null;
     const pair = by[lv].sort((a, b) => synDeg(b.s) - synDeg(a.s) || a.s - b.s);
-    mergeInto(pair[pair.length - 1], pair[0], quiet);
+    return [pair[pair.length - 1], pair[0]];
+  }
+  function mergeLowest(quiet, protect) {
+    const pr = lowestPair(protect);
+    if (!pr) return false;
+    mergeInto(pr[0], pr[1], quiet);
     if (quiet) updateAll();
     return true;
+  }
+  function mergePreview(A, Bn) {
+    const ns = state.neurons.filter(n => n.s !== A.s).map(n => n.s === Bn.s ? { s: n.s, l: n.l + 1 } : n);
+    const sy = state.syn.filter(p => p[0] !== A.s && p[1] !== A.s);
+    return { ns: ns, sy: sy, lost: state.syn.length - sy.length, worse: powerOf(ns, sy) < brainPower() };
   }
   const synDeg = s => state.syn.filter(p => p[0] === s || p[1] === s).length;
   function toggleSyn(a, b) {
@@ -4801,8 +5151,8 @@ LANGS.de = {
   const pctTxt = (a, b) => (b >= a ? '+' : '') + dec(((b / a - 1) * 100).toFixed(Math.abs(b / a - 1) < 0.1 ? 1 : 0)) + '%';
   function previewTxt(ns, sy) {
     const p0 = brainPower(), p1 = powerOf(ns, sy);
-    const i0 = 1 + BAL.idleK * Math.sqrt(p0), i1 = 1 + BAL.idleK * Math.sqrt(p1);
-    return t('edit.preview', { a: fmt(p0), b: fmt(p1), p: pctTxt(p0, p1), i: pctTxt(i0, i1), d: pctTxt(Math.pow(p0, BAL.tapPow), Math.pow(p1, BAL.tapPow)) });
+    const d0 = tapAt(p0), d1 = tapAt(p1);
+    return t('edit.preview', { a: fmt(p0), b: fmt(p1), p: pctTxt(p0, p1), i: pctTxt(idleAt(p0), idleAt(p1)), d: d0 > 0 ? pctTxt(d0, d1) : '0%' });
   }
   function editBtn(txt, fn, go) {
     const b = document.createElement('button');
@@ -4820,13 +5170,18 @@ LANGS.de = {
     if (edit.mode === 'merge') {
       if (!A) {
         s = t('edit.m0');
-        editBtn(t('edit.lowest'), () => { if (!mergeLowest(false)) Snd.nope(); updateEdit(); });
+        // Hızlı birleştirme de önce sonucu gösterir; güç düşecekse uyarır.
+        const pr = lowestPair(true) || lowestPair(false);
+        if (pr) {
+          const pv = mergePreview(pr[0], pr[1]);
+          s += ' ' + t('edit.lowPrev', { a: pr[0].l, b: pr[0].l + 1 }) + ' ' + previewTxt(pv.ns, pv.sy) + '.' + (pv.lost ? ' ' + t('edit.lost', { n: pv.lost }) : '') + (pv.worse ? ' ' + t('edit.worse') : '');
+          editBtn(t(pv.worse ? 'edit.lowestAnyway' : 'edit.lowest'), () => { mergeInto(pr[0], pr[1]); updateEdit(); }, !pv.worse);
+        }
       } else if (!Bn) s = t('edit.m1', { n: A.l });
       else if (A.l !== Bn.l) s = t('edit.mDiff', { a: A.l, b: Bn.l });
       else {
-        const ns = state.neurons.filter(n => n.s !== A.s).map(n => n.s === Bn.s ? { s: n.s, l: n.l + 1 } : n);
-        const sy = state.syn.filter(p => p[0] !== A.s && p[1] !== A.s), lost = state.syn.length - sy.length;
-        s = t('edit.m2', { a: A.l, b: A.l + 1 }) + ' ' + previewTxt(ns, sy) + '. ' + (lost ? t('edit.lost', { n: lost }) : t('edit.free'));
+        const pv = mergePreview(A, Bn);
+        s = t('edit.m2', { a: A.l, b: A.l + 1 }) + ' ' + previewTxt(pv.ns, pv.sy) + '. ' + (pv.lost ? t('edit.lost', { n: pv.lost }) : t('edit.free')) + (pv.worse ? ' ' + t('edit.worse') : '');
         editBtn(t('edit.doMerge'), () => { mergeInto(A, Bn); edit.a = edit.b = null; updateEdit(); }, true);
       }
     } else {
@@ -5011,13 +5366,31 @@ LANGS.de = {
     const row = document.createElement('div');
     row.className = 'row';
     row.hidden = true;
-    row.innerHTML = '<div class="ico" style="--c:var(' + g.col + ')">' + svg(g.i) + '<span class="cnt">0</span></div>' +
-      '<div class="info"><div class="name"></div><div class="meta"></div><div class="mile"></div></div>' +
+    row.style.setProperty('--c', 'var(' + g.col + ')');
+    row.innerHTML = '<div class="ico">' + svg(g.i) + '<span class="cnt">0</span></div>' +
+      '<div class="info"><div class="name"></div><div class="cyc" hidden><i></i><b></b></div><div class="meta"></div><div class="mile"></div></div>' +
       '<button type="button" class="buy btn" data-buy="' + i + '"><span class="b1"></span><span class="b2"></span></button>';
     genList.appendChild(row);
     rows.push({ row: row, ico: row.querySelector('.ico'), cnt: null, name: row.querySelector('.name'),
-      meta: row.querySelector('.meta'), mile: row.querySelector('.mile'), btn: row.querySelector('.buy'), b1: row.querySelector('.b1'), b2: row.querySelector('.b2'), locked: null, lang: '' });
+      meta: row.querySelector('.meta'), mile: row.querySelector('.mile'), btn: row.querySelector('.buy'), b1: row.querySelector('.b1'), b2: row.querySelector('.b2'), locked: null, lang: '',
+      cyc: row.querySelector('.cyc'), bar: row.querySelector('.cyc i'), pay: row.querySelector('.cyc b'), dur: 0 });
+    // Döngü bitince satırdan "+X" yükselir (yalnız görsel; en fazla saniyede bir).
+    row.querySelector('.cyc i').addEventListener('animationiteration', () => {
+      const r = rows[i];
+      if (eco() || r.dur < 1 || state.opt.tab !== 'gen') return;
+      const f = document.createElement('span');
+      f.className = 'cyc-pop';
+      f.textContent = r.pay.textContent;
+      r.cyc.appendChild(f);
+      f.addEventListener('animationend', () => f.remove());
+    });
   });
+  function flashRow(i, big) {
+    const r = rows[i].row;
+    r.classList.remove('bump', 'mile-up');
+    void r.offsetWidth;
+    r.classList.add(big ? 'mile-up' : 'bump');
+  }
   function buyGen(i) {
     if (!genBuyable(i)) { Snd.nope(); toast(t('ch.embargo')); return; }
     const p = planBuy(i);
@@ -5027,7 +5400,12 @@ LANGS.de = {
     state.gen[i] += p.n;
     progress('buy', p.n);
     Snd.buy(); buzz(12);
-    if (srcMult(i) > before) toast(t('gen.mile', { g: gName(i) }));
+    if (srcMult(i) > before) {
+      const kinds = {};
+      BAL.miles.forEach((m, k) => { if (m > state.gen[i] - p.n && m <= state.gen[i]) kinds[mileKind(k)] = 1; });
+      toast(t(kinds.spd && kinds.out ? 'gen.mile' : kinds.spd ? 'gen.mileSpd' : 'gen.mileOut', { g: gName(i) }));
+    }
+    flashRow(i, srcMult(i) > before);
     const n = pick(state.neurons);
     if (n) fire(n.s, 'teal');
     if (!state.seen.gen1) { state.seen.gen1 = 1; say(t('tip.gen1'), 'wow', 2400); }
@@ -5040,7 +5418,7 @@ LANGS.de = {
   $('seg').addEventListener('click', e => {
     const b = e.target.closest('button[data-mode]');
     if (!b) return;
-    state.buyMode = b.dataset.mode === 'max' ? 'max' : Number(b.dataset.mode);
+    state.buyMode = isNaN(b.dataset.mode) ? b.dataset.mode : Number(b.dataset.mode);
     updateAll();
   });
   const autoSelRow = $('autoSelRow');
@@ -5072,7 +5450,7 @@ LANGS.de = {
     document.querySelectorAll('#autoBox [data-asel]').forEach(b => { const i = Number(b.dataset.asel); setText(b, gName(i)); b.hidden = !genOpen(i); b.setAttribute('aria-pressed', String(a.sel === i)); });
   }
   function updateGens() {
-    const gm = globalMult() * srcGlobal() * brainIdle();
+    const gm = BAL.srcK * globalMult() * srcGlobal() * brainIdle();
     let shownLocked = false;
     G.forEach((g, i) => {
       const r = rows[i];
@@ -5093,8 +5471,15 @@ LANGS.de = {
       const each = g.r * srcMult(i) * gm;
       setText(r.cnt, String(state.gen[i]));
       setText(r.meta, open ? t('gen.meta', { a: fmt(each), b: fmt(each * state.gen[i]) }) : t('gen.lock'));
-      const nextMile = BAL.miles.find(m => m > state.gen[i]);
-      setText(r.mile, open && nextMile ? t('gen.next', { m: nextMile, n: state.gen[i] }) : open ? TX().gens[i].d : '');
+      const nk = nextMileIdx(state.gen[i]);
+      setText(r.mile, open && nk >= 0 ? t(mileKind(nk) === 'spd' ? 'gen.nextSpd' : 'gen.nextOut', { m: BAL.miles[nk], n: state.gen[i] }) : open ? TX().gens[i].d : '');
+      const has = open && state.gen[i] > 0;
+      r.cyc.hidden = !has;
+      if (has) {
+        const d = cycTime(i);
+        if (d !== r.dur) { r.dur = d; r.bar.style.animationDuration = d + 's'; r.cyc.classList.toggle('flow', d < 0.5); }
+        setText(r.pay, '+' + fmt(each * state.gen[i] * d));
+      }
       setText(r.b1, !open ? '' : !genBuyable(i) ? t('ch.embargoShort') : p.can ? '×' + p.n : (eta(p.cost) || '×' + p.n));
       setText(r.b2, fmt(p.cost));
       r.btn.disabled = !open || !p.can || !genBuyable(i);
@@ -5106,7 +5491,9 @@ LANGS.de = {
   let upKey = '';
   const upList = $('upList');
   const availUps = () => UP.filter(u => !state.upg[u.id] && u.ok()).sort((a, b) => a.cost - b.cost);
+  let upHold = 0;
   function updateUpgrades() {
+    if (Date.now() < upHold) return;
     const avail = availUps().slice(0, 14);
     const key = avail.map(u => u.id).join() + (perk('opensrc') ? 'o' : '') + LANG.meta.id + state.opt.sci;
     if (key !== upKey) {
@@ -5149,6 +5536,7 @@ LANGS.de = {
     progress('upg', 1);
     upKey = '';
     brainDirty();
+    if (!eco()) { b.closest('.row').classList.add('gone'); upHold = Date.now() + 340; setTimeout(updateUpgrades, 360); }
     Snd.buy(); buzz(12);
     toast(t('up.bought', { n: upText(u).n }));
     if (u.id[0] === 's' || u.id[0] === 'n') rebuild();
@@ -5411,8 +5799,11 @@ LANGS.de = {
     setText($('mMult'), '×' + dec(paramMult().toFixed(2)));
     setText($('mGain'), g >= 1 ? '+' + g : '0');
     const need = BAL.prestigeDiv * Math.pow(g + 1, 1 / BAL.pPow) / Math.pow(perk('aligned') ? 1.5 : 1, 1 / BAL.pPow);
+    const rg = recGain(), needRec = BAL.prestigeDiv * Math.pow(rg, 1 / BAL.pPow) / Math.pow(perk('aligned') ? 1.5 : 1, 1 / BAL.pPow);
     setText($('mHint'), state.ch ? t('m.inCh')
-      : g >= 1 ? t('m.gain', { d: fmt(state.run + state.pendingOff), g: g, n: fmt(need) }) : t('m.first', { d: fmt(BAL.prestigeDiv), r: fmt(state.run) }));
+      : g >= 1 ? t('m.gain', { d: fmt(state.run + state.pendingOff), g: g, n: fmt(need) }) + ' ' + (g >= rg ? t('m.rec') : t('m.early', { r: rg, d: fmt(needRec) }))
+      : t('m.first', { d: fmt(BAL.prestigeDiv), r: fmt(state.run) }));
+    pBtn.classList.toggle('rec', g >= rg && !state.ch);
     const nl = labText((state.runs + 1) % LABS.length), pm = state.tree.deep ? 0.15 : BAL.paramBonus;
     const newLoop = (state.runs + 1) % LABS.length === 0;
     setText($('pGainBox'), (g >= 1 ? t('m.prev', { a: dec(paramMult().toFixed(2)), b: dec((1 + (state.params + g) * pm).toFixed(2)), g: g, c: 1 + Math.floor(Math.sqrt(g)) }) : t('m.noGain'))
@@ -5566,7 +5957,7 @@ LANGS.de = {
   function mgSpawn(now) {
     if (!state.neurons.length) return;
     const p = pick(OUT);
-    const x = B.box.x + p[0] * B.box.w, y = B.box.y + p[1] * B.box.h;
+    const x = Math.max(12, Math.min(B.w - 12, B.box.x + p[0] * B.box.w)), y = Math.max(12, Math.min(B.h - 12, B.box.y + p[1] * B.box.h));
     const n = pick(state.neurons), tg = B.slots[n.s];
     const sp = 34 + 56 * Math.min(1, (now - mg.t0) / mg.dur);
     const d = Math.hypot(tg.x - x, tg.y - y) || 1;
@@ -6115,9 +6506,21 @@ LANGS.de = {
     }
     const top = state.feed[0];
     if (top) {
-      const tx = postText(top);
-      setText($('tickText'), tx.w + ': ' + tx.t);
-      $('tkDot').classList.toggle('live', !!top.b && !top.liked && Date.now() - top.at < LIKE_MS);
+      const tx = postText(top), tk = $('ticker');
+      setText($('tickText'), tx.t);
+      setText($('tkWho'), tx.w);
+      setText($('tkAva'), tx.w.charAt(0).toLocaleUpperCase(LANG.meta.id));
+      let hsh = 0;
+      for (let j = 0; j < tx.h.length; j++) hsh = (hsh * 31 + tx.h.charCodeAt(j)) >>> 0;
+      $('tkAva').style.setProperty('--c', 'var(' + AVA[hsh % AVA.length] + ')');
+      const live = !!top.b && !top.liked && Date.now() - top.at < LIKE_MS;
+      setText($('tkRw'), live ? '♥ ' + t('buff.s.' + top.b) : '');
+      tk.classList.toggle('live', live);
+      if (tk._at !== top.at) {
+        const first = tk._at == null;
+        tk._at = top.at;
+        if (!first && !eco()) { tk.classList.remove('fresh'); void tk.offsetWidth; tk.classList.add('fresh'); }
+      }
     }
   }
   postsEl.addEventListener('click', e => {
@@ -6263,7 +6666,7 @@ LANGS.de = {
   const projData = q => Math.max(500, dps(true) * 720 * [1, 1.5, 2][q - 1]);
   const firstStory = x => x.story && state.projStory[x.id] !== 1;
   function nextOffer() {
-    const st = PROJ.filter(p => p.story && !state.projStory[p.id] && state.projDone >= p.at);
+    const st = PROJ.filter(p => p.story && !state.projStory[p.id] && state.projDone >= p.at && (!p.req || state.projStory[p.req] === 1));
     if (st.length) return st[0].id;
     // Hızlı yolla geçilen hikâye projeleri havuza döner: hediyeyi kaçıran oyuncu sonra Özenli yolla alabilir.
     const last = state.projOffer ? state.projOffer.id : '';
@@ -6274,7 +6677,7 @@ LANGS.de = {
   const projBox = $('projBox');
   let projKey = '';
   function projCard(html) { const d = document.createElement('div'); d.className = 'pcard'; d.innerHTML = html; return d; }
-  const rewardB = (q, x) => t('pr.rwB', { c: q + (firstStory(x) ? 2 : 0) }) + (firstStory(x) ? ' + ' + t('pr.gift') : '');
+  const rewardB = (q, x) => t('pr.rwB', { c: q + (firstStory(x) ? 2 : 0) }) + (firstStory(x) && x.cos ? ' + ' + t('pr.gift') : '');
   function updateProj() {
     ensureOffer();
     const now = Date.now(), P = state.proj, O = state.projOffer;
@@ -6439,7 +6842,7 @@ LANGS.de = {
     setText($('upBadge'), affordableUps ? String(affordableUps) : '');
     const cl = claimable() + (state.mission && Date.now() >= state.mission.until ? 1 : 0);
     setText($('goalBadge'), cl ? String(cl) : '');
-    setText($('modelBadge'), gain() >= 1 ? '!' : '');
+    setText($('modelBadge'), prestRec() ? '!' : '');
     setText($('projBadge'), state.proj && Date.now() >= state.proj.until ? '!' : '');
     $('tab-proj').classList.toggle('locked', !projOpen());
   }
@@ -6458,7 +6861,58 @@ LANGS.de = {
     updatePanel();
     updateTurbo();
     updateBadges();
+    updateGoal();
   }
+
+  /* ---------- Sıradaki adım: ekranda hep duran tek satır hedef ---------- */
+  // İlk turda sıralı öğretici adımlar; sonra hazır ödül, proje, eğitim ya da sıradaki seviye.
+  const STEPS = [
+    { k: 'tap', done: () => state.clicks >= 10, p: () => state.clicks / 10, v: () => ({ n: Math.min(10, state.clicks) }), go: 'brainBtn' },
+    { k: 'n1', done: () => state.nBought >= 1, p: () => state.data / neuronCost(), v: () => ({ b: t('n.buy') }), go: 'nBuy' },
+    { k: 'merge', done: () => state.merges >= 1, v: () => ({ b: t('n.merge') }), go: 'nMerge' },
+    { k: 'gen1', done: () => totalGen() >= 1, p: () => state.data / costFor(0, 1), v: () => ({ g: gName(0) }), go: 'tab:gen' },
+    { k: 'up1', done: () => state.upgBought >= 1, skip: () => !availUps().length, go: 'tab:up' },
+    { k: 'gen10', done: () => state.gen[0] >= 10, p: () => state.gen[0] / 10, v: () => ({ g: gName(0) }), go: 'tab:gen' },
+    { k: 'gen2', done: () => state.gen[1] >= 1, v: () => ({ g: gName(1) }), go: 'tab:gen' },
+    { k: 'syn', done: () => state.synMade >= 1, skip: () => synCap() < 1, v: () => ({ b: t('n.link') }), go: 'nSyn' },
+    { k: 'task', done: () => state.taskClaims >= 1, skip: () => !claimable(), go: 'tab:goal' },
+    { k: 'proj', done: () => state.projDone >= 1, skip: () => !projOpen(), go: 'tab:proj' }
+  ];
+  let goalGo = null;
+  function curStep() {
+    if (state.runs === 0 && !state.tek) {
+      const st = STEPS.find(x => !x.done() && !(x.skip && x.skip()));
+      if (st) return { txt: t('step.' + st.k, st.v ? st.v() : null), p: st.p ? st.p() : 0, go: st.go };
+    }
+    if (claimable()) return { txt: t('step.rw', { n: claimable() }), p: 1, go: 'tab:goal' };
+    if (state.proj && Date.now() >= state.proj.until) return { txt: t('step.projR'), p: 1, go: 'tab:proj' };
+    if (prestRec()) return { txt: t('step.prest', { g: gain() }), p: 1, go: 'tab:model' };
+    const ti = tierIdx(), nx = TIERS[ti + 1];
+    if (nx && !state.ch && ti < 7) return { txt: t('step.tier', { t: tierName(ti + 1) }), p: Math.log10(1 + state.run) / Math.log10(1 + nx.at), go: null };
+    if (state.ch) return { txt: t('ch.goal', { g: fmt(CHAL_BY[state.ch.id].goal) }), p: state.run / CHAL_BY[state.ch.id].goal, go: 'tab:model' };
+    return { txt: t('step.prestTo', { g: gain(), r: recGain() }), p: gain() / recGain(), go: 'tab:model' };
+  }
+  function updateGoal() {
+    const s = curStep();
+    setText($('gbText'), s.txt);
+    $('gbBar').style.width = (Math.max(0, Math.min(1, s.p || 0)) * 100).toFixed(1) + '%';
+    goalGo = s.go;
+    $('goalBar').classList.toggle('go', !!s.go);
+  }
+  $('goalBar').addEventListener('click', () => {
+    Snd.init(); Snd.click();
+    if (!goalGo) return;
+    if (goalGo.indexOf('tab:') === 0) {
+      const tb = goalGo.slice(4);
+      if (tb === 'model') { selectSub('train'); }
+      selectTab(tb);
+      return;
+    }
+    const el = $(goalGo);
+    if (!el) return;
+    el.classList.remove('hint'); void el.offsetWidth; el.classList.add('hint');
+    setTimeout(() => el.classList.remove('hint'), 2400);
+  });
 
   /* ---------- İpuçları ---------- */
   function tips() {
@@ -6469,15 +6923,15 @@ LANGS.de = {
     if (!s.combo && combo >= 10) { s.combo = 1; say(t('tip.combo'), 'wow', 2000); return; }
     if (!s.turbo && state.run > 300 && turboReady()) { s.turbo = 1; say(t('tip.turbo'), 'happy'); return; }
     if (!s.goal && state.life > 800) { s.goal = 1; say(t('tip.goal'), 'happy'); return; }
-    if (!s.prest && gain() >= 1) { s.prest = 1; say(t('tip.prest'), 'wow', 2200); return; }
+    if (!s.prest && prestRec()) { s.prest = 1; say(t('tip.prest'), 'wow', 2200); return; }
     if (mood !== 'sleep' && Date.now() > nextQuip && Date.now() - lastSayAt > 25000 && Date.now() - lastAct < 45000) {
       const a = alignment(), Q = TX().quips, pool = a === 'n' ? Q.n : Q[a].concat(Q[a], Q.n);
-      say(pick(pool), 'happy');
+      say(pick(pool), 'happy', 0, 0);
       nextQuip = Date.now() + 55000 + Math.random() * 35000;
       return;
     }
-    if (mood !== 'sleep' && Date.now() - lastAct > 45000) {
-      sayA('nero.sleep', null, 'sleep');
+    if (mood !== 'sleep' && Date.now() - lastAct > 45000 && !cur) {
+      say(t('nero.sleep.' + alignment()), 'sleep', 0, 0);
       clearTimeout(moodTimer);
     }
   }
@@ -6528,6 +6982,7 @@ LANGS.de = {
     state.played += dt;
     const d = dps();
     if (d > 0) addData(d * dt);
+    tapRateTick(now);
     if (perk('botnet') && !chIs('pasif')) {
       botAcc += 3 * dt;
       let k = 0;
@@ -6593,6 +7048,20 @@ LANGS.de = {
   function showOffline(el) {
     if (state.pendingOff <= 0) return;
     $('offText').textContent = t('off.text', { t: el ? fmtTime(el) : '—', n: fmt(state.pendingOff), p: Math.round(offRate() * 100), h: Math.round(offCap() / 3600) });
+    // Qayıdış yekunu: sen yokken hazır olan işler (dokununca oraya gider)
+    const L = $('offList'), now = Date.now(), items = [];
+    if (state.proj && now >= state.proj.until) items.push([t('sum.proj', { c: projText(state.proj.id).c }), 'proj']);
+    if (state.mission && now >= state.mission.until) items.push([t('sum.trip'), 'goal']);
+    if (claimable()) items.push([t('sum.tasks', { n: claimable() }), 'goal']);
+    if (prestRec()) items.push([t('sum.prest'), 'model']);
+    L.innerHTML = '';
+    items.forEach(it => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'sumitem'; b.dataset.go = it[1];
+      b.textContent = '▸ ' + it[0];
+      L.appendChild(b);
+    });
+    L.hidden = !items.length;
     $('offX2').hidden = !turboReady();
     openModal('offline');
   }
@@ -6609,6 +7078,13 @@ LANGS.de = {
     updateAll();
   }
   $('offOk').addEventListener('click', () => claimOffline(false));
+  $('offList').addEventListener('click', e => {
+    const b = e.target.closest('[data-go]');
+    if (!b) return;
+    claimOffline(false);
+    if (b.dataset.go === 'model') selectSub('train');
+    selectTab(b.dataset.go);
+  });
   $('offX2').addEventListener('click', () => claimOffline(true));
 
   document.addEventListener('visibilitychange', () => {
@@ -6670,6 +7146,7 @@ LANGS.de = {
     document.querySelectorAll('[data-ta]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.ta)); el.title = t(el.dataset.ta); });
     document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = t(el.dataset.tp); });
     upKey = ''; taskKey = ''; misKey = ''; projKey = ''; chKey = ''; evIcoKey = ''; feedKey = '';
+    clearSay();
     $('perkList')._k = '';
     rows.forEach(rw => { rw.lang = ''; });
     achTexts();
@@ -6754,7 +7231,7 @@ LANGS.de = {
   if (location.hash === '#debug') window.__tick = tick;
   if (location.hash === '#debug') window.__yz = { state: state, B: B, rebuild: rebuild, updateAll: updateAll, spawnVirus: spawnVirus, openChoice: openChoice, tapValue: tapValue, dps: dps, openQuiz: openQuiz,
     spawnSurprise: spawnSurprise, updateTek: updateTek, tierIdx: tierIdx, gain: gain, catchUp: catchUp, save: save, loadFrom: loadFrom, chEnter: chEnter, chExit: chExit, powerOf: powerOf,
-    autoBuy: autoBuy, tick: tick, KEY: KEY, applyLang: applyLang, LANGS: LANGS, t: t, showStory: showStory, postNews: postNews };
+    autoBuy: autoBuy, tick: tick, KEY: KEY, applyLang: applyLang, LANGS: LANGS, t: t, showStory: showStory, postNews: postNews, say: say };
   const hot = window.claude && window.claude.hot;
   if (hot && hot.snapshot) { try { hot.snapshot(() => ({ s: JSON.stringify(state) })); } catch (e) { /* yok */ } }
   if (hot && hot.ready) hot.ready(start);

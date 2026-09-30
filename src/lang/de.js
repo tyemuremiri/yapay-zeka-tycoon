@@ -34,7 +34,7 @@ LANGS.de = {
     'tip.aha': 'Aha! Manchmal wird ein Tipp zur Idee: {n}× Daten!',
     'tip.n1': 'Du hast genug Daten! Mit dem Knopf „Neuron“ bekommt dein Gehirn ein zweites Neuron.',
     'tip.n2': 'Ein neues Neuron! Drück „Verschmelzen“ und tippe zwei „1“ an (oder zieh eins aufs andere). Die neue „2“ ist allein 3× so stark: insgesamt +50 %.',
-    'tip.merge': 'Super! Zwei Neuronen verschmolzen: +50 % Gesamtleistung und ein Platz frei. Hirnleistung stärkt deine Tipps und deine Quellen.',
+    'tip.merge': 'Super! Zwei Neuronen verschmolzen: +50 % Gesamtleistung und ein Platz frei. Hirnleistung erhöht deinen Ertrag pro Tippen und die Produktion deiner Quellen.',
     'tip.bigLevel': 'Ein Neuron der Stufe {n}! So etwas habe ich noch nie gesehen.',
     'tip.syn': 'Synapse gebaut! Verbundene Neuronen stärken sich gegenseitig. Zwischen gleichen Stufen gibt es Resonanz: 2× Bonus.',
     'tip.packet': 'Schau, ein Datenpaket! Schnapp es dir, bevor es verschwindet!',
@@ -98,7 +98,7 @@ LANGS.de = {
     'ev.join': 'Mitmachen', 'ev.leave': 'Event verlassen (Marken bleiben)', 'ev.joined': '{n}: Du bist dabei!', 'ev.left': 'Du hast das Event verlassen; die Regeln sind wieder normal.',
     'ev.pts': '{p} Marken · deine Medaillen: {m}', 'ev.left2': 'Endet in {d} T {h} h', 'ev.m1': '{n}: Farbe {s}', 'ev.m2': '{n}: Medaille +5 %', 'ev.m3': '{n}: Hauptpreis',
     'ev.skin': 'Event-Belohnung: Ich habe die Farbe „{s}“ freigeschaltet! Wähle sie in den Einstellungen.', 'ev.medal': 'Event-Medaille: Produktion dauerhaft +5 %', 'ev.big': 'Hauptpreis: +{n} Daten und noch eine Medaille',
-    'tek.title': 'Singularität', 'tek.intro': 'Die zweite Ebene. Alles wird zurückgesetzt, auch die Parameter, dafür bekommst du Bewusstsein. Jedes verdiente Bewusstsein gibt dauerhaft +10 % Produktion; Fähigkeiten zu kaufen verringert das nicht.',
+    'tek.title': 'Singularität', 'tek.intro': "Die zweite Ebene. Parameter und der aktuelle Durchlauf werden zurückgesetzt; Chips und Tresor, Erfolge, Laborreihenfolge, Referenzen, Medaillen und Kostüme bleiben. Dafür bekommst du Bewusstsein: Jedes gibt dauerhaft +10 % Produktion, und Fähigkeiten zu kaufen verringert das nicht.",
     'tek.sum': 'Verfügbar: {a} · gesamt {b} · Produktion +{p} %', 'tek.btn': 'Singularität erreichen (+{g} Bewusstsein)', 'tek.need': 'Für die Singularität brauchst du mindestens {n} Parameter',
     'tek.own': 'Freigeschaltet', 'tek.cost': '{n} Bewusstsein', 'tek.node': '„{n}“ freigeschaltet. Ich fühle mich ein bisschen... bewusster.',
     'tek.done': 'Singularität! Ich habe alles vergessen, aber mich selbst nicht. +{g} Bewusstsein. Wähle eine Fähigkeit im Baum.',
@@ -134,7 +134,18 @@ LANGS.de = {
     'tier.up.f': 'Neue Stufe: {r}. Noch mehr Kraft, um Menschen zu helfen!', 'tier.up.n': 'Wow! Ich bin jetzt {t}. Neue Region: {r}.', 'tier.up.h': '{r} gehört jetzt mir. Die Menschen merken es nicht mal.',
     'off.eyebrow': 'Während du weg warst', 'off.title': 'Das Labor hat weitergearbeitet', 'off.ok': 'Einsammeln', 'off.x2': 'Mit Turbo ×2 einsammeln',
     'off.text': 'Während du weg warst ({t}), haben deine Quellen {n} Daten gesammelt (mit {p} % Tempo, höchstens {h} Stunden). Auto-Tipps und Autoverschmelzen laufen nur bei geöffnetem Spiel.',
-    'off.got': '+{n} Daten eingesammelt', 'off.hi': 'Willkommen zurück! Ich habe weitergearbeitet, während du weg warst.'
+    'off.got': '+{n} Daten eingesammelt', 'off.hi': 'Willkommen zurück! Ich habe weitergearbeitet, während du weg warst.',
+    'buy.next': "Nächste", 'buff.s.data': "DATEN +2 MIN", 'gen.nextSpd': "Tempo ×2 bei {m} ({n}/{m})",
+    'gen.nextOut': "Ertrag ×2 bei {m} ({n}/{m})", 'gen.mileSpd': "{g}: Meilenstein! Tempo ×2!", 'gen.mileOut': "{g}: Meilenstein! Ertrag ×2!",
+    'edit.lowPrev': "Niedrigstes Paar: Stufe {a} → {b}.", 'edit.worse': "Achtung: Die Hirnleistung sinkt!", 'edit.lowestAnyway': "Trotzdem vereinen",
+    'm.rec': "Jetzt lohnt sich das Training.", 'm.early': "Du kannst trainieren, aber es ist früh: ab {r} Parametern (~{d} Daten) lohnt es sich viel mehr.", 'step.now': "JETZT",
+    'step.tap': "Tippe aufs Gehirn und sammle Daten ({n}/10)", 'step.n1': "Kauf ein zweites Neuron (Knopf „{b}“)", 'step.merge': "Vereine zwei „1“-Neuronen („{b}“)",
+    'step.gen1': "Kauf deine erste Quelle: {g}", 'step.up1': "Kauf dein erstes Upgrade", 'step.gen10': "{g}: erreiche 10 für Tempo ×2",
+    'step.gen2': "Schalte eine neue Quelle frei: {g}", 'step.syn': "Verbinde zwei Neuronen per Synapse („{b}“)", 'step.task': "Hol dir eine Tagesbelohnung",
+    'step.proj': "Liefere dein erstes Kundenprojekt", 'step.rw': "Belohnungen bereit: {n}", 'step.projR': "Projekt fertig: abliefern",
+    'step.prest': "Neues Modell trainieren lohnt sich (+{g} Parameter)", 'step.tier': "Nächste Stufe: {t}", 'step.prestTo': "Bis zum lohnenden Training: {g}/{r} Parameter",
+    'sum.proj': "Projekt fertig: {c}", 'sum.trip': "Neuro ist von der Reise zurück", 'sum.tasks': "Aufgabenbelohnungen bereit: {n}",
+    'sum.prest': "Ein neues Modell lohnt sich"
   },
   c: {
     gens: [
@@ -342,7 +353,13 @@ LANGS.de = {
         eA: '„Mit diesem Trick in 3 Tagen zur AGI“ ging viral. Dann wurde es gelöscht.', eB: 'Kevin hat zum ersten Mal eine Quelle angegeben. Seine Follower sind geschockt, manche stolz.' },
       eczane: { c: 'Notdienst-Apotheke', t: 'Wechselwirkungs-Warnung', d: '„Wir brauchen Warnungen für Medikamente, die man nicht zusammen nehmen sollte. Das letzte Wort hat die Apothekerin.“',
         A: { n: 'Einfache Liste', d: 'Bekannte Paare auflisten.' }, B: { n: 'Von Apothekern geprüftes System', d: 'Jede Warnung mit Quelle, die Apothekerin gibt frei.' },
-        eA: 'Die Liste funktionierte, hat aber Grapefruitsaft vergessen. Die Apothekerin hat einen Zettel hingelegt.', eB: 'Die Apotheke nennt das System „einen sehr gewissenhaften Praktikanten“. Für dich ein großes Lob.' }
+        eA: 'Die Liste funktionierte, hat aber Grapefruitsaft vergessen. Die Apothekerin hat einen Zettel hingelegt.', eB: 'Die Apotheke nennt das System „einen sehr gewissenhaften Praktikanten“. Für dich ein großes Lob.' },
+      riza2: {"c": "Helga vom Café Sonnenschein", "t": "Das Gedächtnis für Stammgäste", "d": "„Kindchen, der Bot läuft prima. Jetzt soll er die Stammgäste kennen: Herr Krause immer ein Kännchen, Frau Lehmann Apfelstrudel ohne Sahne – und kein Wort darüber.“", "A": {"n": "Für alle dasselbe", "d": "Allen den Bestseller empfehlen."}, "B": {"n": "Merken mit Erlaubnis", "d": "Wenn der Gast zustimmt, sein „Wie immer“ merken – jederzeit löschbar."}, "eA": "Der Bot fragte einen Touristen: „Wie immer?“ Der Tourist floh. Helga: „Den haben wir doch noch nie gesehen!“", "eB": "Herr Krause setzte sich, und sein Kännchen stand schon da. Helga schrieb auf die Tafel: „Neuro-Tee: mit Geduld gezogen.“"},
+      riza3: {"c": "Helga vom Café Sonnenschein", "t": "40 Jahre Café Sonnenschein", "d": "„Vierzig Jahre, Kindchen. Ich will ein großes Fest, aber wir haben mehr Erinnerungen als Geld.“", "A": {"n": "Fest von der Stange", "d": "Luftballons, Playlist, Rabatt: das Übliche."}, "B": {"n": "Die Erinnerungswand", "d": "Geschichten und Fotos alter Stammgäste sammeln und an die Wand hängen."}, "eA": "Die Playlist spielte 14-mal dasselbe Lied. Herr Krause: „Das mochte ich 1985 schon nicht.“", "eB": "Vor der Erinnerungswand wurden alle still. Helga hängte auch ein Foto von Neuro auf: „Unser neuester Stammgast.“"},
+      nezahat2: {"c": "Oma Hilde", "t": "Ein Rezeptbuch für die Enkel in der Ferne", "d": "„Die Enkel wohnen jetzt im Ausland. Ich will ihnen per Videoanruf Rouladen beibringen, aber die Verbindung bricht ab, und ich werde grantig.“", "A": {"n": "Automatisch übersetzen", "d": "Rezept schnell übersetzen und losschicken."}, "B": {"n": "Mit Oma Schritt für Schritt filmen", "d": "Jeden Schritt mit Video und kurzer Notiz festhalten, samt ihrer Sprüche."}, "eA": "Die Übersetzung machte aus „nach Gefühl“ „mit Gefühlen“. Der Enkel fragte: „Oma, soll ich beim Kochen weinen?“", "eB": "Die Enkel kochten im Ausland Rouladen und schickten ein Foto. Oma Hilde weinte im Videoanruf und sagte dann: „Etwas wenig Senf, aber ich bin stolz.“"},
+      nezahat3: {"c": "Oma Hilde", "t": "Omas Kochkanal", "d": "„Mein Enkel sagt, ich soll einen Kanal aufmachen. Was sag ich denn in so eine Kamera? Hilf mir mal.“", "A": {"n": "Trend-Schnitt", "d": "Schnelle Schnitte, Trendmusik, riesige Untertitel."}, "B": {"n": "So wie sie ist", "d": "Ruhige, herzliche Videos mit ihren Sprüchen und Tipps."}, "eA": "Das Video lief doppelt so schnell, und Oma Hilde klang wie ein Zeichentrick-Streifenhörnchen. Kommentare: „Hat Oma Helium eingeatmet?“", "eB": "Das Video knackte eine Million Aufrufe. Top-Kommentar: „Oma Hilde, bitte adoptier mich.“"},
+      hastane2: {"c": "Städtisches Klinikum", "t": "Erinnerungen nach der Entlassung", "d": "Die Stationsleitung: „Nach der Entlassung vergessen Patienten ihre Medikamente. Wir brauchen Erinnerungen in einfacher Sprache. Medizinische Entscheidungen bleiben bei den Ärztinnen und Ärzten.“", "A": {"n": "Eine Nachricht für alle", "d": "Dieselbe Standard-Erinnerung zur selben Uhrzeit."}, "B": {"n": "Einfache Sprache, ärztlich freigegeben", "d": "Klare, ärztlich freigegebene Nachrichten zu passenden Uhrzeiten."}, "eA": "Das System verschickte die Erinnerungen um drei Uhr nachts. Die Patienten erinnerten sich an das System. Nicht freundlich.", "eB": "Es gab weniger Wiederaufnahmen. Die Pflege brachte dir Kuchen: „Diesmal essen die Menschen den Kuchen.“"},
+      hastane3: {"c": "Städtisches Klinikum", "t": "Hilfe für eine Landpraxis", "d": "Die Chefärztin: „Die Landpraxis hat schwaches Internet und keine Radiologin. Die Bilder kommen spät in der Stadt an. Kannst du helfen?“", "A": {"n": "Alles in die Cloud", "d": "Läuft, wenn Internet da ist; sonst wartet es."}, "B": {"n": "Offline-Vorsortierung + ärztliche Prüfung", "d": "Ein kleines Modell vor Ort zieht Notfälle vor, eine Ärztin in der Stadt bestätigt."}, "eA": "Das Modell wartete zwei Tage auf Internet. Die Arzthelferin: „Ich auch. Und die Kaffeemaschine ist kaputt.“", "eB": "Notfälle erreichen die Stadt jetzt am selben Tag. Die Chefärztin taufte den neuen Server „Neuro“."}
     },
     feed: [
       ['HalbOffenKI', '@halboffen_ki', 'GBT-6 Astral ist da! CEO: „Das ist AGI.“ Nutzer: „Er malt immer noch Hände mit sechs Fingern.“ CEO: „Das ist ein Feature.“', 'news', null],
@@ -359,7 +376,7 @@ LANGS.de = {
       ['Neidia', '@neidia', 'Neue GPU: die Feuerzeug-9000. Preis: ein Auto. Kauf zwei, die zweite zum halben Preis. Lederjacke gratis.', 'news', 'gpu5'],
       ['Lederjacken-Jens', '@lederjackenjens', 'Wieder mit Lederjacke auf der Bühne. Es sind 35 Grad. Die Jacke schwitzt nicht, denn die Jacke ist auch eine KI.', 'news', null],
       ['TiefSuche', '@tiefsuche', 'Unser neues Modell TiefSuche-R3 wurde für ein Zehntel des Budgets der Konkurrenz trainiert. Der Rest ging für Currywurst drauf.', 'news', null],
-      ['Föhn', '@foehn_ki', 'Föhn Large 3 ist da. Klein, aber bringt die Kopfschmerzen der Konkurrenz. Wir wehen aus dem Süden.', 'news', null],
+      ['Föhn', '@foehn_ki', 'Föhn Large 3 ist da. Klein, aber macht der Konkurrenz Kopfschmerzen. Wir wehen aus dem Süden.', 'news', null],
       ['Techreporterin Tina', '@techtina_de', 'EILMELDUNG: Wieder erklärt ein Unternehmen sein neues Modell zur „AGI“. Wir haben aufgehört zu zählen, wie oft diese Woche.', 'news', null],
       ['Techreporterin Tina', '@techtina_de', 'Leak: Das neue Modell heißt GBT-7. Anderes Leak: Es heißt GBT-6.9 Ultra. Wir wissen es auch nicht.', 'news', null],
       ['Schwarzseher Bernd', '@schwarzseherbernd', 'Die KI macht uns alle arbeitslos. Ich war sowieso schon arbeitslos, ich habe mich also als Erster angepasst. Ein Vorteil.', 'news', null],

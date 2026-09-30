@@ -15,12 +15,15 @@ const used = new Set();
 ['f', 'h'].forEach(a => used.add('align.short.' + a));
 ['hW', 'hL', 'fW', 'fL'].forEach(x => used.add('mg.end.' + x));
 ['tap', 'aha', 'packet', 'merge', 'earn', 'buy', 'upg', 'trip', 'proj', 'turbo'].forEach(x => used.add('task.' + x));
-['tap', 'src', 'crit'].forEach(x => used.add('buff.s.' + x));
+['tap', 'src', 'crit', 'data'].forEach(x => used.add('buff.s.' + x));
 ['tap', 'src', 'crit', 'data'].forEach(x => used.add('buff.n.' + x));
 ['auto', 'dark', 'light'].forEach(x => used.add('theme.' + x));
 ['quiz', 'hallu', 'duck'].forEach(x => used.add('pk.' + x));
 ['mis.back', 'mis.away', 'mis.home', 'pr.note', 'pr.locked', 'eco.on', 'eco.off', 'ev.in', 'ev.opt', 'ev.join', 'ev.leave', 'auto.on', 'auto.off', 'auto.buyFast', 'auto.buySlow', 'sw.on', 'sw.off',
   'pr.slow', 'pr.fast', 'pr.slowTag', 'pr.fastTag', 'pr.goSlow', 'pr.goFast', 'mg.dark', 'mg.light', 'mg.introD', 'mg.introL', 'pk.gift', 'pk.got', 'pk.giftAria', 'pk.aria'].forEach(k => used.add(k));
+['tap', 'n1', 'merge', 'gen1', 'up1', 'gen10', 'gen2', 'syn', 'task', 'proj'].forEach(x => used.add('step.' + x));
+['gen.nextSpd', 'gen.nextOut', 'gen.mileSpd', 'gen.mileOut', 'edit.lowestAnyway'].forEach(k => used.add(k));
+used.delete('.row');
 const bad = [...used].filter(k => /[^a-zA-Z0-9.]/.test(k) || k.endsWith('.') || !k.includes('.') && !['mk', 'karma', 'combo', 'duck'].includes(k));
 bad.forEach(k => used.delete(k));
 const ref = LANGS.tr;

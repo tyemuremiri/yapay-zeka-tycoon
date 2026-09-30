@@ -59,7 +59,7 @@ LANGS.en = {
     'auto.protect': 'Protect linked neurons', 'sw.on': 'On', 'sw.off': 'Off', 'auto.on': 'buyer on', 'auto.off': 'buyer off', 'auto.locked': 'locked',
     'auto.lockedBuy': 'The Auto-buyer unlocks after you train your first new model. Your settings survive every reset.',
     'auto.buySlow': 'The buyer buys 1 every 4 seconds.', 'auto.buyFast': 'The buyer buys up to 10 every second.',
-    'auto.merge': 'The merger merges the lowest pair every {n} seconds.', 'auto.lockedMerge': 'The Auto-merger unlocks with your 3rd training.', 'auto.offline': 'Neither runs while you\'re away.',
+    'auto.merge': 'Auto-merge combines the lowest-level pair every {n} seconds.', 'auto.lockedMerge': 'The Auto-merger unlocks with your 3rd training.', 'auto.offline': 'Neither runs while you\'re away.',
     'up.empty': 'New upgrades appear as your sources, neurons and data grow.', 'up.bought': '{n} bought',
     'choice.title': 'What kind of AI will you be?', 'choice.eyebrow': 'New tier: {t}', 'choice.region': '{r} unlocked', 'choice.x': 'output ×1.2',
     'choice.karma': 'Karma is {k}. +3 or more: Light Mode (output ×1.25). -3 or less: Dark Mode (output ×1.5, but virus attacks).',
@@ -98,7 +98,7 @@ LANGS.en = {
     'ev.join': 'Join event', 'ev.leave': 'Leave event (tokens stay)', 'ev.joined': '{n}: you\'re in!', 'ev.left': 'You left the event; rules are back to normal.',
     'ev.pts': '{p} tokens · your medals: {m}', 'ev.left2': 'Ends in {d}d {h}h', 'ev.m1': '{n}: {s} color', 'ev.m2': '{n}: medal +5%', 'ev.m3': '{n}: grand prize',
     'ev.skin': 'Event reward: I unlocked the "{s}" color! Pick it in Settings.', 'ev.medal': 'Event medal: output permanently +5%', 'ev.big': 'Grand prize: +{n} data and another medal',
-    'tek.title': 'Singularity', 'tek.intro': 'The second layer. Everything resets, parameters included, and you earn Consciousness. Every Consciousness earned adds +10% output forever; buying skills doesn\'t reduce it.',
+    'tek.title': 'Singularity', 'tek.intro': "The second layer. Parameters and the current run reset; chips and the Vault, achievements, lab order, references, medals and costumes stay. In return you earn Consciousness: each one adds +10% output forever, and buying skills doesn't reduce it.",
     'tek.sum': 'Spendable: {a} · total {b} · output +{p}%', 'tek.btn': 'Reach the Singularity (+{g} Consciousness)', 'tek.need': 'The Singularity needs at least {n} parameters',
     'tek.own': 'Unlocked', 'tek.cost': '{n} Consciousness', 'tek.node': '"{n}" unlocked. I feel a little more... conscious.',
     'tek.done': 'Singularity! I forgot everything, but I remember myself. +{g} Consciousness. Pick a skill from the tree.',
@@ -134,7 +134,18 @@ LANGS.en = {
     'tier.up.f': 'New tier: {r}. More power to help people!', 'tier.up.n': 'Whoa! I\'m a {t} now. New region: {r}.', 'tier.up.h': '{r} is mine now. The humans won\'t even notice.',
     'off.eyebrow': 'While you were away', 'off.title': 'The lab kept working', 'off.ok': 'Collect', 'off.x2': 'Collect ×2 with Turbo',
     'off.text': 'While you were away ({t}) your sources collected {n} data (at {p}% speed, up to {h} hours). Auto-taps and the merger only run while the game is open.',
-    'off.got': '+{n} data collected', 'off.hi': 'Welcome back! I kept working while you were gone.'
+    'off.got': '+{n} data collected', 'off.hi': 'Welcome back! I kept working while you were gone.',
+    'buy.next': "Next", 'buff.s.data': "DATA +2 MIN", 'gen.nextSpd': "Speed ×2 at {m} ({n}/{m})",
+    'gen.nextOut': "Output ×2 at {m} ({n}/{m})", 'gen.mileSpd': "{g}: milestone! Speed ×2!", 'gen.mileOut': "{g}: milestone! Output ×2!",
+    'edit.lowPrev': "Lowest pair: level {a} → {b}.", 'edit.worse': "Careful: brain power will drop!", 'edit.lowestAnyway': "Merge anyway",
+    'm.rec': "Training now is worth it.", 'm.early': "You can train, but it's early: at {r} parameters (~{d} data) it pays off much better.", 'step.now': "NOW",
+    'step.tap': "Tap the brain to collect data ({n}/10)", 'step.n1': "Buy a second neuron (\"{b}\" button)", 'step.merge': "Merge two \"1\" neurons (\"{b}\")",
+    'step.gen1': "Buy your first source: {g}", 'step.up1': "Buy your first upgrade", 'step.gen10': "{g}: reach 10 for speed ×2",
+    'step.gen2': "Unlock a new source: {g}", 'step.syn': "Link two neurons with a synapse (\"{b}\")", 'step.task': "Claim a daily task reward",
+    'step.proj': "Deliver your first client project", 'step.rw': "Rewards ready: {n}", 'step.projR': "Project done: deliver it",
+    'step.prest': "Training a new model pays off (+{g} parameters)", 'step.tier': "Next level: {t}", 'step.prestTo': "Toward a worthwhile training: {g}/{r} parameters",
+    'sum.proj': "Project ready: {c}", 'sum.trip': "Neuro is back from the trip", 'sum.tasks': "Task rewards ready: {n}",
+    'sum.prest': "Training a new model pays off"
   },
   c: {
     gens: [
@@ -342,7 +353,13 @@ LANGS.en = {
         eA: '"I reached AGI in 3 days with this one trick" went viral. Then got deleted.', eB: 'Harry cited a source for the first time. His followers are shocked, some are proud.' },
       eczane: { c: 'Night Pharmacy', t: 'Drug interaction alert', d: '"We need alerts for medicines that shouldn\'t be taken together. The pharmacist has the final word."',
         A: { n: 'Simple list', d: 'List the known pairs.' }, B: { n: 'Pharmacist-verified system', d: 'Show every alert with a source; the pharmacist approves.' },
-        eA: 'The list worked, but it forgot grapefruit juice. The pharmacist left a note.', eB: 'Pharmacists describe the system as "a very careful intern". High praise, for you.' }
+        eA: 'The list worked, but it forgot grapefruit juice. The pharmacist left a note.', eB: 'Pharmacists describe the system as "a very careful intern". High praise, for you.' },
+      riza2: {"c": "Sal from Sal's Diner", "t": "Remembering the regulars", "d": "\"Kid, the bot works great. Now teach it the regulars. Earl takes his coffee black, Dot wants decaf and pretends it isn't.\"", "A": {"n": "Same pitch for everyone", "d": "Suggest the bestseller to every customer."}, "B": {"n": "Remember, with permission", "d": "If a customer opts in, remember their usual; they can wipe it anytime."}, "eA": "The bot asked a tourist \"The usual, hon?\" The tourist fled. Sal: \"We've never seen that man in our lives!\"", "eB": "Earl sat down and his black coffee was already there. Sal added a line to the menu board: \"The Neuro: pie, patience, extra napkins.\""},
+      riza3: {"c": "Sal from Sal's Diner", "t": "The diner's 40th anniversary", "d": "\"Forty years, kid. I want a big party, but we got more memories than money.\"", "A": {"n": "Party in a box", "d": "Balloons, a playlist, a coupon: the standard deal."}, "B": {"n": "A memory wall", "d": "Collect stories and photos from old regulars and put them on the wall."}, "eA": "The playlist played the same song 14 times. Earl: \"Didn't like this one in 1985 either.\"", "eB": "Everyone teared up at the memory wall. Sal pinned up a photo of Neuro too: \"Our newest regular.\""},
+      nezahat2: {"c": "Grandma June", "t": "A recipe book for faraway grandkids", "d": "\"The grandkids live overseas now. I try to teach them my pot roast on video calls, but the line drops and I get cranky.\"", "A": {"n": "Auto-translate it", "d": "Quickly translate the recipe and send it."}, "B": {"n": "Film it step by step with June", "d": "Record every step with a short note, and keep her little asides in."}, "eA": "The translation turned \"eyeball it\" into \"add one eyeball\". The grandkid asked: \"Grandma, is this a horror recipe?\"", "eB": "The grandkids made the pot roast overseas and sent a photo. Grandma June cried on the call, then said: \"Needs salt, but I'm proud.\""},
+      nezahat3: {"c": "Grandma June", "t": "Grandma's cooking channel", "d": "\"My grandson says I should start a channel. What would I even say to a camera? You help me, dear.\"", "A": {"n": "Trendy edit", "d": "Fast cuts, trending music, giant captions."}, "B": {"n": "Just as she is", "d": "Slow, warm videos that keep her jokes and tips."}, "eA": "The video was sped up 2x and Grandma June sounded like a cartoon chipmunk. Comments: \"Did grandma inhale helium?\"", "eB": "The video hit a million views. Top comment: \"Grandma June, please adopt me.\""},
+      hastane2: {"c": "City Hospital", "t": "Reminders after discharge", "d": "Head nurse: \"Patients forget their meds once they go home. We need plain-language reminders. Medical decisions stay with the doctors.\"", "A": {"n": "One message for all", "d": "The same standard reminder, same time, for everyone."}, "B": {"n": "Plain language, doctor-approved", "d": "Clear messages each doctor signs off on, at times that suit the patient."}, "eA": "The system sent reminders at 3 a.m. Patients remembered the system. Not fondly.", "eB": "Readmissions dropped. The nurses brought you a cake: \"This time the humans eat the cake.\""},
+      hastane3: {"c": "City Hospital", "t": "Support for a rural clinic", "d": "Chief physician: \"Our rural clinic has weak internet and no radiologist. Images reach the city late. Can you help?\"", "A": {"n": "Send everything to the cloud", "d": "Works when there is internet; waits when there isn't."}, "B": {"n": "Offline pre-screening + doctor review", "d": "A small on-site model flags urgent cases; a city doctor confirms."}, "eA": "The model waited two days for internet. The clinic nurse: \"Same here. And the coffee machine's broken.\"", "eB": "Urgent cases now reach the city the same day. The chief named the new server \"Neuro\"."}
     },
     feed: [
       ['AjarAI', '@ajar_ai', 'GBT-6 Astral is out! CEO: "This is AGI." Users: "It still draws six-fingered hands." CEO: "That\'s a feature."', 'news', null],

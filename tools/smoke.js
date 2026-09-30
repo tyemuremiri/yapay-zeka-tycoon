@@ -92,6 +92,7 @@ const ok = (c, m) => console.log((c ? 'PASS ' : 'FAIL ') + m);
   ok(/veya/.test(tt), 'daily pairs show "veya"');
   await p.click('[data-reroll]');
   ok(await S(() => __yz.state.daily.rerolls === 0), 'reroll used');
+  await p.evaluate(() => { document.getElementById('evFold').open = true; });
   await p.click('#evJoin');
   ok(await S(() => __yz.state.ev.join === true), 'event join');
   await p.screenshot({ path: 'v8-goal.png' });
