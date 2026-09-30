@@ -1,0 +1,285 @@
+<div class="app" id="app">
+  <header class="hud">
+    <div class="hud-row">
+      <div class="res">
+        <span class="lbl" data-t="hud.data"></span>
+        <strong class="num" id="data">0</strong>
+        <span class="rate num" id="dps"></span>
+      </div>
+      <div class="hud-side">
+        <div class="pills"><span class="pill turbo" id="turboPill" hidden data-t="pill.turbo"></span><span class="pill insp" id="inspPill" hidden data-t="pill.insp"></span><span id="buffPills" class="pills-in"></span></div>
+        <button type="button" class="gear btn" id="gearBtn" data-ta="set.title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="tierline">
+      <span class="tiername" id="tierName"></span>
+      <span class="chip align-n" id="alignChip"></span>
+      <span class="chip lab" id="labChip"></span>
+    </div>
+    <div class="track thin"><i id="tierBar"></i></div>
+    <small class="tiernext" id="tierNext"></small>
+  </header>
+
+  <button type="button" class="ticker" id="ticker" data-ta="feed.open"><span class="tk-dot" id="tkDot"></span><span class="tk" id="tickText"></span></button>
+
+  <section class="stage">
+    <div class="brain-wrap" id="brainWrap">
+      <button type="button" class="brain-btn" id="brainBtn" data-ta="brain.aria"><canvas id="brain"></canvas></button>
+      <span class="ovl combo" id="combo" hidden><span data-t="combo"></span> <b id="comboX">×1,0</b><span class="cbar"><i id="comboBar"></i></span></span>
+      <span class="ovl tapnote num" id="tapNote"></span>
+      <span class="ovl mghud" id="mgHud" hidden></span>
+      <span class="ovl stats num"><span id="brainPow"></span><span id="multAll"></span></span>
+      <button type="button" class="fab mg btn" id="mgBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg><span id="mgT"></span></button>
+      <div class="editbar" id="editBar" hidden><span id="editText"></span><div class="acts" id="editActs"></div></div>
+      <div class="nero">
+        <button type="button" class="mascot" id="mascot" data-ta="nero.aria">
+          <svg viewBox="0 0 80 84" class="bot" id="bot" aria-hidden="true">
+            <ellipse class="halo" cx="40" cy="4" rx="15" ry="4" fill="none" stroke="var(--sun)" stroke-width="3"/>
+            <line x1="40" y1="15" x2="40" y2="7" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="40" cy="7" r="4.5" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect x="7" y="29" width="9" height="18" rx="3" fill="var(--grape)" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect x="64" y="29" width="9" height="18" rx="3" fill="var(--grape)" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect x="24" y="60" width="32" height="20" rx="5" fill="var(--sun)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="13" y="14" width="54" height="48" rx="12" fill="var(--skin, var(--teal))" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="20" y="22" width="40" height="29" rx="7" fill="var(--screen)"/>
+            <g fill="var(--eye)">
+              <g class="e-open"><ellipse cx="32" cy="35" rx="4" ry="5.2"/><ellipse cx="48" cy="35" rx="4" ry="5.2"/></g>
+              <g class="e-wow"><circle cx="32" cy="35" r="6"/><circle cx="48" cy="35" r="6"/></g>
+            </g>
+            <g stroke="var(--eye)" stroke-width="2.6" stroke-linecap="round" fill="none">
+              <path class="brows" d="M25 26.5l11 4M55 26.5l-11 4"/>
+              <path class="e-closed" d="M28 36.5h8M44 36.5h8"/>
+              <path class="m-smile" d="M34 43.5q6 4.5 12 0"/>
+              <path class="m-flat" d="M36 45h8"/>
+            </g>
+            <ellipse class="m-o" cx="40" cy="45.5" rx="3" ry="3.2" fill="var(--eye)"/>
+            <g class="cos c-fes"><path d="M27 17 30 1h20l3 16z" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M40 2q7 5 5 13" stroke="var(--ink)" stroke-width="2" fill="none"/><circle cx="45" cy="16" r="2.3" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.5"/></g>
+            <g class="cos c-sapka"><rect x="27" y="-8" width="26" height="22" rx="3" fill="var(--ink)"/><rect x="27" y="6" width="26" height="4" fill="var(--coral)"/><rect x="19" y="12" width="42" height="5" rx="2.5" fill="var(--ink)"/></g>
+            <g class="cos c-tac"><path d="M23 17 25 1l8 8 7-10 7 10 8-8 2 16z" fill="var(--sun)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="40" cy="11" r="2" fill="var(--coral)"/></g>
+            <g class="cos c-kep"><path d="M16 9 40 0l24 9-24 9z" fill="var(--ink)"/><rect x="30" y="11" width="20" height="7" fill="var(--ink)"/><path d="M62 9v11" stroke="var(--sun)" stroke-width="2.2"/><circle cx="62" cy="21" r="2.4" fill="var(--sun)"/></g>
+            <g class="cos c-gozluk"><rect x="22" y="29" width="16" height="12" rx="4" fill="var(--ink)"/><rect x="42" y="29" width="16" height="12" rx="4" fill="var(--ink)"/><path d="M38 33h4" stroke="var(--ink)" stroke-width="2.5"/><path d="M25 32h5M45 32h5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></g>
+            <g class="cos c-kulak"><path d="M11 38C11 4 69 4 69 38" fill="none" stroke="var(--ink)" stroke-width="4"/><rect x="4" y="27" width="13" height="22" rx="6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2.5"/><rect x="63" y="27" width="13" height="22" rx="6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2.5"/></g>
+            <g class="cos c-onluk"><path d="M27 60h26v18a3 3 0 0 1-3 3H30a3 3 0 0 1-3-3z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.3"/><path d="M33 68h14v7H33z" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M40 63.5c-1.6-1.8-4 0-2.4 1.8L40 67l2.4-1.7c1.6-1.8-.8-3.6-2.4-1.8z" fill="var(--coral)"/></g>
+            <g class="cos c-stetoskop"><path d="M30 60c0 9 4 13 10 13s10-4 10-13" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><path d="M50 66v6" stroke="var(--ink)" stroke-width="2.4"/><circle cx="50" cy="75" r="3.6" fill="var(--sky)" stroke="var(--ink)" stroke-width="2"/></g>
+            <g class="cos c-cay"><ellipse cx="75" cy="58" rx="7" ry="2.2" fill="var(--sun)" stroke="var(--ink)" stroke-width="2"/><path d="M70 42h10l-2 5 2 5-2 5h-6l-2-5 2-5z" fill="#C2410C" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M71.5 44h7" stroke="#FFFFFF" stroke-width="1.4" opacity=".6"/></g>
+            <g class="cos c-papyon"><path d="M40 64 28 58v12zM40 64l12-6v12z" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="40" cy="64" r="3" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.8"/></g>
+          </svg>
+        </button>
+        <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="brainbar">
+      <button type="button" class="bb main btn" id="nBuy"><span class="b1" data-t="n.buy"></span><span class="b2 num" id="nBuyCost">10</span></button>
+      <button type="button" class="bb mrg btn" id="nMerge" aria-pressed="false"><span class="b1" data-t="n.merge"></span><span class="b2 num" id="nMergeN"></span></button>
+      <button type="button" class="bb lnk btn" id="nSyn" aria-pressed="false"><span class="b1" data-t="n.link"></span><span class="b2 num" id="nSynN">0/0</span></button>
+      <button type="button" class="bb turbo btn" id="turboBtn"><span class="b1" id="turboT1"></span><span class="b2 num" id="turboT2"></span></button>
+    </div>
+  </section>
+
+  <section class="side">
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab" role="tab" id="tab-gen" data-tab="gen" aria-selected="true" aria-controls="panel-gen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="7"/><rect x="4" y="13" width="16" height="7"/><path d="M8 6.5h.01M8 16.5h.01"/></svg><span data-t="tab.gen"></span></button>
+      <button type="button" class="tab" role="tab" id="tab-up" data-tab="up" aria-selected="false" aria-controls="panel-up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20V6M5 12l7-7 7 7"/></svg><span data-t="tab.up"></span><span class="badge" id="upBadge"></span></button>
+      <button type="button" class="tab" role="tab" id="tab-proj" data-tab="proj" aria-selected="false" aria-controls="panel-proj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13"/><path d="M8 7V4h8v3M3 13h18"/></svg><span data-t="tab.proj"></span><span class="badge" id="projBadge"></span></button>
+      <button type="button" class="tab" role="tab" id="tab-goal" data-tab="goal" aria-selected="false" aria-controls="panel-goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg><span data-t="tab.goal"></span><span class="badge" id="goalBadge"></span></button>
+      <button type="button" class="tab" role="tab" id="tab-model" data-tab="model" aria-selected="false" aria-controls="panel-model"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="19" r="2.2"/><circle cx="12" cy="12" r="2.2"/><path d="M7.7 7.5 10.3 10.5M16.3 7.5 13.7 10.5M12 14.2v2.6"/></svg><span data-t="tab.model"></span><span class="badge" id="modelBadge"></span></button>
+    </nav>
+
+    <div class="panels" id="panels">
+      <div class="panel" id="panel-gen" role="tabpanel" aria-labelledby="tab-gen">
+        <div class="seg" id="seg">
+          <span class="lbl" data-t="buy.mode"></span>
+          <button type="button" data-mode="1" aria-pressed="true">×1</button>
+          <button type="button" data-mode="10" aria-pressed="false">×10</button>
+          <button type="button" data-mode="max" aria-pressed="false" data-t="buy.max"></button>
+        </div>
+        <div class="list" id="genList"></div>
+        <div class="autobox" id="autoBox">
+          <div class="sechead"><h2 data-t="auto.title"></h2><span id="autoSum"></span></div>
+          <p class="note" id="autoNote"></p>
+          <div class="optrow" id="autoBuyRow"><span class="lbl" data-t="auto.buyer"></span>
+            <button type="button" class="pill-btn" data-auto="buy"></button>
+            <button type="button" class="pill-btn" data-amode="eff" data-t="auto.eff"></button>
+            <button type="button" class="pill-btn" data-amode="mile" data-t="auto.mile"></button>
+            <button type="button" class="pill-btn" data-amode="sel" data-t="auto.sel"></button>
+          </div>
+          <div class="optrow" id="autoSelRow"><span class="lbl" data-t="auto.selSrc"></span></div>
+          <div class="optrow" id="autoMergeRow"><span class="lbl" data-t="auto.merger"></span>
+            <button type="button" class="pill-btn" data-auto="merge"></button>
+            <button type="button" class="pill-btn" data-auto="protect"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-up" role="tabpanel" aria-labelledby="tab-up" hidden>
+        <div class="list" id="upList"></div>
+      </div>
+
+      <div class="panel" id="panel-proj" role="tabpanel" aria-labelledby="tab-proj" hidden>
+        <div class="sechead"><h2 data-t="pr.title"></h2><span id="projSum"></span></div>
+        <p class="note" id="projNote"></p>
+        <div class="stack" id="projBox"></div>
+      </div>
+
+      <div class="panel" id="panel-goal" role="tabpanel" aria-labelledby="tab-goal" hidden>
+        <div class="sechead"><h2 data-t="ev.title"></h2><span id="evLeft"></span></div>
+        <div class="event">
+          <div class="eh"><div class="ico" id="evIco" style="--c:var(--pink)"></div><div><b id="evName"></b><small id="evPts"></small></div></div>
+          <p id="evDesc"></p>
+          <div class="track"><i id="evBar"></i></div>
+          <div class="miles" id="evMiles"></div>
+          <button type="button" class="ghost btn" id="evJoin"></button>
+        </div>
+        <div class="sechead"><h2 data-t="mis.title"></h2><span id="misLeft"></span></div>
+        <div class="list" id="misList"></div>
+        <div class="sechead"><h2 data-t="task.title"></h2><span id="dayLeft"></span></div>
+        <div class="list" id="taskList"></div>
+        <div class="sechead"><h2 data-t="ach.title"></h2><span id="achSum"></span></div>
+        <div class="achs" id="achList"></div>
+      </div>
+
+      <div class="panel" id="panel-model" role="tabpanel" aria-labelledby="tab-model" hidden>
+        <div class="seg msub" id="msub">
+          <button type="button" data-msub="train" aria-pressed="true" data-t="msub.train"></button>
+          <button type="button" data-msub="kasa" aria-pressed="false" data-t="msub.kasa"></button>
+          <button type="button" data-msub="stats" aria-pressed="false" data-t="msub.stats"></button>
+        </div>
+        <div class="stack" data-sub="train">
+          <div class="sechead"><h2 data-t="char.title"></h2><span id="alignText"></span></div>
+          <div class="karma">
+            <div class="kmeter" aria-hidden="true"><i id="kDot" style="left:50%"></i></div>
+            <div class="kends"><span data-t="align.h"></span><span data-t="align.n"></span><span data-t="align.f"></span></div>
+            <div class="perks" id="perkList"></div>
+          </div>
+          <p class="note" id="alignNote"></p>
+          <div class="sechead"><h2 data-t="m.title"></h2></div>
+          <p class="note" data-t="m.intro"></p>
+          <div class="facts">
+            <div><span class="lbl" data-t="m.params"></span><strong class="num" id="mParams">0</strong></div>
+            <div><span class="lbl" data-t="m.mult"></span><strong class="num" id="mMult">×1,00</strong></div>
+            <div><span class="lbl" data-t="m.this"></span><strong class="num" id="mGain">0</strong></div>
+          </div>
+          <p class="note" id="mHint"></p>
+          <div class="prev" id="pPrev">
+            <div class="gain" id="pGainBox"></div>
+            <div><b data-t="m.keep"></b><span data-t="m.keepList"></span></div>
+            <div><b data-t="m.reset"></b><span data-t="m.resetList"></span></div>
+          </div>
+          <button type="button" class="primary btn" id="pBtn" disabled></button>
+          <div id="tekBox" hidden>
+            <div class="stack">
+              <div class="sechead"><h2 data-t="tek.title"></h2><span id="tekSum"></span></div>
+              <p class="note" data-t="tek.intro"></p>
+              <button type="button" class="primary btn" id="tekBtn" disabled></button>
+              <div class="tree" id="tree"></div>
+              <div class="sechead"><h2 data-t="ch.title"></h2><span id="chSum"></span></div>
+              <p class="note" data-t="ch.intro"></p>
+              <div class="list" id="chList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack" data-sub="kasa" hidden>
+          <div class="sechead"><h2 data-t="kasa.title"></h2><span id="chipSum"></span></div>
+          <p class="note" data-t="kasa.intro"></p>
+          <div class="tree kasa" id="kasa"></div>
+          <p class="note" id="labNote"></p>
+        </div>
+        <div class="stack" data-sub="stats" hidden>
+          <div class="facts two">
+            <div><span class="lbl" data-t="st.life"></span><strong class="num" id="sLife">0</strong></div>
+            <div><span class="lbl" data-t="st.clicks"></span><strong class="num" id="sClicks">0</strong></div>
+            <div><span class="lbl" data-t="st.merges"></span><strong class="num" id="sMerges">0</strong></div>
+            <div><span class="lbl" data-t="st.crits"></span><strong class="num" id="sCrits">0</strong></div>
+            <div><span class="lbl" data-t="st.runs"></span><strong class="num" id="sRuns">0</strong></div>
+            <div><span class="lbl" data-t="st.time"></span><strong class="num" id="sTime">0</strong></div>
+            <div><span class="lbl" data-t="st.proj"></span><strong class="num" id="sProj">0</strong></div>
+            <div><span class="lbl" data-t="st.brain"></span><strong class="num" id="sBrain">0</strong></div>
+          </div>
+          <div class="chart">
+            <span class="lbl" data-t="chart.title"></span>
+            <canvas id="chart" role="img" data-ta="chart.aria"></canvas>
+            <p class="note" data-t="chart.note"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="modal" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="sheet">
+    <div class="sheet-h"><h2 id="setTitle" data-t="set.title"></h2><button type="button" class="pill-btn" data-close="settings" data-t="btn.close"></button></div>
+    <div class="optrow"><span class="lbl" data-t="set.lang"></span><small class="hint" id="langAuto"></small></div>
+    <div class="optrow langs" id="langRow"></div>
+    <div class="toggles">
+      <button type="button" class="tgl btn" id="sndBtn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span data-t="set.sound"></span></button>
+      <button type="button" class="tgl btn" id="musBtn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span data-t="set.music"></span></button>
+      <button type="button" class="tgl btn" id="hapBtn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="8" y="3" width="8" height="18"/><path d="M4 8v8M20 8v8"/></svg><span data-t="set.haptic"></span></button>
+      <button type="button" class="tgl btn" id="ecoBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="16" height="10"/><path d="M22 10.5v3M11.5 8.8 9 12.2h4l-2.5 3.4"/></svg><span data-t="set.eco"></span></button>
+    </div>
+    <div class="optrow" id="themeRow"><span class="lbl" data-t="set.theme"></span></div>
+    <div class="optrow" id="notRow"><span class="lbl" data-t="set.notation"></span>
+      <button type="button" class="pill-btn" data-not="tr" aria-pressed="true" id="notTr">1,25</button>
+      <button type="button" class="pill-btn" data-not="sci" aria-pressed="false">1.25e6</button>
+    </div>
+    <div class="optrow" id="skinRow"><span class="lbl" data-t="set.skin"></span></div>
+    <div class="optrow" id="cosRow"><span class="lbl" data-t="set.cos"></span></div>
+    <div class="optrow"><span class="lbl" data-t="set.save"></span>
+      <textarea id="saveBox" spellcheck="false" data-ta="set.saveBox" data-tp="set.savePh"></textarea>
+      <button type="button" class="pill-btn" id="expBtn" data-t="set.export"></button>
+      <button type="button" class="pill-btn" id="impBtn" data-t="set.import"></button>
+    </div>
+    <button type="button" class="danger" id="resetBtn" data-t="set.reset"></button>
+  </div>
+</div>
+
+<div class="modal" id="feedSheet" hidden role="dialog" aria-modal="true" aria-labelledby="feedTitle">
+  <div class="sheet feed">
+    <div class="sheet-h"><div><h2 id="feedTitle" data-t="feed.title"></h2><span class="lbl" data-t="feed.sub"></span></div><button type="button" class="pill-btn" data-close="feedSheet" data-t="btn.close"></button></div>
+    <div class="posts" id="posts" aria-live="polite"></div>
+  </div>
+</div>
+
+<div class="modal" id="offline" hidden role="dialog" aria-modal="true" aria-labelledby="offTitle">
+  <div class="sheet">
+    <span class="lbl" data-t="off.eyebrow"></span>
+    <h2 id="offTitle" data-t="off.title"></h2>
+    <p id="offText"></p>
+    <div class="acts">
+      <button type="button" class="primary btn" id="offOk" data-t="off.ok"></button>
+      <button type="button" class="ghost btn" id="offX2" hidden data-t="off.x2"></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="choice" hidden role="dialog" aria-modal="true" aria-labelledby="chTitle">
+  <div class="sheet">
+    <span class="lbl" id="chEyebrow"></span>
+    <h2 id="chTitle" data-t="choice.title"></h2>
+    <p id="chText"></p>
+    <div class="cards">
+      <button type="button" class="choice f btn" id="chF"><span class="tag" data-t="align.short.f"></span><b></b><span class="d"></span></button>
+      <button type="button" class="choice h btn" id="chH"><span class="tag" data-t="align.short.h"></span><b></b><span class="d"></span></button>
+    </div>
+    <p data-t="choice.foot"></p>
+  </div>
+</div>
+<div class="modal" id="quiz" hidden role="dialog" aria-modal="true" aria-labelledby="qTitle">
+  <div class="sheet">
+    <span class="lbl" data-t="quiz.eyebrow"></span>
+    <h2 id="qTitle"></h2>
+    <p data-t="quiz.note"></p>
+    <div class="qopts" id="qOpts"></div>
+  </div>
+</div>
+<div class="modal" id="story" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
+  <div class="sheet">
+    <span class="lbl" id="stEyebrow"></span>
+    <h2 id="stTitle"></h2>
+    <p class="stext" id="stText"></p>
+    <button type="button" class="primary btn" id="stOk" data-t="btn.next"></button>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
