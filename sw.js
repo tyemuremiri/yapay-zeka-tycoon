@@ -1,5 +1,5 @@
 // Oyunu çevrimdışı çalıştırır: önce ağ, olmazsa önbellek (güncellemeler hemen gelsin diye).
-const CACHE = 'yz-tycoon-v7';
+const CACHE = 'yz-tycoon-v7b';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon.svg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {

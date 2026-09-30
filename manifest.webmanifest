@@ -1,7 +1,7 @@
 {
   "name": "Yapay Zekâ Tycoon",
   "short_name": "YZ Tycoon",
-  "description": "Tek bir nörondan yapay zekâ beyni kurduğun idle oyun. Türkçe, English, Русский, العربية, Español, Deutsch.",
+  "description": "Tek bir nörondan yapay zekâ beyni kurduğun idle oyun. Türkçe, Azərbaycanca, English, Русский, العربية, Español, Deutsch.",
   "lang": "tr",
   "start_url": "./",
   "scope": "./",

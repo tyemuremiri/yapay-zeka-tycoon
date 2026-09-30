@@ -2,7 +2,7 @@
 const fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..');
 const LANGS = {};
-for (const l of ['tr', 'en', 'ru', 'ar', 'es', 'de']) {
+for (const l of ['tr', 'az', 'en', 'ru', 'ar', 'es', 'de']) {
   const f = path.join(root, 'src/lang', l + '.js');
   if (fs.existsSync(f)) new Function('LANGS', fs.readFileSync(f, 'utf8'))(LANGS);
 }

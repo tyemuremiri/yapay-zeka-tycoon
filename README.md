@@ -3,7 +3,7 @@
 Tek bir nörondan yapay zekâ beyni kurduğun, Türkçe, çizgi film tarzı tıklama (idle/incremental) oyunu.
 
 - `src/style.css`, `src/body.html`, `src/js/*.js`: oyunun kaynağı (tasarım, iskelet, mantık).
-- `src/lang/{tr,en,ru,ar,es,de}.js`: bütün metinler. Her dilin kendi espri, parodi şirket ve karakterleri var (tam yerelleştirme, Arapça sağdan sola).
+- `src/lang/{tr,az,en,ru,ar,es,de}.js`: bütün metinler. Her dilin kendi espri, parodi şirket ve karakterleri var (tam yerelleştirme, Arapça sağdan sola).
 - `python3 build.py`: parçaları birleştirir → `index.html` (tek başına çalışan PWA) ve `dist/game.html` (Claude artifact sürümü).
 - `manifest.webmanifest`, `sw.js`, `icon-*.png`: telefona "Ana ekrana ekle" ve çevrimdışı oynama için.
 - `tools/keycheck.js`: her dilde eksik metin, yer tutucu uyumsuzluğu ve quiz cevabı kontrolü. `tools/smoke.js`: Playwright ile uçtan uca kontrol. `tools/sim.js`: tempo simülasyonu.
@@ -35,7 +35,7 @@ Benchmark meydan okumalarının hedefleri, Tekillik açıldığında (~100 param
 
 - **Tek ekran (uygulama gibi):** telefonda sayfa kaymaz. Üstte veri göstergesi, ortada beyin ve düğmeleri, altta yalnız kendi içinde kayan panel ve sekmeler.
 - **Ayarlar penceresi (⚙):** dil, ses, müzik, titreşim, tasarruf, tema (otomatik/koyu/açık), sayı biçimi, Nöro'nun rengi ve aksesuarı, kayıt yedeği.
-- **6 dil:** Türkçe, English, Русский, العربية (sağdan sola), Español, Deutsch. İlk açılışta cihazın dili seçilir. Her dilde yerel karakterler (ör. Sal's Diner, тётя Валя, أبو خليل, Paco el del bar, Café Sonnenschein), yerel parodi şirketler (Envydia/Завидия/حسديا/Envidia/Neidia) ve o dile özgü kelime oyunlu sorular.
+- **7 dil:** Türkçe, Azərbaycanca, English, Русский, العربية (sağdan sola), Español, Deutsch. İlk açılışta cihazın dili seçilir. Her dilde yerel karakterler (ör. Naxçıvanlı Validə nənə, Lənkəranlı Zakir dayı, Sal's Diner, тётя Валя, أبو خليل, Paco el del bar, Café Sonnenschein), yerel parodi şirketler (Paxıllıq/Envydia/Завидия/حسديا/Envidia/Neidia) ve o dile özgü kelime oyunlu sorular.
 - **Yeni görünüm:** "laboratuvar HUD'u" tasarım sistemi. 45° kesik köşeler, çizgiyle ayrılmış satırlar, Tektur + IBM Plex yazı tipleri, aqua (veri) ve amber (satın alma) vurguları, koyu temada statik neon parıltı. Beyin çizimi de yeni.
 
 ## v6'da neler değişti

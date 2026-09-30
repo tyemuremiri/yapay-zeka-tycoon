@@ -7,7 +7,7 @@
   /* ---------- Dil ----------
      Tüm metinler src/lang/*.js dosyalarında. t('anahtar', {degisken}) arayüz metni verir, TX() o dilin içeriğini
      (kaynak adları, espriler, haber akışı, sorular...). Eksik anahtar Türkçeye düşer. */
-  const LANG_IDS = ['tr', 'en', 'ru', 'ar', 'es', 'de'].filter(k => LANGS[k]);
+  const LANG_IDS = ['tr', 'az', 'en', 'ru', 'ar', 'es', 'de'].filter(k => LANGS[k]);
   function detectLang() {
     const ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']);
     for (let i = 0; i < ls.length; i++) { const k = String(ls[i]).toLowerCase().slice(0, 2); if (LANG_IDS.indexOf(k) >= 0 && LANGS[k]) return k; }
